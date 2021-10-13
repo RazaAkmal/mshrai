@@ -1,40 +1,30 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import $ from "jquery";
 import { Link } from "react-router-dom";
 import Select from "react-select";
 import { colourStyles } from "../constants";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
+import { fetchSearchInputs } from "../features/search/searchApi";
+import { useDispatch, useSelector } from "react-redux";
+import { getSearchInputs } from "../features/search/searchSlice";
 const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range);
 
-export default class Search extends Component {
-  componentDidMount() {
-    $(".load_cont").fadeOut(function () {
-      $(this).parent().fadeOut();
-      $("body").css({ "overflow-y": "visible" });
+export default function Search(){
+  const searchInputs = useSelector((state) => state.search.searchInputs)
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    fetchSearchInputs().then(result => {
+      $(".load_cont").fadeOut(function () {
+        $(this).parent().fadeOut();
+        $("body").css({ "overflow-y": "visible" });
+      });
+      dispatch(getSearchInputs(result))
     });
-  }
+  }, [dispatch])
 
-  state = {
-    brandOptions: [
-      { value: "تويوتا", label: "تويوتا" },
-      { value: "فورد", label: "فورد" },
-      { value: "شيفروليه", label: "شيفروليه" },
-    ],
-    modelOptions: [
-      { value: "كورلا", label: "كورلا" },
-      { value: "جى تى", label: "جى تى" },
-      { value: "أريستو", label: "أريستو" },
-    ],
-    cityOptions: [
-      { value: "جدة", label: "جدة" },
-      { value: "مكة المكرمة", label: "مكة المكرمة" },
-      { value: "الدمام", label: "الدمام" },
-    ],
-  };
-
-  render() {
     return (
       <>
         <div className="main_screen img_bc">
@@ -59,7 +49,7 @@ export default class Search extends Component {
                           defaultValue={[]}
                           isMulti
                           name="brand"
-                          options={this.state.brandOptions}
+                          options={searchInputs.marksOptions}
                           className="basic-multi-select"
                           placeholder=""
                           styles={colourStyles}
@@ -72,7 +62,7 @@ export default class Search extends Component {
                           defaultValue={[]}
                           isMulti
                           name="brand"
-                          options={this.state.modelOptions}
+                          options={searchInputs.modelOptions}
                           className="basic-multi-select"
                           placeholder=""
                           styles={colourStyles}
@@ -86,7 +76,7 @@ export default class Search extends Component {
                           defaultValue={[]}
                           isMulti
                           name="brand"
-                          options={this.state.cityOptions}
+                          options={searchInputs.cityOptions}
                           className="basic-multi-select"
                           placeholder=""
                           styles={colourStyles}
@@ -147,82 +137,18 @@ export default class Search extends Component {
                       </div>
 
                       <div className="col-12 flex_col  mb-3">
-                        <div className="checkbox">
+                        {searchInputs.shapes.map(shape => {
+                          return (<div className="checkbox">
                           <input type="checkbox" name="car_body" id="t1" />
                           <label htmlFor="t1">
                             <span>
-                              <img src="../images/body_type/1.png" alt="" />
-                              ليموزين
+                              <img src={shape.image} alt={shape.title} />
+                              {shape.title}
                             </span>
                           </label>
-                        </div>
+                        </div>)
                         {/* <!--End Checkbox--> */}
-
-                        <div className="checkbox">
-                          <input type="checkbox" name="car_body" id="t2" />
-                          <label htmlFor="t2">
-                            <span>
-                              <img src="../images/body_type/2.png" alt="" />
-                              دفع رباعى
-                            </span>
-                          </label>
-                        </div>
-                        {/* <!--End Checkbox--> */}
-
-                        <div className="checkbox">
-                          <input type="checkbox" name="car_body" id="t3" />
-                          <label htmlFor="t3">
-                            <span>
-                              <img src="../images/body_type/3.png" alt="" />
-                              كومبى
-                            </span>
-                          </label>
-                        </div>
-                        {/* <!--End Checkbox--> */}
-
-                        <div className="checkbox">
-                          <input type="checkbox" name="car_body" id="t4" />
-                          <label htmlFor="t4">
-                            <span>
-                              <img src="../images/body_type/4.png" alt="" />
-                              كابريو
-                            </span>
-                          </label>
-                        </div>
-                        {/* <!--End Checkbox--> */}
-
-                        <div className="checkbox">
-                          <input type="checkbox" name="car_body" id="t5" />
-                          <label htmlFor="t5">
-                            <span>
-                              <img src="../images/body_type/5.png" alt="" />
-                              كلاينفاغن
-                            </span>
-                          </label>
-                        </div>
-                        {/* <!--End Checkbox--> */}
-
-                        <div className="checkbox">
-                          <input type="checkbox" name="car_body" id="t6" />
-                          <label htmlFor="t6">
-                            <span>
-                              <img src="../images/body_type/6.png" alt="" />
-                              كومباكت
-                            </span>
-                          </label>
-                        </div>
-                        {/* <!--End Checkbox--> */}
-
-                        <div className="checkbox">
-                          <input type="checkbox" name="car_body" id="t7" />
-                          <label htmlFor="t7">
-                            <span>
-                              <img src="../images/body_type/7.png" alt="" />
-                              فان
-                            </span>
-                          </label>
-                        </div>
-                        {/* <!--End Checkbox--> */}
+                        })}
                       </div>
                       {/* <!--End Col-12--> */}
                     </div>
@@ -249,5 +175,4 @@ export default class Search extends Component {
         </div>
       </>
     );
-  }
 }
