@@ -11,7 +11,7 @@ function App() {
     <Router basename="/website">
       <div className="App">
         <Switch>
-          <Route exact path="/resaults">
+          <Route exact path="/results">
             <Resault />
           </Route>
           <Route exact path="/">

@@ -38,3 +38,21 @@ export async function fetchSearchInputs() {
   }
   return options;
 }
+
+export async function fetchCars(query) {
+  var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+  try{
+    var response = await fetch("http://localhost:8983/solr/syarty/select?q="+query, requestOptions);
+    return response.json();
+  }catch(err){
+    console.log(err)
+  }
+  
+
+    // .then(response => {return response.json()})
+    // .catch(error => console.log('error', error));
+}
+
