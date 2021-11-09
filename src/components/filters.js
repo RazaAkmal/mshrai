@@ -224,8 +224,8 @@ export default function Filters(props) {
                 id="ep1"
                 type="checkbox"
                 name="engine_power"
-                checked={props.searchState.kilometer.includes("[0 TO 10000]")}
-                onChange={() => addValue("kilometer", "[0 TO 10000]")}
+                checked={props.searchState.kilometer.includes("[0 TO 9999]")}
+                onChange={() => addValue("kilometer", "[0 TO 9999]")}
               />
               <label className="d-block" htmlFor="ep1">
                 {" "}
@@ -244,7 +244,7 @@ export default function Filters(props) {
               />
               <label className="d-block" htmlFor="ep2">
                 {" "}
-                11,000 : 50,000{" "}
+                10,000 : 50,000{" "}
               </label>
             </div>
             <div className="form-group">
@@ -259,7 +259,7 @@ export default function Filters(props) {
               />
               <label className="d-block" htmlFor="ep3">
                 {" "}
-                51,000 : 75,000{" "}
+                50,000 : 75,000{" "}
               </label>
             </div>
             <div className="form-group">
@@ -274,7 +274,7 @@ export default function Filters(props) {
               />
               <label className="d-block" htmlFor="ep4">
                 {" "}
-                76,000 : 100,000{" "}
+                75,000 : 100,000{" "}
               </label>
             </div>
             <div className="form-group">
@@ -285,7 +285,7 @@ export default function Filters(props) {
                 checked={props.searchState.kilometer.includes(
                   "[100000 TO 150000]"
                 )}
-                onChange={() => addValue("kilometer", "[10000 TO 150000]")}
+                onChange={() => addValue("kilometer", "[100000 TO 150000]")}
               />
               <label className="d-block" htmlFor="ep5">
                 {" "}
@@ -301,11 +301,11 @@ export default function Filters(props) {
                 checked={props.searchState.kilometer.includes(
                   "[150000 TO 200000]"
                 )}
-                onChange={() => addValue("kilometer", "[155000 TO 200000]")}
+                onChange={() => addValue("kilometer", "[150000 TO 200000]")}
               />
               <label className="d-block" htmlFor="ep6">
                 {" "}
-                155,000 : 200,000{" "}
+                150,000 : 200,000{" "}
               </label>
             </div>
             <div className="form-group">
@@ -314,9 +314,9 @@ export default function Filters(props) {
                 type="checkbox"
                 name="engine_power"
                 checked={props.searchState.kilometer.includes(
-                  "[200000 TO 999999999]"
+                  "[200001 TO 999999999]"
                 )}
-                onChange={() => addValue("kilometer", "[200000 TO 999999999]")}
+                onChange={() => addValue("kilometer", "[200001 TO 999999999]")}
               />
               <label className="d-block" htmlFor="ep7">
                 {" "}

@@ -8,7 +8,7 @@ import { store } from "./app/store";
 function App() {
   return (
     <Provider store={store}>
-    <Router basename="/website">
+    <Router basename="/">
       <div className="App">
         <Switch>
           <Route exact path="/results">

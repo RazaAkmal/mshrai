@@ -102,28 +102,28 @@ export default function Search() {
                     <div className="col-md-6  mb-3">
                       <label className="text-end d-block"> الماركة </label>
                       <Select
-                        defaultValue={searchInputs.marksOptions.map(i => state.brand_type_id.indexOf(i.value) != -1 ? i : false)}
+                        defaultValue={searchInputs.marksOptions.map(i => state.brand_id.indexOf(i.value) != -1 ? i : false)}
                         isMulti
                         name="brand"
                         options={searchInputs.marksOptions}
                         className="basic-multi-select"
                         placeholder=""
                         styles={colourStyles}
-                        onChange={(value)=> setBrandType(value)}
+                        onChange={(value)=> setBrand(value)}
                         // classNamePrefix="select"
                       />
                     </div>
                     <div className="col-md-6  mb-3">
                       <label className="text-end d-block"> المودل </label>
                       <Select
-                        defaultValue={searchInputs.modelOptions.map(i => state.brand_id.indexOf(i.value) != -1 ? i : false)}
+                        defaultValue={searchInputs.modelOptions.map(i => state.brand_type_id.indexOf(i.value) != -1 ? i : false)}
                         isMulti
                         name="brand"
                         options={searchInputs.modelOptions}
                         className="basic-multi-select"
                         placeholder=""
                         styles={colourStyles}
-                        onChange={(value)=> setBrand(value)}
+                        onChange={(value)=> setBrandType(value)}
                         // classNamePrefix="select"
                       />
                     </div>

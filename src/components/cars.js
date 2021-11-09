@@ -1,11 +1,13 @@
+import { Link } from "react-router-dom";
+
 export default function Cars({ cars }) {
   return (
     <div className="row">
-      {cars.map((car) => (
+      {cars.length > 0 ? cars.map((car) => (
         <div className="col-lg-4 col-md-6 col-sm-6" key={car.id}>
-          <div className="car_item">
+          <Link to={car.url} className="car_item" target="_blank" rel="noopener noreferrer">
             <div className="car_img">
-              <img src={"http://localhost/syarty/public/upload/"+car.image} alt="" />
+              <img src={"http://sayarty.inzox.co/public/upload/"+car.image} alt="" />
             </div>
             <div className="car_cont">
               <h3>{car.brand + " - " + car.brand_type}</h3>
@@ -24,13 +26,13 @@ export default function Cars({ cars }) {
                 <div className="price">
                   <span> السعر </span> {car.price} ريال
                 </div>
-                <img src={car.source === "OLX" ? "./images/olx.jpg" : "./images/haraj-logo.jpg"} alt="" />
+                <img src={"http://sayarty.inzox.co/public/upload/"+car.source_image || "./images/olx.jpg"} alt="" />
               </div>
             </div>
-          </div>
+          </Link>
           {/* <!--End Car ITem--> */}
         </div>
-      ))}
+      )): (<div className="col-12 text-center d-flex justify-content-center align-items-center" style={{"minHeight": "50vh"}}>لا يوجد نتائج توافق بحثك</div>)}
     </div>
   );
 }

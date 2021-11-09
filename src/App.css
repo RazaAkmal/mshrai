@@ -161,9 +161,11 @@ input[type="radio"] + label::before {
 
 input[type="checkbox"]:checked + label::before,
 input[type="radio"]:checked + label::before {
-  content: "\f00c";
+  content: "\2713";
+  font-size: 1.2em;
+  font-weight: bold;
   color: var(--second_color);
-  background-color: transparent;
+  background-color: aliceblue;
 }
 input[type="checkbox"] + label img,
 input[type="radio"] + label img {

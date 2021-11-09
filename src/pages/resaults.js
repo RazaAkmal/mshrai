@@ -4,12 +4,25 @@ import $ from "jquery";
 import Filters from "../components/filters";
 import Cars from "../components/cars";
 import Loader from "../components/loader";
-import { fetchCars } from "../features/search/searchApi";
+import { fetchCars, saveResults } from "../features/search/searchApi";
 import { useDispatch, useSelector } from "react-redux";
-import { setCars, setSearchForm } from "../features/search/searchSlice";
-export default function Resault() {
+import { setCars, setQuery, setResultsNumebr, setSearchForm } from "../features/search/searchSlice";
+import SaveResults from "../components/saveResultModal";
+
+export default function Resault(props) {
+  useEffect(() => {
+    $(".alert").hide();
+    const params = new URLSearchParams(window.location.search)
+    if(params.has('k')){
+      let query = params.get('k');
+      let newSearchForm = JSON.parse(query);
+      console.log(JSON.parse(newSearchForm));
+      dispatch(setSearchForm(JSON.parse(newSearchForm)));
+    }
+
+  }, [])
   const [state, setState] = useState({
-    searchKeyWord: " كيان موديل 2017 كومبى",
+    searchKeyWord: "",
     email: "",
     isOpen: false,
     cars: [],
@@ -17,38 +30,47 @@ export default function Resault() {
 
   const cars = useSelector((state) => state.search.cars);
   const searchForm = useSelector((state) => state.search.searchForm);
+  const searchInputs = useSelector((state) => state.search.searchInputs);
+  const resultsNumber = useSelector((state) => state.search.numFound);
+
   const dispatch = useDispatch();
-  // const history = useHistory();
-  // useEffect(() => {
-  //   var savedSearch = localStorage.getItem('savedSearch') || null;
-  //   console.log(savedSearch);
-  //   if(savedSearch === null){
-  //     history.push("/");
-  //   }else{
-  //     dispatch(setSearchForm(JSON.parse(savedSearch)));
-  //   }
-  // },[])
+
+  const _handleSubscripeToNewsletter = () => {
+    if(state.email === "") return;
+    let data = {email: state.email, type: "newsletter"}
+
+    saveResults(data).then(res => {
+      $(".alert").show();
+      setTimeout(() => {
+        $("[data-bs-dismiss]").trigger({ type: "click" });
+      }, 1000);
+    })
+}
 
   const _handleStartSearch = (type, value) => {
     switch (type) {
       case "keyword":
         dispatch(
-          setSearchForm({ ...searchForm, keyword: state.searchKeyWord })
+          setSearchForm({
+            ...searchForm,
+            keyword: state.searchKeyWord,
+            index: 0,
+          })
         );
         break;
       case "price":
-        dispatch(
-          setSearchForm({ ...searchForm, price: value })
-        );
+        dispatch(setSearchForm({ ...searchForm, price: value, index: 0 }));
         break;
       case "brand_type_id":
-        dispatch(setSearchForm({ ...searchForm, brand_type_id: value }));
+        dispatch(
+          setSearchForm({ ...searchForm, brand_type_id: value, index: 0 })
+        );
         break;
       case "brand_id":
-        dispatch(setSearchForm({ ...searchForm, brand_id: value }));
+        dispatch(setSearchForm({ ...searchForm, brand_id: value, index: 0 }));
         break;
       case "city_id":
-        dispatch(setSearchForm({ ...searchForm, city_id: value }));
+        dispatch(setSearchForm({ ...searchForm, city_id: value, index: 0 }));
         break;
       case "model_year":
         dispatch(
@@ -60,10 +82,16 @@ export default function Resault() {
         );
         break;
       case "shape_id":
-        dispatch(setSearchForm({ ...searchForm, shape_id: value }));
+        dispatch(setSearchForm({ ...searchForm, shape_id: value, index: 0 }));
         break;
       case "kilometer":
-        dispatch(setSearchForm({ ...searchForm, kilometer: value }));
+        dispatch(setSearchForm({ ...searchForm, kilometer: value, index: 0 }));
+        break;
+      case "sort":
+        dispatch(setSearchForm({ ...searchForm, sort: value, index: 0 }));
+        break;
+      case "paginate":
+        dispatch(setSearchForm({ ...searchForm, index: value }));
         break;
       default:
         break;
@@ -133,15 +161,25 @@ export default function Resault() {
       });
       query += ")";
     }
+    if (searchForm.sort && searchForm.sort !== "") {
+      query += `&${searchForm.sort}`;
+    }
+    query += `&rows=12&start=${searchForm.index}`;
+    dispatch(setQuery(query));
     console.log(query);
     fetchCars(query).then((res) => {
       $(".load_cont").fadeOut(function () {
         $(this).parent().fadeOut();
         $("body").css({ "overflow-y": "visible" });
       });
-      if (res.response && res.response.docs) {
+      if (res && res.response && res.response.docs) {
         console.log(res.response.docs);
-        dispatch(setCars(res.response.docs));
+        let carsArray =
+          searchForm.index > 0
+            ? [...cars, ...res.response.docs]
+            : res.response.docs;
+        dispatch(setCars(carsArray));
+        dispatch(setResultsNumebr(res.response.numFound));
       }
     });
   }, [dispatch, searchForm]);
@@ -158,6 +196,7 @@ export default function Resault() {
   const menuClass = `dropdown-menu${state.isOpen ? " show" : ""}`;
   return (
     <>
+    <SaveResults />
       <header>
         <div className="container">
           <div className="row">
@@ -175,9 +214,11 @@ export default function Resault() {
                 />
                 <button
                   className="link"
-                  onClick={() =>
-                    _handleStartSearch("keyword", state.searchKeyWord)
-                  }
+                  onClick={(e) => {
+                    e.preventDefault();
+                    _handleStartSearch("keyword", state.searchKeyWord);
+                  }}
+                  type="button"
                 >
                   <i className="fa fa-search"></i> بحث
                 </button>
@@ -189,47 +230,91 @@ export default function Resault() {
       <section>
         <div className="container">
           <div className="row">
-            <div className="col-lg-6 col-md-7">
+            <div className="col-lg-7 col-md-8">
               <div className="search_hint">
                 <p>
-                  يوجد <span>{cars.length}</span> نتيجة بحث عن سيارة معروضة
+                  يوجد <span>{resultsNumber}</span> نتيجة بحث عن سيارة معروضة
                   للبيع
                 </p>
                 <ul className="search_tags">
-                  {
-                    <li>
-                      نيسان
-                      <button type="button" className="close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </li>
-                  }
-                  <li>
-                    تويتا
-                    <button type="button" className="close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </li>
-                  <li>
-                    كومبى
-                    <button type="button" className="close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </li>
+                  {searchForm.brand_id && searchForm.brand_id.length > 0
+                    ? searchInputs.marksOptions.map((mark, index) => {
+                        return searchForm.brand_id.includes(mark.value) ? (
+                          <li key={"searchMarks" + index}>
+                            {mark.label}
+                            {/* <button type="button" className="close">
+                            <span aria-hidden="true">&times;</span>
+                          </button> */}
+                          </li>
+                        ) : (
+                          false
+                        );
+                      })
+                    : ""}
+                  {searchForm.brand_type_id &&
+                  searchForm.brand_type_id.length > 0
+                    ? searchInputs.modelOptions.map((model, index) => {
+                        return searchForm.brand_type_id.includes(
+                          model.value
+                        ) ? (
+                          <li key={"searchMarks" + index}>
+                            {model.label}
+                            {/* <button type="button" className="close">
+                            <span aria-hidden="true">&times;</span>
+                          </button> */}
+                          </li>
+                        ) : (
+                          false
+                        );
+                      })
+                    : ""}
+                  {searchForm.shape_id && searchForm.shape_id.length > 0
+                    ? searchInputs.shapes.map((shape, index) => {
+                        return searchForm.shape_id.includes(shape.id) ? (
+                          <li key={"searchShapes" + index}>
+                            {shape.title}
+                            {/* <button type="button" className="close">
+                            <span aria-hidden="true">&times;</span>
+                          </button> */}
+                          </li>
+                        ) : (
+                          false
+                        );
+                      })
+                    : ""}
+                    {searchForm.city_id && searchForm.city_id.length > 0
+                    ? searchInputs.cityOptions.map((city, index) => {
+                        return searchForm.city_id.includes(city.value) ? (
+                          <li key={"searchcities" + index}>
+                            {city.label}
+                          </li>
+                        ) : (
+                          false
+                        );
+                      })
+                    : ""}
                 </ul>
               </div>
             </div>
-            <div className="col-lg-6 col-md-5 text-left">
-              <form className="subscribe">
+            <div className="col-lg-5 col-md-4 text-left">
+            <div className="alert alert-warning alert-dismissible fade show" role="alert">
+              تم الإشتراك فى النشرة الإخبارية بنجاح.
+              <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+              <form 
+                className="subscribe"
+              >
                 <label> إشترك معنا فى النشرة الأخبارية</label>
                 <input
                   type="email"
                   className="form-control"
                   placeholder=" البريد الألكترونى "
                   value={state.email}
-                  onChange={(e) =>setState({...state, email: e.target.value})}
+                  onChange={(e) =>
+                    setState({ ...state, email: e.target.value })
+                  }
                 />
-                <button className="fa fa-search"></button>
+                <button className="fa fa-search" type="button" onClick={(e) => {e.preventDefault(); _handleSubscripeToNewsletter();}}></button>
               </form>
             </div>
           </div>
@@ -276,23 +361,56 @@ export default function Resault() {
                       willChange: "transform",
                     }}
                   >
-                    <div className="dropdown-item"> السعر [ الأقل ] </div>
-                    <div className="dropdown-item"> السعر [ الأكثر ] </div>
-                    {/* <div className="dropdown-item">
-                        {" "}
-                        قوة المحرك [ الأقل ]{" "}
-                      </div>
-                      <div className="dropdown-item">
-                        {" "}
-                        قوة المحرك [ الأعلى ]{" "}
-                      </div> */}
+                    <div
+                      className="dropdown-item"
+                      onClick={() =>
+                        _handleStartSearch("sort", "sort=price+asc")
+                      }
+                    >
+                      {" "}
+                      السعر [ الأقل ]{" "}
+                    </div>
+                    <div
+                      className="dropdown-item"
+                      onClick={() =>
+                        _handleStartSearch("sort", "sort=price+desc")
+                      }
+                    >
+                      {" "}
+                      السعر [ الأكثر ]{" "}
+                    </div>
+                    {/* <div
+                      className="dropdown-item"
+                      onClick={() =>
+                        _handleStartSearch("sort", "sort=gear+desc")
+                      }
+                    >
+                      {" "}
+                      قوة المحرك [ الأقل ]{" "}
+                    </div>
+                    <div
+                      className="dropdown-item"
+                      onClick={() =>
+                        _handleStartSearch("sort", "sort=gear+asc")
+                      }
+                    >
+                      {" "}
+                      قوة المحرك [ الأعلى ]{" "}
+                    </div> */}
                   </div>
                 </div>
               </div>
               <Cars cars={cars} />
               <div className="w-100 text-left">
-                <button className="link green_bc">حفظ نتائج البحث</button>
-                <button className="link">تحميل المزيد</button>
+                <button className="link green_bc" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">حفظ نتائج البحث</button>
+                <button
+                  className="link"
+                  onClick={() =>
+                    _handleStartSearch("paginate", searchForm.index + 12)
+                  }
+                >
+                  تحميل المزيد
+                </button>
               </div>
             </div>
           </div>

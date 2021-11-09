@@ -8,7 +8,10 @@ const initialState = {
     shapes: [],
   },
   cars: [],
+  numFound: 0,
+  query: "",
   searchForm: {
+    numFound: 0,
     price: [],
     model_year_start: 1990,
     model_year_end: Number(new Date().getFullYear()),
@@ -18,8 +21,8 @@ const initialState = {
     shape_id: [],
     city_id: [],
     keyword: "",
-    sort_by:"",
-    sort_order:""
+    sort:"",
+    index: 0,
   }
 };
 
@@ -35,10 +38,16 @@ export const searchSlice = createSlice({
     },
     setSearchForm: (state, action) => {
       state.searchForm = action.payload
+    },
+    setQuery: (state, action) => {
+      state.query = action.payload
+    },
+    setResultsNumebr: (state, action) => {
+      state.numFound = action.payload
     }
   },
 });
 
-export const { getSearchInputs, setCars , setSearchForm } = searchSlice.actions;
+export const { getSearchInputs, setCars , setSearchForm, setQuery, setResultsNumebr } = searchSlice.actions;
 
 export default searchSlice.reducer;
