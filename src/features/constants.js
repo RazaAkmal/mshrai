@@ -1,1 +1,1 @@
-export const apiUrl = "http://sayarty.inzox.co/public";
+export const apiUrl = "http://admin.mshrai.com/public";

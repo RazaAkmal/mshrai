@@ -40,10 +40,15 @@ export default function Resault(props) {
     let data = {email: state.email, type: "newsletter"}
 
     saveResults(data).then(res => {
-      $(".alert").show();
+      if(res && res.code == 0){
+        $(".alert-success").show();
+        setState({...state, email:""});
+      }else{
+        $(".alert-danger").show();
+      }
       setTimeout(() => {
-        $("[data-bs-dismiss]").trigger({ type: "click" });
-      }, 1000);
+        $(".alert").hide();
+      }, 3000);
     })
 }
 
@@ -297,8 +302,12 @@ export default function Resault(props) {
               </div>
             </div>
             <div className="col-lg-5 col-md-4 text-left">
-            <div className="alert alert-warning alert-dismissible fade show" role="alert">
+            <div className="alert alert-success alert-dismissible fade show" role="alert">
               تم الإشتراك فى النشرة الإخبارية بنجاح.
+              <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div className="alert alert-danger alert-dismissible fade show" role="alert">
+              حدث خطأ ما تأكد من البيانات وأعد الإرسال.
               <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
               <form 
@@ -403,14 +412,14 @@ export default function Resault(props) {
               <Cars cars={cars} />
               <div className="w-100 text-left">
                 <button className="link green_bc" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">حفظ نتائج البحث</button>
-                <button
+                {resultsNumber > cars.length &&<button
                   className="link"
                   onClick={() =>
                     _handleStartSearch("paginate", searchForm.index + 12)
                   }
                 >
                   تحميل المزيد
-                </button>
+                </button>}
               </div>
             </div>
           </div>
