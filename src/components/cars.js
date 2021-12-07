@@ -1,13 +1,29 @@
 import { Link } from "react-router-dom";
+import { apiUrl } from "../features/constants";
+
+function validURL(str) {
+  var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+    
+    let isValid = pattern.test(str);
+    let src = isValid ? `${apiUrl}/upload/` : "";
+  return src + str;
+}
+
 
 export default function Cars({ cars }) {
+
   return (
     <div className="row">
       {cars.length > 0 ? cars.map((car) => (
         <div className="col-lg-4 col-md-6 col-sm-6" key={car.id}>
           <Link to={car.url} className="car_item" target="_blank" rel="noopener noreferrer">
             <div className="car_img">
-              <img src={"http://sayarty.inzox.co/public/upload/"+car.image} alt="" />
+              <img onError={(e)=>{e.target.onerror = null; e.target.src=`${apiUrl}/upload/default.jpg`}} src={validURL(car.image)} alt="" id={car.id}/>
             </div>
             <div className="car_cont">
               <h3>{car.brand + " - " + car.brand_type}</h3>
@@ -26,7 +42,7 @@ export default function Cars({ cars }) {
                 <div className="price">
                   <span> السعر </span> {car.price} ريال
                 </div>
-                <img src={"http://sayarty.inzox.co/public/upload/"+car.source_image || "./images/olx.jpg"} alt="" />
+                <img src={apiUrl+"/upload/"+car.source_image || "./images/olx.jpg"} alt="" />
               </div>
             </div>
           </Link>
