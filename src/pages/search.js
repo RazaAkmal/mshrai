@@ -176,7 +176,7 @@ export default function Search() {
                           ]}
                           handleStyle={[
                             {
-                              background: "red",
+                              background: "#3e0292",
                               color: "#555555",
                               width: "9px",
                               borderRadius: "3px",
@@ -186,7 +186,7 @@ export default function Search() {
                               bottom: "-7px",
                             },
                             {
-                              background: "red",
+                              background: "#3e0292",
                               color: "#555555",
                               width: "9px",
                               borderRadius: "3px",
