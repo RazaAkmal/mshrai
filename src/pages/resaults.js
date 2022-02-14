@@ -8,6 +8,7 @@ import { fetchCars, saveResults } from "../features/search/searchApi";
 import { useDispatch, useSelector } from "react-redux";
 import { setCars, setQuery, setResultsNumebr, setSearchForm } from "../features/search/searchSlice";
 import SaveResults from "../components/saveResultModal";
+import { Link } from "react-router-dom";
 
 export default function Resault(props) {
   useEffect(() => {
@@ -206,7 +207,9 @@ export default function Resault(props) {
         <div className="container">
           <div className="row">
             <div className="col-12">
-              <img src="./images/logo.png" alt="logo" />
+              <Link to="/">
+                <img src="./images/logo.png" alt="logo" />
+              </Link>
               <form>
                 <input
                   className="form-control"

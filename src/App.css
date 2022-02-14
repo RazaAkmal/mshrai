@@ -25,7 +25,7 @@
   color: #fff !important;
 }
 .green_bc {
-  background-color: rgb(8 126 37) !important;
+  background-color: rgb(62 2 146) !important;
 }
 body {
   font-family: "Almarai", sans-serif;
@@ -291,11 +291,12 @@ section {
   font-size: 14px;
 }
 .img_bc {
-  background: url("./images/bc.jpg") center no-repeat;
+  /* background: url("./images/bc.jpg") center no-repeat; */
+  background: #00CEE0;
   background-size: cover;
   position: relative;
 }
-.img_bc::before {
+/* .img_bc::before {
   content: "";
   position: fixed;
   width: 100%;
@@ -303,7 +304,7 @@ section {
   top: 0;
   left: 0;
   background-color: rgba(32, 30, 31, 0.8);
-}
+} */
 .img_bc::after {
   content: " ";
   position: absolute;
@@ -384,7 +385,7 @@ section {
 =======================*/
 header {
   padding: 10px 0;
-  background-color: var(--main_color);
+  background-color: #3e0292;
 }
 header .col-12 {
   display: flex;
@@ -409,6 +410,7 @@ header form .link {
   top: 0;
   left: 0;
   height: 100%;
+  background-color: #000000 !important;
 }
 header form .link i {
   margin-left: 5px;
@@ -436,7 +438,7 @@ header form .link i {
   padding: 5px 15px 5px 10px;
   border: 1px solid #e0e0e0;
   text-align: right;
-  border-right: 3px solid var(--second_color);
+  border-right: 3px solid #000;
 }
 
 .toggle-container .panel-title a {
@@ -681,9 +683,9 @@ header form .link i {
 }
 .car_item .car_cont .tags li {
   display: inline-block;
-  background-color: #f5f7fb;
+  background-color: #BBBBBB;
   padding: 0 15px;
-  margin: auto;
+  margin: 2px;
   line-height: 28px;
   color: var(--main_color);
   border-radius: 3px;

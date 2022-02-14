@@ -86,7 +86,7 @@ export default function Search() {
           <div className="row">
             <div className="col-12">
               <div className="cont">
-                <img src="../images/logo.png" alt="" className="logo" />
+                <img src="../images/logo_color.png" alt="" className="logo" />
                 <h1>أفضل منصة لتحصل على أفضل السيارات المستعملة</h1>
                 <form className="search_form">
                   <div className="row">

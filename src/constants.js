@@ -31,7 +31,7 @@ export const colourStyles = {
     multiValue: (styles, { data }) => {
       return {
         ...styles,
-        backgroundColor: "#c3fac6",
+        backgroundColor: "#aaf3ff",
         color: "#000",
       };
     },

@@ -21,7 +21,7 @@ export default function Cars({ cars }) {
     <div className="row">
       {cars.length > 0 ? cars.map((car) => (
         <div className="col-lg-4 col-md-6 col-sm-6" key={car.id}>
-          <Link to={car.url} className="car_item" target="_blank" rel="noopener noreferrer">
+          <Link to={{ pathname:car.url }} className="car_item" target="_blank" rel="noopener noreferrer">
             <div className="car_img">
               <img onError={(e)=>{e.target.onerror = null; e.target.src=`${apiUrl}/upload/default.jpg`}} src={validURL(car.image)} alt="" id={car.id}/>
             </div>
