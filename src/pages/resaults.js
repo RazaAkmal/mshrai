@@ -210,7 +210,7 @@ export default function Resault(props) {
               <Link to="/">
                 <img src="./images/logo.png" alt="logo" />
               </Link>
-              <form>
+              {/* <form>
                 <input
                   className="form-control"
                   type="text"
@@ -230,7 +230,7 @@ export default function Resault(props) {
                 >
                   <i className="fa fa-search"></i> بحث
                 </button>
-              </form>
+              </form> */}
             </div>
           </div>
         </div>

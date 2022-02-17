@@ -16,6 +16,8 @@ export default function Search() {
   const searchInputs = useSelector((state) => state.search.searchInputs);
   const searchForm = useSelector((state) => state.search.searchForm);
 
+  const [modelOptions, setModelOptions] = useState([])
+
   const dispatch = useDispatch();
   const [state, setState] = useState({...searchForm});
   useEffect(() => {
@@ -27,6 +29,18 @@ export default function Search() {
       dispatch(getSearchInputs(result));
     });
   }, [dispatch]);
+
+  const [yearList, setYearList] = useState([])
+
+  useEffect(() => {
+    const yearOption = []
+    for (let index = 1990; index < new Date().getFullYear(); index++) {
+      yearOption.push({id: index, label: index})
+      console.log(index)
+    }
+    setYearList(yearOption)
+  }, [])
+  
 
   const addShape = (i) => {
     let shapes = [...state.shape_id];
@@ -56,6 +70,19 @@ export default function Search() {
       brand_id: [...brands]
     })
   }
+
+  useEffect(() => {
+    const models = []
+    state.brand_id.map((id) => {
+      return searchInputs.modelOptions.map((model) => {
+        if (model.brandId === id) {
+          models.push(model)
+        }
+      })
+    })
+    setModelOptions(models)
+  }, [state.brand_id])
+  
 
   const setBrandType = (values) => {
     let brands_types = values.map(value => value.value);
@@ -90,6 +117,7 @@ export default function Search() {
                 <h1>أفضل منصة لتحصل على أفضل السيارات المستعملة</h1>
                 <form className="search_form">
                   <div className="row">
+                    {/* Commenting this Code is its not required yet
                     <div className="col-12">
                       <input
                         type="text"
@@ -98,11 +126,11 @@ export default function Search() {
                         value={state.keyword}
                         onChange={(e)=> setState({...state, keyword:e.target.value})}
                       />
-                    </div>
+                    </div> */}
                     <div className="col-md-6  mb-3">
                       <label className="text-end d-block"> الماركة </label>
                       <Select
-                        defaultValue={searchInputs.marksOptions.map(i => state.brand_id.indexOf(i.value) != -1 ? i : false)}
+                        defaultValue={searchInputs.marksOptions.map(i => state.brand_id.indexOf(i.value) !== -1 ? i : false)}
                         isMulti
                         name="brand"
                         options={searchInputs.marksOptions}
@@ -113,21 +141,22 @@ export default function Search() {
                         // classNamePrefix="select"
                       />
                     </div>
-                    <div className="col-md-6  mb-3">
-                      <label className="text-end d-block"> المودل </label>
-                      <Select
-                        defaultValue={searchInputs.modelOptions.map(i => state.brand_type_id.indexOf(i.value) != -1 ? i : false)}
-                        isMulti
-                        name="brand"
-                        options={searchInputs.modelOptions}
-                        className="basic-multi-select"
-                        placeholder=""
-                        styles={colourStyles}
-                        onChange={(value)=> setBrandType(value)}
+                    {state.brand_id.length &&
+                      <div className="col-md-6  mb-3">
+                        <label className="text-end d-block"> المودل </label>
+                        <Select
+                          defaultValue={searchInputs.modelOptions.map(i => state.brand_type_id.indexOf(i.value) !== -1 ? i : false)}
+                          isMulti
+                          name="brand"
+                          options={modelOptions}
+                          className="basic-multi-select"
+                          placeholder=""
+                          styles={colourStyles}
+                          onChange={(value) => setBrandType(value)}
                         // classNamePrefix="select"
-                      />
-                    </div>
-
+                        />
+                      </div>
+                    }
                     <div className="col-md-6  mb-3">
                       <label className="text-end d-block"> المدينة </label>
                       <Select
@@ -142,18 +171,32 @@ export default function Search() {
                         // classNamePrefix="select"
                       />
                     </div>
+                    <div className="col-md-6  mb-3"></div>
+                    <div className="col-md-6  mb-3">
+                      <label className="text-end d-block">سنة تصنيع محددة</label>
+                      <Select
+                        value={state.model_year_end === state.model_year_start && [{label: state.model_year_end}]}
+                        name="brand"
+                        options={yearList}
+                        className="basic-multi-select"
+                        placeholder=""
+                        styles={colourStyles}
+                        onChange={(value)=> setYearRange([value.label,value.label])}
+                        // classNamePrefix="select"
+                      />
+                    </div>
                     <div className="col-md-6  mb-3">
                       <label className="text-end d-block">سنة الصنع</label>
                       <div className="mt-3">
                         <Range
-                          onAfterChange={(value)=> setYearRange(value)}
+                          onChange={(value)=> setYearRange(value)}
                           marks={{
                             1990: `1990`,
                             2021: `2021`,
                           }}
                           min={1990}
                           max={new Date().getFullYear()}
-                          defaultValue={[state.model_year_start, state.model_year_end]}
+                          value={[state.model_year_start, state.model_year_end]}
                           tipFormatter={(value) => `${value}`}
                           tipProps={{
                             placement: "top",
@@ -200,8 +243,8 @@ export default function Search() {
                       </div>
                       {/* <div className="year_slider" name="slider"></div> */}
                     </div>
-
-                    <div className="col-12 flex_col  mb-3">
+                    {/* Commenting this Code is its not required yet
+                     <div className="col-12 flex_col  mb-3">
                       {searchInputs.shapes.map((shape, i) => {
                         return (
                           <div className="checkbox" key={shape.id}>
@@ -217,7 +260,7 @@ export default function Search() {
                           </div>
                         );
                       })}
-                    </div>
+                    </div> */}
                     {/* <!--End Col-12--> */}
                   </div>
                   {/* <!--End Row--> */}

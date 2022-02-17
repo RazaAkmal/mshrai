@@ -24,7 +24,7 @@ export async function fetchSearchInputs() {
     }
     if(result.model && result.model.length > 0){
       result.model.forEach(model => {
-        options.modelOptions.push({value: model.id, label: model.brand_types})
+        options.modelOptions.push({value: model.id, label: model.brand_types, brandId: model.brand_id})
       });
     }
     if(result.cities && result.cities.length > 0){
