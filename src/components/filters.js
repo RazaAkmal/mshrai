@@ -12,15 +12,19 @@ export default function Filters(props) {
 
   useEffect(() => {
     const models = []
-    props.searchState.brand_id.map((id) => {
-      return searchInputs.modelOptions.map((model) => {
-        if (model.brandId === id) {
-          models.push(model)
-        }
+    if (props.searchState.brand_id.length) {
+      props.searchState.brand_id.map((id) => {
+        return searchInputs.modelOptions.map((model) => {
+          if (model.brandId === id) {
+            models.push(model)
+          }
+        })
       })
-    })
+    } else {
+      searchInputs.modelOptions.map((model) => models.push(model))
+    }
     setModelOptions(models)
-  }, [props.searchState.brand_id])
+  }, [props.searchState.brand_id, searchInputs.modelOptions])
 
   const addValue = (type, value) => {
     switch (type) {
@@ -257,7 +261,6 @@ export default function Filters(props) {
         {/* <!--End Panel Collapse--> */}
       </div>
       {/* <!--End Panel--> */}
-      {props.searchState.brand_id.length > 0 &&
         <div className="panel">
           <h4 className="panel-title">
             <a
@@ -298,7 +301,6 @@ export default function Filters(props) {
           </div>
           {/* <!--End Panel Collapse--> */}
         </div>
-      }
       {/* <!--End Panel--> */}
 
       <div className="panel">

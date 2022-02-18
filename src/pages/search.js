@@ -17,6 +17,7 @@ export default function Search() {
   const searchForm = useSelector((state) => state.search.searchForm);
 
   const [modelOptions, setModelOptions] = useState([])
+  const [brandOptions, setBrandOptions] = useState([])
 
   const dispatch = useDispatch();
   const [state, setState] = useState({...searchForm});
@@ -36,10 +37,14 @@ export default function Search() {
     const yearOption = []
     for (let index = 1990; index < new Date().getFullYear(); index++) {
       yearOption.push({id: index, label: index})
-      console.log(index)
     }
     setYearList(yearOption)
   }, [])
+
+  useEffect(() => {
+    const brandOptionsStored = searchInputs.marksOptions.map(i => state.brand_id.indexOf(i.value) !== -1 ? i : false)
+    setBrandOptions(brandOptionsStored)
+  }, [searchInputs])
   
 
   const addShape = (i) => {
@@ -69,26 +74,56 @@ export default function Search() {
       ...state,
       brand_id: [...brands]
     })
+    setBrandOptions(values)
   }
 
   useEffect(() => {
     const models = []
-    state.brand_id.map((id) => {
-      return searchInputs.modelOptions.map((model) => {
-        if (model.brandId === id) {
-          models.push(model)
-        }
+    if (state.brand_id.length) {
+      state.brand_id.map((id) => {
+        return searchInputs.modelOptions.map((model) => {
+          if (model.brandId === id) {
+            models.push(model)
+          }
+        })
       })
-    })
+    } else {
+      searchInputs.modelOptions.map((model) => models.push(model))
+    }
     setModelOptions(models)
-  }, [state.brand_id])
+  }, [state.brand_id, searchInputs.modelOptions])
+
+
+
+  useEffect(() => {
+    const selectedBrands = []
+    let prevId
+    let newId = ''
+    if (state.model_brand_id && state.model_brand_id.length) {
+      state.model_brand_id.map((id) => {
+        prevId = id
+        return searchInputs.marksOptions.map((brand) => {
+          //this condition check the same brand should not print again, and also check and print brand of selected model
+          if (brand.value === id && prevId !== newId) {
+            newId=id
+            selectedBrands.push(brand)
+          }
+        })
+      })
+      setBrandOptions(selectedBrands)
+    }
+   
+  }, [state.model_brand_id])
+  
   
 
   const setBrandType = (values) => {
     let brands_types = values.map(value => value.value);
+    let brands_type_id = values.map(value => value.brandId);
     setState({
       ...state,
-      brand_type_id: [...brands_types]
+      brand_type_id: [...brands_types],
+      model_brand_id: [...brands_type_id]
     })
   }
 
@@ -130,7 +165,8 @@ export default function Search() {
                     <div className="col-md-6  mb-3">
                       <label className="text-end d-block"> الماركة </label>
                       <Select
-                        defaultValue={searchInputs.marksOptions.map(i => state.brand_id.indexOf(i.value) !== -1 ? i : false)}
+                        // defaultValue={searchInputs.marksOptions.map(i => state.brand_id.indexOf(i.value) !== -1 ? i : false)}
+                        value={brandOptions}
                         isMulti
                         name="brand"
                         options={searchInputs.marksOptions}
@@ -141,37 +177,20 @@ export default function Search() {
                         // classNamePrefix="select"
                       />
                     </div>
-                    {state.brand_id.length &&
-                      <div className="col-md-6  mb-3">
-                        <label className="text-end d-block"> المودل </label>
-                        <Select
-                          defaultValue={searchInputs.modelOptions.map(i => state.brand_type_id.indexOf(i.value) !== -1 ? i : false)}
-                          isMulti
-                          name="brand"
-                          options={modelOptions}
-                          className="basic-multi-select"
-                          placeholder=""
-                          styles={colourStyles}
-                          onChange={(value) => setBrandType(value)}
-                        // classNamePrefix="select"
-                        />
-                      </div>
-                    }
                     <div className="col-md-6  mb-3">
-                      <label className="text-end d-block"> المدينة </label>
+                      <label className="text-end d-block"> المودل </label>
                       <Select
-                        defaultValue={searchInputs.cityOptions.map(i => state.city_id.indexOf(i.value) != -1 ? i : false)}
+                        defaultValue={searchInputs.modelOptions.map(i => state.brand_type_id.indexOf(i.value) !== -1 ? i : false)}
                         isMulti
                         name="brand"
-                        options={searchInputs.cityOptions}
+                        options={modelOptions}
                         className="basic-multi-select"
                         placeholder=""
                         styles={colourStyles}
-                        onChange={(value)=> addCity(value)}
-                        // classNamePrefix="select"
+                        onChange={(value) => setBrandType(value)}
+                      // classNamePrefix="select"
                       />
                     </div>
-                    <div className="col-md-6  mb-3"></div>
                     <div className="col-md-6  mb-3">
                       <label className="text-end d-block">سنة تصنيع محددة</label>
                       <Select
@@ -243,6 +262,21 @@ export default function Search() {
                       </div>
                       {/* <div className="year_slider" name="slider"></div> */}
                     </div>
+                    <div className="col-md-6  mb-3">
+                      <label className="text-end d-block"> المدينة </label>
+                      <Select
+                        defaultValue={searchInputs.cityOptions.map(i => state.city_id.indexOf(i.value) != -1 ? i : false)}
+                        isMulti
+                        name="brand"
+                        options={searchInputs.cityOptions}
+                        className="basic-multi-select"
+                        placeholder=""
+                        styles={colourStyles}
+                        onChange={(value)=> addCity(value)}
+                        // classNamePrefix="select"
+                      />
+                    </div>
+                    <div className="col-md-6  mb-3"></div>
                     {/* Commenting this Code is its not required yet
                      <div className="col-12 flex_col  mb-3">
                       {searchInputs.shapes.map((shape, i) => {

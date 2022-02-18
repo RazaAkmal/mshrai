@@ -23,7 +23,7 @@ export default function Cars({ cars }) {
         <div className="col-lg-4 col-md-6 col-sm-6" key={car.id}>
           <Link to={{ pathname:car.url }} className="car_item" target="_blank" rel="noopener noreferrer">
             <div className="car_img">
-              <img onError={(e)=>{e.target.onerror = null; e.target.src=`${apiUrl}/upload/default.jpg`}} src={validURL(car.image)} alt="" id={car.id}/>
+              <img onError={(e)=>{e.target.onerror = null; e.target.src=`${apiUrl}/upload/default.jpg`}} src={car.image} alt="" id={car.id}/>
             </div>
             <div className="car_cont">
               <h3>{car.brand + " - " + car.brand_type}</h3>
