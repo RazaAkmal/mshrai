@@ -428,7 +428,7 @@ export default function Resault(props) {
           </div>
         </div>
       </section>
-      <div className="copyrights">جميع الحقوق محفوظة | موقع سيارتى 2021</div>
+      <div className="copyrights">جميع الحقوق محفوظة | موقع سيارتى {new Date().getFullYear()}</div>
       <Loader />
     </>
   );
