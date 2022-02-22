@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 // import { useHistory } from "react-router-dom";
 import $ from "jquery";
+import InfiniteScroll from "react-infinite-scroll-component";
 import Filters from "../components/filters";
 import Cars from "../components/cars";
 import Loader from "../components/loader";
@@ -412,17 +413,39 @@ export default function Resault(props) {
                   </div>
                 </div>
               </div>
-              <Cars cars={cars} />
+              <div
+                id="scrollableDiv"
+                style={{
+                  height: 600,
+                  overflow: 'auto',
+                }}
+              >
+                <InfiniteScroll
+                  dataLength={searchForm.index + 12} //This is important field to render the next data
+                  next={() => _handleStartSearch("paginate", searchForm.index + 12)}
+                  hasMore={searchForm.index + 12 < resultsNumber}
+                  loader={          <img src="./images/loading.gif" alt="loading" />
+                }
+                  scrollWindow={false}
+                  scrollableTarget="scrollableDiv"
+                  endMessage={
+                    <p style={{ textAlign: 'center' }}>
+                      <h2>ياي! لقد رأيت كل شيء</h2>
+                    </p>
+                  }>
+                  <Cars cars={cars} />
+                </InfiniteScroll>
+              </div>
               <div className="w-100 text-left">
                 <button className="link green_bc" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">حفظ نتائج البحث</button>
-                {resultsNumber > cars.length &&<button
+                {/* {resultsNumber > cars.length &&<button
                   className="link"
                   onClick={() =>
                     _handleStartSearch("paginate", searchForm.index + 12)
                   }
                 >
                   تحميل المزيد
-                </button>}
+                </button>} */}
               </div>
             </div>
           </div>
