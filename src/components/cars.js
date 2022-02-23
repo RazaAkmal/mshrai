@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { apiUrl } from "../features/constants";
+import { MdOutlineLocationOn } from 'react-icons/md'
 
 function validURL(str) {
   var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
@@ -29,14 +30,14 @@ export default function Cars({ cars }) {
               <h3>{car.brand + " - " + car.brand_type}</h3>
               <p>
                 <i className="far fa-clock"></i>
-                {car.addDate}
+                {car.addDate || "غير متاح"}
               </p>
               <ul className="tags">
                 <li>{car.model_year}</li>
                 <li>{car.kilometer} كم</li>
               </ul>
               <p>
-                <i className="fa fa-map-marker-alt"></i> {car.city}
+              <MdOutlineLocationOn /> {car.city}
               </p>
               <div className="bottom">
                 <div className="price">
