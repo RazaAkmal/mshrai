@@ -12,7 +12,9 @@
 }
 :root {
   --main_color: #000000;
-  --second_color: #3e0292;
+  --primary_color: #3e0292;
+  --second_color: #00CEE0;
+  --acent_color: #AAF3FF;
   --third_color: #3e3636;
 }
 ::-moz-selection {
@@ -165,7 +167,7 @@ input[type="radio"]:checked + label::before {
   content: "\2713";
   font-size: 1.2em;
   font-weight: bold;
-  color: var(--second_color);
+  color: var(--primary_color);
   background-color: aliceblue;
 }
 input[type="checkbox"] + label img,
@@ -226,7 +228,7 @@ input[type="radio"] + label img {
   text-align: center;
   font-size: 13px;
   padding: 0 20px;
-  background-color: var(--second_color);
+  background-color: var(--primary_color);
   color: #fff;
   border: 0;
   -webkit-box-shadow: none;
@@ -246,7 +248,7 @@ input[type="radio"] + label img {
   text-align: center;
   font-size: 10px;
   padding: 0;
-  background-color: var(--second_color);
+  background-color: var(--primary_color);
   color: #fff;
   border: 0;
   -webkit-box-shadow: none;
@@ -352,7 +354,7 @@ section {
   line-height: 35px;
   display: block;
   padding: 0 15px;
-  background-color: var(--second_color);
+  background-color: var(--primary_color);
   color: #fff;
   border-radius: 3px;
   margin: 25px auto 5px;
@@ -431,14 +433,20 @@ header form .link i {
   padding: 0;
   width: 100%;
 }
+.toggle-container .panel-collapse {
+  transition: 3s all linear;
+}
 
 .toggle-container .panel-title {
   line-height: 35px;
   margin: 0;
-  padding: 5px 15px 5px 10px;
+  padding: 5px 5px 5px 10px;
   border: 1px solid #e0e0e0;
   text-align: right;
-  border-right: 3px solid #000;
+  transition: border-width 0.2s linear;
+}
+.toggle-container .panel-title:hover {
+  border-right: 3px solid var(--primary_color);
 }
 
 .toggle-container .panel-title a {
@@ -451,7 +459,7 @@ header form .link i {
 
 .toggle-container .panel-title a::before {
   position: absolute;
-  content: " - ";
+  content: url(./images/select_arrow.svg);
   line-height: 30px;
   font-size: 26px;
   padding: 0;
@@ -466,7 +474,7 @@ header form .link i {
 }
 
 .toggle-container .panel-title a.collapsed::before {
-  content: " + ";
+  transform: rotate(180deg);
 }
 
 .toggle-container .panel-content {
@@ -518,7 +526,7 @@ header form .link i {
   display: block;
 }
 .search_hint p span {
-  color: var(--second_color);
+  color: var(--primary_color);
   margin: 0 5px;
   font-size: 24px;
   display: inline-block;
@@ -569,7 +577,7 @@ header form .link i {
   font-weight: 600;
 }
 .search_hint .dropdown .dropdown-item:hover {
-  color: var(--second_color);
+  color: var(--primary_color);
 }
 .search_hint .dropdown button:after {
   display: none;
@@ -592,6 +600,10 @@ header form .link i {
   margin-right: 2px;
 }
 
+.search_tags li span{
+  float: left;
+}
+
 .search_tags li .close {
   position: absolute;
   color: inherit;
@@ -611,23 +623,40 @@ header form .link i {
 .subscribe{
     max-width: 360px;
     margin: 0 auto 25px 0;
-    position: relative;
 }
 .subscribe label{
     margin: 10px 0 0;
 }
+.subscribe input{
+  text-align: right;
+  width: 70%;
+  color: var(--main_color);
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  margin: 15px 0;
+  padding: 0 15px;
+  height: 50px;
+  font-size: 13px;
+  outline: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  font-weight: 700;
+  border-radius: 0 5px 5px 0 !important;
+  -webkit-border-radius: 5px;
+}
 .subscribe button{
-    position: absolute;
+    width: 30%;
     bottom: 0;
     left: 0;
     height: 50px;
     border: 0;
-    background-color: var(--second_color);
+    background-color: var(--primary_color);
     padding: 0 15px;
     color: #fff;
-    border-radius: 3px;
+    border-radius: 5px 0 0 5px !important;
+
 }
-.subscribe button:focus ,
+.subscribe button:focus,
 .subscribe button:hover{
   background-color: var(--main_color);
 }
@@ -635,8 +664,11 @@ header form .link i {
   display: block;
   margin-bottom: 25px;
   align-items: center;
-  border-radius: 5px;
-  border: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--primary_color);
+  transition: all 0.2s ease;
+}
+.car_item:hover {
+  transform: translateY(-20px);
 }
 .car_item.visited {
   opacity: 50%;
@@ -670,7 +702,7 @@ header form .link i {
   color: var(--main_color);
   font-weight: 600;
   font-size: 15px;
-  margin: 10px 15px;
+  margin: 10px 15px 0px 15px;
 }
 .car_item .car_cont p {
   color: var(--third_color);
@@ -679,16 +711,16 @@ header form .link i {
   display: inline-block;
 }
 .car_item .car_cont .tags {
-  margin: 10px;
+  margin: 5px;
 }
 .car_item .car_cont .tags li {
   display: inline-block;
-  background-color: #BBBBBB;
+  background-color: var(--acent_color);
   padding: 0 15px;
   margin: 2px;
   line-height: 28px;
   color: var(--main_color);
-  border-radius: 3px;
+  border-radius: 50px;
   font-weight: 600;
   font-size: 11px;
 }
@@ -699,12 +731,12 @@ header form .link i {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 10px;
+  margin-top: 5px;
 }
 .car_item .car_cont .bottom .price {
   width: 100%;
   font-weight: 600;
-  color: var(--second_color);
+  color: var(--primary_color);
   font-size: 14px;
 }
 .car_item .car_cont .bottom .price span {
@@ -737,7 +769,7 @@ header form .link i {
 .year_slider .ui-state-default,
 .year_slider .ui-widget-content .ui-state-default,
 .year_slider .ui-widget-header .ui-state-default {
-  background: var(--second_color);
+  background: var(--primary_color);
   color: #555555;
   width: 9px;
   border-radius: 3px;

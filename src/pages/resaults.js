@@ -34,6 +34,7 @@ export default function Resault(props) {
   const searchForm = useSelector((state) => state.search.searchForm);
   const searchInputs = useSelector((state) => state.search.searchInputs);
   const resultsNumber = useSelector((state) => state.search.numFound);
+  const query = useSelector((state) => state.search.query);
 
   const dispatch = useDispatch();
 
@@ -103,6 +104,23 @@ export default function Resault(props) {
       default:
         break;
     }
+  };
+
+  const _handleSaveResults = () => {
+    if (state.email === "") return;
+    let key = JSON.stringify(searchForm);
+    let q = JSON.stringify(query);
+    let data = {
+      email: state.email,
+      keys: key,
+      search: q,
+      type: "saveResults",
+      response: resultsNumber,
+    };
+
+    saveResults(data).then((res) => {
+      console.log(res);
+    });
   };
 
   useEffect(() => {
@@ -251,9 +269,7 @@ export default function Resault(props) {
                         return searchForm.brand_id.includes(mark.value) ? (
                           <li key={"searchMarks" + index}>
                             {mark.label}
-                            {/* <button type="button" className="close">
-                            <span aria-hidden="true">&times;</span>
-                          </button> */}
+                            {/* <span><IoIosClose /></span> */}
                           </li>
                         ) : (
                           false
@@ -314,21 +330,30 @@ export default function Resault(props) {
               حدث خطأ ما تأكد من البيانات وأعد الإرسال.
               <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-              <form 
+              <div 
                 className="subscribe"
               >
-                <label> إشترك معنا فى النشرة الأخبارية</label>
+                <label> أدخل بريدك الألكترونى وسيتم إبلاغك عند توافر نتائج جديدة</label>
                 <input
                   type="email"
-                  className="form-control"
                   placeholder=" البريد الألكترونى "
                   value={state.email}
                   onChange={(e) =>
                     setState({ ...state, email: e.target.value })
                   }
                 />
-                <button className="fa fa-search" type="button" onClick={(e) => {e.preventDefault(); _handleSubscripeToNewsletter();}}></button>
-              </form>
+                <button
+                  type="button"
+                  className="btn btn-success"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    _handleSaveResults();
+                  }}
+                >
+              حفظ نتائج البحث
+            </button>
+                {/* <button className="fa fa-search" type="button" onClick={(e) => {e.preventDefault(); _handleSubscripeToNewsletter();}}></button> */}
+              </div>
             </div>
           </div>
           <div className="row">
@@ -416,7 +441,7 @@ export default function Resault(props) {
               <div
                 id="scrollableDiv"
                 style={{
-                  height: 600,
+                  height: 800,
                   overflow: 'auto',
                 }}
               >
@@ -437,7 +462,7 @@ export default function Resault(props) {
                 </InfiniteScroll>
               </div>
               <div className="w-100 text-left">
-                <button className="link green_bc" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">حفظ نتائج البحث</button>
+                {/* <button className="link green_bc" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">حفظ نتائج البحث</button> */}
                 {/* {resultsNumber > cars.length &&<button
                   className="link"
                   onClick={() =>
