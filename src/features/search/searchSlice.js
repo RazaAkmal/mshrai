@@ -39,6 +39,9 @@ export const searchSlice = createSlice({
     setSearchForm: (state, action) => {
       state.searchForm = action.payload
     },
+    setSearchFormToInital: (state, action) => {
+      state.searchForm = initialState.searchForm
+    },
     setQuery: (state, action) => {
       state.query = action.payload
     },
@@ -48,6 +51,6 @@ export const searchSlice = createSlice({
   },
 });
 
-export const { getSearchInputs, setCars , setSearchForm, setQuery, setResultsNumebr } = searchSlice.actions;
+export const { getSearchInputs, setCars , setSearchForm,setSearchFormToInital, setQuery, setResultsNumebr } = searchSlice.actions;
 
 export default searchSlice.reducer;

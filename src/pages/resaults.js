@@ -7,9 +7,10 @@ import Cars from "../components/cars";
 import Loader from "../components/loader";
 import { fetchCars, saveResults } from "../features/search/searchApi";
 import { useDispatch, useSelector } from "react-redux";
-import { setCars, setQuery, setResultsNumebr, setSearchForm } from "../features/search/searchSlice";
+import { setCars, setQuery, setResultsNumebr, setSearchForm, setSearchFormToInital } from "../features/search/searchSlice";
 import SaveResults from "../components/saveResultModal";
 import { Link } from "react-router-dom";
+import { IoIosClose } from "react-icons/io"
 
 export default function Resault(props) {
   useEffect(() => {
@@ -57,6 +58,9 @@ export default function Resault(props) {
 
   const _handleStartSearch = (type, value) => {
     switch (type) {
+      case "clearall":
+        dispatch(setSearchFormToInital())
+        break;
       case "keyword":
         dispatch(
           setSearchForm({
@@ -267,9 +271,18 @@ export default function Resault(props) {
                   {searchForm.brand_id && searchForm.brand_id.length > 0
                     ? searchInputs.marksOptions.map((mark, index) => {
                         return searchForm.brand_id.includes(mark.value) ? (
-                          <li key={"searchMarks" + index}>
+                          <li
+                            key={"searchMarks" + index}>
                             {mark.label}
-                            {/* <span><IoIosClose /></span> */}
+                            <span onClick={() => {
+                              let marks = [...searchForm.brand_id];
+                              if (marks.includes(mark.value)) {
+                                marks.splice(marks.indexOf(mark.value), 1);
+                              }
+                              _handleStartSearch("brand_id", marks);
+                            }}>
+                              <IoIosClose />
+                            </span>
                           </li>
                         ) : (
                           false
@@ -284,9 +297,15 @@ export default function Resault(props) {
                         ) ? (
                           <li key={"searchMarks" + index}>
                             {model.label}
-                            {/* <button type="button" className="close">
-                            <span aria-hidden="true">&times;</span>
-                          </button> */}
+                            <span onClick={() => {
+                              let brandModel = [...searchForm.brand_type_id];
+                              if (brandModel.includes(model.value)) {
+                                brandModel.splice(brandModel.indexOf(model.value), 1);
+                              }
+                              _handleStartSearch("brand_type_id", brandModel);
+                            }}>
+                              <IoIosClose />
+                            </span>
                           </li>
                         ) : (
                           false
@@ -298,9 +317,15 @@ export default function Resault(props) {
                         return searchForm.shape_id.includes(shape.id) ? (
                           <li key={"searchShapes" + index}>
                             {shape.title}
-                            {/* <button type="button" className="close">
-                            <span aria-hidden="true">&times;</span>
-                          </button> */}
+                            <span onClick={() => {
+                              let shapes = [...searchForm.shape_id];
+                              if (shapes.includes(shape.value)) {
+                                shapes.splice(shapes.indexOf(shape.value), 1);
+                              }
+                              _handleStartSearch("shape_id", shapes);
+                            }}>
+                              <IoIosClose />
+                            </span>
                           </li>
                         ) : (
                           false
@@ -312,12 +337,29 @@ export default function Resault(props) {
                         return searchForm.city_id.includes(city.value) ? (
                           <li key={"searchcities" + index}>
                             {city.label}
+                            <span onClick={() => {
+                              let cities = [...searchForm.city_id];
+                              if (cities.includes(city.value)) {
+                                cities.splice(cities.indexOf(city.value), 1);
+                              }
+                              _handleStartSearch("city_id", cities);
+                            }}>
+                              <IoIosClose />
+                            </span>
                           </li>
                         ) : (
                           false
                         );
                       })
                     : ""}
+                  {(searchForm.city_id.length > 0 ||
+                    searchForm.shape_id.length > 0 ||
+                    searchForm.brand_type_id.length > 0 ||
+                    searchForm.brand_id.length > 0) &&
+                    <li key={"searchcitiesclear"} onClick={() => _handleStartSearch('clearall')} key={"searchcities clear"}>
+                      Clear All
+                    </li>
+                  }
                 </ul>
               </div>
             </div>
