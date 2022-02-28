@@ -16,6 +16,7 @@
   --second_color: #00CEE0;
   --acent_color: #AAF3FF;
   --third_color: #3e3636;
+  --gray_color: #BBBBBB;
 }
 ::-moz-selection {
   background-color: var(--main_color) !important;
@@ -450,6 +451,7 @@ header form .link i {
 }
 
 .toggle-container .panel-title a {
+  text-decoration: none;
   display: block;
   position: relative;
   font-size: 13px;
@@ -588,7 +590,7 @@ header form .link i {
 
 .search_tags li {
   display: inline-block;
-  background-color: #c3fac6;
+  background-color: var(--acent_color);
   color: var(--main_color);
   font-size: 13px;
   line-height: 30px;
@@ -601,7 +603,18 @@ header form .link i {
 }
 
 .search_tags li span{
+  cursor: pointer;
   float: left;
+}
+.search_tags li span svg{
+  width: 20px;
+  height: 20px;
+}
+
+.search_tags li:last-child {
+  cursor: pointer;
+  background-color: var(--gray_color);
+  margin-right: 5px;
 }
 
 .search_tags li .close {
