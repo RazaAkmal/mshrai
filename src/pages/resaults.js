@@ -357,7 +357,7 @@ export default function Resault(props) {
                     searchForm.brand_type_id.length > 0 ||
                     searchForm.brand_id.length > 0) &&
                     <li key={"searchcitiesclear"} onClick={() => _handleStartSearch('clearall')} key={"searchcities clear"}>
-                      Clear All
+                      امسح الكل
                     </li>
                   }
                 </ul>
