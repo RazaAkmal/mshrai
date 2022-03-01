@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { apiUrl } from "../features/constants";
 import { MdOutlineLocationOn } from 'react-icons/md'
+import moment from 'moment';
 
 function validURL(str) {
   var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
@@ -18,19 +19,74 @@ function validURL(str) {
 
 export default function Cars({ cars }) {
 
+  const e2a = s => s.replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d])
+
+  
+  const getDate = (date) => {
+
+    const dateObj = new Date();
+    const month = dateObj.getUTCMonth() + 1; //months from 1-12
+    const day = dateObj.getUTCDate();
+    const year = dateObj.getUTCFullYear();
+
+    const index = date.indexOf(' ')
+    const dateSlice = date.slice(0, index)
+
+    const dateArray = dateSlice.split('/')
+    const dateOne = moment([year, month, day]);
+    const dateTwo = moment([dateArray[2], dateArray[1], dateArray[0]]);
+    const resultDays = dateOne.diff(dateTwo, 'days')
+    const resultWeek = dateOne.diff(dateTwo, 'week')
+    const resultMonth = dateOne.diff(dateTwo, 'month')
+    const arabicDays = e2a(resultDays.toString())
+    const arabicWeek = e2a(resultWeek.toString())
+    const arabicMonth = e2a(resultMonth.toString())
+    let message
+    if (resultMonth > 0) {
+      return `منذ شهر`
+    } else if (resultWeek > 0) {
+      let morethan = false
+        if (resultDays > 7 &&  resultDays !== 14 && resultDays !== 21 && resultDays !== 28) {
+          morethan = true
+        }
+        if (resultWeek > 0 && !morethan) {
+          message = "منذ اسبوع "
+        }
+        if (resultWeek > 1) {
+          message = "اسبوعين واكثر"
+        }
+        if (resultWeek > 2) {
+          message = `${arabicWeek} اسابيع واكثر`
+        }
+      return message
+    } else if (resultDays > 0) {
+        message = "قبل يوم"
+        if (resultDays > 1) {
+          message = "قبل يومين"
+        }
+        if (resultDays > 2) {
+          message = ` قبل ${arabicDays} ايام `
+        }
+        return message
+    } else {
+      return 'أضيف اليوم'
+    }
+  }
+
+
   return (
     <div className="row">
       {cars.length > 0 ? cars.map((car) => (
         <div className="col-lg-4 col-md-6 col-sm-6" key={car.id}>
           <Link to={{ pathname:car.url }} className="car_item" target="_blank" rel="noopener noreferrer">
             <div className="car_img">
-              <img onError={(e)=>{e.target.onerror = null; e.target.src=`${apiUrl}/upload/default.jpg`}} src={car.image} alt="" id={car.id}/>
+              <img onError={(e)=>{e.target.onerror = null; e.target.src=`${apiUrl}/upload/default.jpg`}} src={car.image || car.description} alt="" id={car.id}/>
             </div>
             <div className="car_cont">
               <h3>{car.brand + " - " + car.brand_type}</h3>
               <p>
                 <i className="far fa-clock"></i>
-                {car.addDate || "غير متاح"}
+                {getDate(car.date)}
               </p>
               <ul className="tags">
                 <li>{car.model_year}</li>
@@ -41,7 +97,7 @@ export default function Cars({ cars }) {
               </p>
               <div className="bottom">
                 <div className="price">
-                  <span> السعر </span> {car.price} ريال
+                  <span> السعر </span> {!car.price ? "لايوجد سعر" : car.price + "ريال"} 
                 </div>
                 <img src={apiUrl+"/upload/"+car.source_image || "./images/olx.jpg"} alt="" />
               </div>

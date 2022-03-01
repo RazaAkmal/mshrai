@@ -370,7 +370,7 @@ section {
   width: 100%;
   border-radius: 5px;
   align-items: center;
-  overflow: hidden;
+  /* overflow: hidden; */
   padding: 25px 25px 15px;
 }
 .search_form .row {
@@ -594,7 +594,7 @@ header form .link i {
   color: var(--main_color);
   font-size: 13px;
   line-height: 30px;
-  border-radius: 3px;
+  border-radius: 50px;
   padding: 0 5px 0 10px;
   min-width: 70px;
   text-align: center;
