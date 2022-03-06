@@ -980,6 +980,7 @@ header form .link i {
 
 
 .filter-accordion .accordion-button {
+  padding: 0.7rem 0.7rem;
   justify-content: space-between;
 }
 .filter-accordion .accordion-button:focus {
@@ -990,6 +991,10 @@ header form .link i {
 }
 .filter-accordion .accordion-header {
   border: 1px solid #e0e0e0;
+  transition: border-width 0.2s linear;
+}
+.filter-accordion .accordion-header:hover {
+  border-right: 3px solid var(--primary_color);
 }
 .filter-accordion .accordion-body {
   padding: 0;
@@ -1001,3 +1006,4 @@ header form .link i {
 .filter-accordion .accordion-item {
   margin-bottom: 25px;
 }
+
