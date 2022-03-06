@@ -13,6 +13,7 @@
 :root {
   --main_color: #000000;
   --primary_color: #3e0292;
+  --primary_color_2: #00CEBD;
   --second_color: #00CEE0;
   --acent_color: #AAF3FF;
   --third_color: #3e3636;
@@ -590,7 +591,7 @@ header form .link i {
 
 .search_tags li {
   display: inline-block;
-  background-color: var(--acent_color);
+  background-color: var(--primary_color_2);
   color: var(--main_color);
   font-size: 13px;
   line-height: 30px;
@@ -969,4 +970,34 @@ header form .link i {
 .search-button a:hover{
   color: #fff;
   text-decoration: none;
+}
+
+
+.d-block img {
+  width: 30px !important;
+  height: 30px;
+}
+
+
+.filter-accordion .accordion-button {
+  justify-content: space-between;
+}
+.filter-accordion .accordion-button:focus {
+  box-shadow: none;
+}
+.filter-accordion .accordion-item {
+  border: none
+}
+.filter-accordion .accordion-header {
+  border: 1px solid #e0e0e0;
+}
+.filter-accordion .accordion-body {
+  padding: 0;
+}
+
+.filter-accordion .accordion-button::after {
+  margin-left: 0 !important;
+}
+.filter-accordion .accordion-item {
+  margin-bottom: 25px;
 }

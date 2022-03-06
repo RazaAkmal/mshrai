@@ -4,6 +4,8 @@ import $ from "jquery";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSearchInputs } from "../features/search/searchApi";
 import { getSearchInputs } from "../features/search/searchSlice";
+import { Accordion } from 'react-bootstrap';
+import { apiUrl } from "../features/constants";
 
 export default function Filters(props) {
   const searchInputs = useSelector((state) => state.search.searchInputs);
@@ -224,7 +226,7 @@ export default function Filters(props) {
           </div>
         </div> */}
       {/* <!--End Panel--> */}
-      <div className="panel">
+      {/* <div className="panel">
         <h4 className="panel-title">
           <a
             href="#toggle8"
@@ -235,7 +237,6 @@ export default function Filters(props) {
             الماركة
           </a>
         </h4>
-        {/* <!--End panel-title--> */}
         <div className="panel-collapse collapse" id="toggle8">
           <div className="panel-content">
             {searchInputs.marksOptions.map((brand, index) => {
@@ -256,12 +257,10 @@ export default function Filters(props) {
               );
             })}
           </div>
-          {/* <!--End Panel Content--> */}
         </div>
-        {/* <!--End Panel Collapse--> */}
-      </div>
+      </div> */}
       {/* <!--End Panel--> */}
-        <div className="panel">
+        {/* <div className="panel">
           <h4 className="panel-title">
             <a
               href="#toggle7"
@@ -272,7 +271,6 @@ export default function Filters(props) {
               المودل
             </a>
           </h4>
-          {/* <!--End panel-title--> */}
           <div className="panel-collapse collapse" id="toggle7">
             <div className="panel-content">
               {modelOptions.map((brand_type, index) => {
@@ -297,13 +295,11 @@ export default function Filters(props) {
                 );
               })}
             </div>
-            {/* <!--End Panel Content--> */}
           </div>
-          {/* <!--End Panel Collapse--> */}
-        </div>
+        </div> */}
       {/* <!--End Panel--> */}
 
-      <div className="panel">
+      {/* <div className="panel">
         <h4 className="panel-title">
           <a
             href="#toggle9"
@@ -314,7 +310,6 @@ export default function Filters(props) {
             سنة الصنع
           </a>
         </h4>
-        {/* <!--End panel-title--> */}
         <div className="panel-collapse collapse" id="toggle9">
           <div className="panel-content" style={{ height: "90px" }}>
             <Range
@@ -372,15 +367,12 @@ export default function Filters(props) {
                 },
               ]}
             />
-            {/* <div className="year_slider" name="slider"></div> */}
           </div>
-          {/* <!--End Panel Content--> */}
         </div>
-        {/* <!--End Panel Collapse--> */}
-      </div>
+      </div> */}
       {/* <!--End Panel--> */}
 
-      <div className="panel">
+      {/* <div className="panel">
         <h4 className="panel-title">
           <a
             href="#toggle5"
@@ -391,7 +383,6 @@ export default function Filters(props) {
             السعر [ ريال سعودى ]
           </a>
         </h4>
-        {/* <!--End panel-title--> */}
         <div className="panel-collapse collapse" id="toggle5">
           <div className="panel-content">
             <div className="form-group">
@@ -462,12 +453,10 @@ export default function Filters(props) {
               </label>
             </div>
           </div>
-          {/* <!--End Panel Content--> */}
         </div>
-        {/* <!--End Panel Collapse--> */}
-      </div>
+      </div> */}
       {/* <!--End Panel--> */}
-      <div className="panel">
+      {/* <div className="panel">
         <h4 className="panel-title">
           <a
             href="#toggle6"
@@ -478,7 +467,6 @@ export default function Filters(props) {
             المدينة
           </a>
         </h4>
-        {/* <!--End panel-title--> */}
         <div className="panel-collapse collapse" id="toggle6">
           <div className="panel-content">
             {searchInputs.cityOptions.map((city, index) => {
@@ -499,12 +487,10 @@ export default function Filters(props) {
               );
             })}
           </div>
-          {/* <!--End Panel Content--> */}
         </div>
-        {/* <!--End Panel Collapse--> */}
-      </div>
+      </div> */}
       {/* <!--End Panel--> */}
-      <div className="panel">
+      {/* <div className="panel">
         <h4 className="panel-title">
           <a
             href="#toggle3"
@@ -514,7 +500,6 @@ export default function Filters(props) {
             عدد الكيلوهات المستعملة
           </a>
         </h4>
-        {/* <!--End panel-title--> */}
         <div className="panel-collapse collapse in show" id="toggle3">
           <div className="panel-content">
             <div className="form-group">
@@ -622,9 +607,8 @@ export default function Filters(props) {
               </label>
             </div>
           </div>
-          {/* <!--End Panel Content--> */}
         </div>
-      </div>
+      </div> */}
       {/* <!--End Panel--> */}
       {/* <div className="panel">
         <h4 className="panel-title">
@@ -663,7 +647,336 @@ export default function Filters(props) {
          <!--End Panel Collapse--> 
       </div>
        <!--End Panel-->  */}
-    
+      <Accordion>
+        <div className="filter-accordion">
+        <Accordion.Item eventKey="0">
+          <Accordion.Header>الماركة</Accordion.Header>
+          <Accordion.Body>
+          <div className="panel-content">
+            {searchInputs.marksOptions.map((brand, index) => {
+              return (
+                <div className="form-group" key={"brand" + index}>
+                  <input
+                    id={"brand" + index}
+                    type="checkbox"
+                    name="car_brand2"
+                    checked={props.searchState.brand_id.includes(brand.value)}
+                    onChange={(v) => addValue("brand_id", brand.value)}
+                  />
+                  <label className="d-block" htmlFor={"brand" + index}>
+                  <span>
+                    <img src={apiUrl+"/upload/"+brand.image} alt="" />
+                  </span>
+                    {" "}
+                    {brand.label}{" "}
+                  </label>
+                </div>
+              );
+            })}
+          </div>
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="1">
+          <Accordion.Header>المودل</Accordion.Header>
+          <Accordion.Body>
+          <div className="panel-content">
+          {modelOptions.map((brand_type, index) => {
+                return (
+                  <div className="form-group" key={"brand_type" + index}>
+                    <input
+                      id={"brand_type" + index}
+                      type="checkbox"
+                      name="car_modal"
+                      checked={props.searchState.brand_type_id.includes(
+                        brand_type.value
+                      )}
+                      onChange={(v) =>
+                        addValue("brand_type_id", brand_type.value)
+                      }
+                    />
+                    <label className="d-block" htmlFor={"brand_type" + index}>
+                      {" "}
+                      {brand_type.label}{" "}
+                    </label>
+                  </div>
+                );
+              })}
+              </div>
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="2">
+          <Accordion.Header>سنة الصنع</Accordion.Header>
+          <Accordion.Body>
+          <div className="panel-content" style={{ height: "90px" }}>
+            <Range
+              onAfterChange={(value) => addValue("years", value)}
+              marks={{
+                1990: `1990`,
+                2021: `2021`,
+              }}
+              min={1990}
+              max={new Date().getFullYear()}
+              defaultValue={[
+                props.searchState.model_year_start,
+                props.searchState.model_year_end,
+              ]}
+              tipFormatter={(value) => `${value}`}
+              tipProps={{
+                placement: "top",
+                visible: true,
+              }}
+              railStyle={{
+                background: "#fff",
+                height: "12px",
+                borderRadius: "3px",
+                border: "1px solid #e0e0e0",
+              }}
+              dotStyle={{ display: "none" }}
+              activeDotStyle={{}}
+              trackStyle={[
+                {
+                  height: "100%",
+                  background: "#dfdfdf",
+                  borderRadius: 0,
+                },
+              ]}
+              handleStyle={[
+                {
+                  background: "#3e0292",
+                  color: "#555555",
+                  width: "9px",
+                  borderRadius: "3px",
+                  border: 0,
+                  cursor: "pointer",
+                  height: "20px",
+                  bottom: "-7px",
+                },
+                {
+                  background: "#3e0292",
+                  color: "#555555",
+                  width: "9px",
+                  borderRadius: "3px",
+                  border: 0,
+                  cursor: "pointer",
+                  height: "20px",
+                  bottom: "-7px",
+                },
+              ]}
+            />
+            {/* <div className="year_slider" name="slider"></div> */}
+          </div>
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="3">
+          <Accordion.Header>السعر [ ريال سعودى ]</Accordion.Header>
+          <Accordion.Body>
+          <div className="panel-content">
+            <div className="form-group">
+              <input
+                id="price1"
+                type="checkbox"
+                name="price"
+                checked={props.searchState.price.includes("[0 TO 70000]")}
+                onChange={() => addValue("price", "[0 TO 70000]")}
+              />
+              <label className="d-block" htmlFor="price1">
+                {" "}
+                أقل من 70,000{" "}
+              </label>
+            </div>
+            <div className="form-group">
+              <input
+                id="price2"
+                type="checkbox"
+                name="price"
+                checked={props.searchState.price.includes("[70000 TO 120000]")}
+                onChange={() => addValue("price", "[70000 TO 120000]")}
+              />
+              <label className="d-block" htmlFor="price2">
+                {" "}
+                70,000 - 120,000{" "}
+              </label>
+            </div>
+            <div className="form-group">
+              <input
+                id="price3"
+                type="checkbox"
+                name="price"
+                checked={props.searchState.price.includes("[120000 TO 170000]")}
+                onChange={() => addValue("price", "[120000 TO 170000]")}
+              />
+              <label className="d-block" htmlFor="price3">
+                {" "}
+                120,000 - 170,000{" "}
+              </label>
+            </div>
+            <div className="form-group">
+              <input
+                id="price4"
+                type="checkbox"
+                name="price"
+                checked={props.searchState.price.includes("[170000 TO 200000]")}
+                onChange={() => addValue("price", "[170000 TO 200000]")}
+              />
+              <label className="d-block" htmlFor="price4">
+                {" "}
+                170,000 - 200,000{" "}
+              </label>
+            </div>
+            <div className="form-group">
+              <input
+                id="price5"
+                type="checkbox"
+                name="price"
+                checked={props.searchState.price.includes(
+                  "[200000 TO 999999999]"
+                )}
+                onChange={() => addValue("price", "[200000 TO 999999999]")}
+              />
+              <label className="d-block" htmlFor="price5">
+                {" "}
+                أكثر من 200,000{" "}
+              </label>
+            </div>
+          </div>
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="4">
+          <Accordion.Header>المدينة</Accordion.Header>
+          <Accordion.Body>
+          <div className="panel-content">
+            {searchInputs.cityOptions.map((city, index) => {
+              return (
+                <div className="form-group" key={"city" + index}>
+                  <input
+                    id={"city" + index}
+                    type="checkbox"
+                    name="city"
+                    checked={props.searchState.city_id.includes(city.value)}
+                    onChange={(v) => addValue("city_id", city.value)}
+                  />
+                  <label className="d-block" htmlFor={"city" + index}>
+                    {" "}
+                    {city.label}{" "}
+                  </label>
+                </div>
+              );
+            })}
+          </div>
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="5">
+          <Accordion.Header>عدد الكيلوهات المستعملة</Accordion.Header>
+          <Accordion.Body>
+          <div className="panel-content">
+            <div className="form-group">
+              <input
+                id="ep1"
+                type="checkbox"
+                name="engine_power"
+                checked={props.searchState.kilometer.includes("[0 TO 9999]")}
+                onChange={() => addValue("kilometer", "[0 TO 9999]")}
+              />
+              <label className="d-block" htmlFor="ep1">
+                {" "}
+                أقل من 10,000{" "}
+              </label>
+            </div>
+            <div className="form-group">
+              <input
+                id="ep2"
+                type="checkbox"
+                name="engine_power"
+                checked={props.searchState.kilometer.includes(
+                  "[10000 TO 50000]"
+                )}
+                onChange={() => addValue("kilometer", "[10000 TO 50000]")}
+              />
+              <label className="d-block" htmlFor="ep2">
+                {" "}
+                10,000 : 50,000{" "}
+              </label>
+            </div>
+            <div className="form-group">
+              <input
+                id="ep3"
+                type="checkbox"
+                name="engine_power"
+                checked={props.searchState.kilometer.includes(
+                  "[50000 TO 75000]"
+                )}
+                onChange={() => addValue("kilometer", "[50000 TO 75000]")}
+              />
+              <label className="d-block" htmlFor="ep3">
+                {" "}
+                50,000 : 75,000{" "}
+              </label>
+            </div>
+            <div className="form-group">
+              <input
+                id="ep4"
+                type="checkbox"
+                name="engine_power"
+                checked={props.searchState.kilometer.includes(
+                  "[75000 TO 100000]"
+                )}
+                onChange={() => addValue("kilometer", "[75000 TO 100000]")}
+              />
+              <label className="d-block" htmlFor="ep4">
+                {" "}
+                75,000 : 100,000{" "}
+              </label>
+            </div>
+            <div className="form-group">
+              <input
+                id="ep5"
+                type="checkbox"
+                name="engine_power"
+                checked={props.searchState.kilometer.includes(
+                  "[100000 TO 150000]"
+                )}
+                onChange={() => addValue("kilometer", "[100000 TO 150000]")}
+              />
+              <label className="d-block" htmlFor="ep5">
+                {" "}
+                100,000 : 150,000{" "}
+              </label>
+            </div>
+            <div className="form-group">
+              <input
+                id="ep6"
+                type="checkbox"
+                name="engine_power"
+                checked={props.searchState.kilometer.includes(
+                  "[150000 TO 200000]"
+                )}
+                onChange={() => addValue("kilometer", "[150000 TO 200000]")}
+              />
+              <label className="d-block" htmlFor="ep6">
+                {" "}
+                150,000 : 200,000{" "}
+              </label>
+            </div>
+            <div className="form-group">
+              <input
+                id="ep7"
+                type="checkbox"
+                name="engine_power"
+                checked={props.searchState.kilometer.includes(
+                  "[200001 TO 999999999]"
+                )}
+                onChange={() => addValue("kilometer", "[200001 TO 999999999]")}
+              />
+              <label className="d-block" htmlFor="ep7">
+                {" "}
+                أكثر من 200,000{" "}
+              </label>
+            </div>
+          </div>
+          </Accordion.Body>
+        </Accordion.Item>
+        </div>
+      </Accordion>
     </form>
   );
 }
