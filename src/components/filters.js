@@ -10,6 +10,9 @@ import { apiUrl } from "../features/constants";
 export default function Filters(props) {
   const searchInputs = useSelector((state) => state.search.searchInputs);
   const [modelOptions, setModelOptions] = useState([])
+  const [filterbrand, setFilterbrand] = useState('')
+  const [filterModal, setFilterModal] = useState('')
+  const [filterCity, setFilterCity] = useState('')
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -116,6 +119,10 @@ export default function Filters(props) {
       $('a[href="' + elm + '"]').removeClass("collapsed");
     }
   };
+
+  const filterValue = (val, filter) => {
+    return val.label.toLowerCase().includes(filter.toLowerCase())
+  }
 
   return (
     <form className="toggle-container" id="accordion1">
@@ -653,7 +660,8 @@ export default function Filters(props) {
           <Accordion.Header>الماركة</Accordion.Header>
           <Accordion.Body>
           <div className="panel-content">
-            {searchInputs.marksOptions.map((brand, index) => {
+            <input type="text" placeholder="البحث عن العلامة التجارية" style={{marginTop: '0'}} className="form-control" onChange={(e) => setFilterbrand(e.target.value)}/>
+            {searchInputs.marksOptions.filter(v => filterValue(v, filterbrand)).map((brand, index) => {
               return (
                 <div className="form-group" key={"brand" + index}>
                   <input
@@ -680,7 +688,8 @@ export default function Filters(props) {
           <Accordion.Header>المودل</Accordion.Header>
           <Accordion.Body>
           <div className="panel-content">
-          {modelOptions.map((brand_type, index) => {
+          <input type="text" placeholder="مشروط البحث" style={{marginTop: '0'}} className="form-control" onChange={(e) => setFilterModal(e.target.value)}/>
+          {modelOptions.filter(v => filterValue(v, filterModal)).map((brand_type, index) => {
                 return (
                   <div className="form-group" key={"brand_type" + index}>
                     <input
@@ -845,7 +854,8 @@ export default function Filters(props) {
           <Accordion.Header>المدينة</Accordion.Header>
           <Accordion.Body>
           <div className="panel-content">
-            {searchInputs.cityOptions.map((city, index) => {
+          <input placeholder="ابحث عن المدينة" type="text" style={{marginTop: '0'}} className="form-control" onChange={(e) => setFilterCity(e.target.value)}/>
+            {searchInputs.cityOptions.filter(v => filterValue(v, filterCity)).map((city, index) => {
               return (
                 <div className="form-group" key={"city" + index}>
                   <input

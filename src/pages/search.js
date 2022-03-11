@@ -5,9 +5,10 @@ import Select from "react-select";
 import { colourStyles } from "../constants";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-import { fetchSearchInputs } from "../features/search/searchApi";
+import { fetchSearchInputs, fetchCars } from "../features/search/searchApi";
 import { useDispatch, useSelector } from "react-redux";
-import { getSearchInputs, setSearchForm } from "../features/search/searchSlice";
+import { getSearchInputs, setSearchForm, setResultsNumebr } from "../features/search/searchSlice";
+
 const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range);
 
@@ -15,6 +16,7 @@ export default function Search() {
   let history = useHistory();
   const searchInputs = useSelector((state) => state.search.searchInputs);
   const searchForm = useSelector((state) => state.search.searchForm);
+  const resultsNumber = useSelector((state) => state.search.numFound);
 
   const [modelOptions, setModelOptions] = useState([])
   const [brandOptions, setBrandOptions] = useState([])
@@ -45,6 +47,82 @@ export default function Search() {
     const brandOptionsStored = searchInputs.marksOptions.map(i => state.brand_id.indexOf(i.value) !== -1 ? i : false)
     setBrandOptions(brandOptionsStored)
   }, [searchInputs])
+
+  useEffect(() => {
+    var query = `model_year:[${state.model_year_start} TO ${state.model_year_end}]`;
+    if (state.keyword && state.keyword !== "") {
+      query += ` AND (brand:"${state.keyword}" OR brand_type:"${state.keyword}")`;
+    }
+    if (
+      state.brand_id &&
+      state.brand_id != null &&
+      state.brand_id.length > 0
+    ) {
+      query += ` AND brand_id:(`;
+      state.brand_id.forEach((id, index) => {
+        query += index === 0 ? id : ` OR ${id}`;
+      });
+      query += ")";
+    }
+    if (
+      state.brand_type_id &&
+      state.brand_type_id != null &&
+      state.brand_type_id.length > 0
+    ) {
+      query += ` AND brand_type_id:(`;
+      state.brand_type_id.forEach((id, index) => {
+        query += index === 0 ? id : ` OR ${id}`;
+      });
+      query += ")";
+    }
+    if (
+      state.shape_id &&
+      state.shape_id != null &&
+      state.shape_id.length > 0
+    ) {
+      query += ` AND shape_id:(`;
+      state.shape_id.forEach((id, index) => {
+        query += index === 0 ? id : ` OR ${id}`;
+      });
+      query += ")";
+    }
+    if (
+      state.city_id &&
+      state.city_id != null &&
+      state.city_id.length > 0
+    ) {
+      query += ` AND city_id:(`;
+      state.city_id.forEach((id, index) => {
+        query += index === 0 ? id : ` OR ${id}`;
+      });
+      query += ")";
+    }
+    if (state.kilometer && state.kilometer.length > 0) {
+      query += ` AND kilometer:(`;
+      state.kilometer.forEach((id, index) => {
+        query += index === 0 ? id : ` OR ${id}`;
+      });
+      query += ")";
+    }
+    if (state.price && state.price.length > 0) {
+      query += ` AND price:(`;
+      state.price.forEach((id, index) => {
+        query += index === 0 ? id : ` OR ${id}`;
+      });
+      query += ")";
+    }
+    if (state.sort && state.sort !== "") {
+      query += `&${state.sort}`;
+    }
+    query += `&rows=12&start=${state.index}`;
+    fetchCars(query).then((res) => {
+      if (res && res.response && res.response.docs) {
+        console.log(res.response.docs);
+        dispatch(setResultsNumebr(res.response.numFound));
+      }
+    });
+  }, [state]);
+  
   
 
   const addShape = (i) => {
@@ -171,7 +249,7 @@ export default function Search() {
                         name="brand"
                         options={searchInputs.marksOptions}
                         className="basic-multi-select"
-                        placeholder=""
+                        placeholder="أي علامة تجارية"
                         styles={colourStyles}
                         onChange={(value)=> setBrand(value)}
                         // classNamePrefix="select"
@@ -185,7 +263,7 @@ export default function Search() {
                         name="brand"
                         options={modelOptions}
                         className="basic-multi-select"
-                        placeholder=""
+                        placeholder="أي نموذج"
                         styles={colourStyles}
                         onChange={(value) => setBrandType(value)}
                       // classNamePrefix="select"
@@ -270,7 +348,7 @@ export default function Search() {
                         name="brand"
                         options={searchInputs.cityOptions}
                         className="basic-multi-select"
-                        placeholder=""
+                        placeholder="أي مدينة"
                         styles={colourStyles}
                         onChange={(value)=> addCity(value)}
                         // classNamePrefix="select"
@@ -299,8 +377,8 @@ export default function Search() {
                   </div>
                   {/* <!--End Row--> */}
 
-                  <button type="button" className="search-button" onClick={navigateToResult}>
-                      <i className="fa fa-search"></i> عرض النتائج
+                  <button type="button" disabled={!resultsNumber > 0}  className={resultsNumber > 0 ? "search-button" : "disable-button" } onClick={navigateToResult}>
+                    شاهد {resultsNumber} سيارة
                   </button>
                 </form>
                 <p>
