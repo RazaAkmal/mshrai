@@ -476,6 +476,10 @@ header form .link i {
   transition: 0.3s all linear;
 }
 
+.css-14el2xx-placeholder {
+  color: var(--main_color) !important;
+}
+
 .toggle-container .panel-title a.collapsed::before {
   transform: rotate(180deg);
 }
@@ -961,6 +965,10 @@ header form .link i {
 .sliderArea {
   width: 300px;
   margin: 0 auto;
+}
+
+.disable-button {
+  background-color: var(--gray_color) !important;
 }
 
 .search-button a{
