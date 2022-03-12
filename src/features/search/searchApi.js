@@ -15,6 +15,7 @@ export async function fetchSearchInputs() {
     modelOptions: [],
     cityOptions: [],
     shapes: [],
+    sources: [],
   };
   if(result.code === "0"){
     if(result.marks && result.marks.length > 0){
@@ -25,6 +26,11 @@ export async function fetchSearchInputs() {
     if(result.model && result.model.length > 0){
       result.model.forEach(model => {
         options.modelOptions.push({value: model.id, label: model.brand_types, brandId: model.brand_id})
+      });
+    }
+    if(result.sources && result.sources.length > 0){
+      result.sources.forEach(source => {
+        options.sources.push({value: source.id, label: source.title, image: source.image})
       });
     }
     if(result.cities && result.cities.length > 0){

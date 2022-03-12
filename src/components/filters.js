@@ -13,6 +13,7 @@ export default function Filters(props) {
   const [filterbrand, setFilterbrand] = useState('')
   const [filterModal, setFilterModal] = useState('')
   const [filterCity, setFilterCity] = useState('')
+  const [filterSource, setFilterSource] = useState('')
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -59,6 +60,15 @@ export default function Filters(props) {
           shapes.push(value);
         }
         props.handleStartSearch("shape_id", shapes);
+        break;
+      case "source_id":
+        let sources = [...props.searchState.source_id];
+        if (sources.includes(value)) {
+          sources.splice(sources.indexOf(value), 1);
+        } else {
+          sources.push(value);
+        }
+        props.handleStartSearch("source_id", sources);
         break;
       case "city_id":
         let cities = [...props.searchState.city_id];
@@ -982,6 +992,34 @@ export default function Filters(props) {
                 أكثر من 200,000{" "}
               </label>
             </div>
+          </div>
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="6">
+          <Accordion.Header>مصدر</Accordion.Header>
+          <Accordion.Body>
+          <div className="panel-content">
+            <input type="text" placeholder="مصدر البحث" style={{marginTop: '0'}} className="form-control" onChange={(e) => setFilterSource(e.target.value)}/>
+            {searchInputs.sources.filter(v => filterValue(v !== "Snap" ? v : 'other', filterSource)).map((source, index) => {
+              return (
+                <div className="form-group" key={"source" + index}>
+                  <input
+                    id={"source" + index}
+                    type="checkbox"
+                    name="source"
+                    checked={props.searchState.source_id.includes(source.value)}
+                    onChange={(v) => addValue("source_id", source.value)}
+                  />
+                  <label className="d-block" htmlFor={"source" + index}>
+                  <span>
+                    <img src={`${apiUrl}/upload/${source.label !== 'Snap' ? source.image : 'default.jpg'}`} alt="" />
+                  </span>
+                    {" "}
+                    {source.label === 'Snap' ? "Other" : source.label}{" "}
+                  </label>
+                </div>
+              );
+            })}
           </div>
           </Accordion.Body>
         </Accordion.Item>
