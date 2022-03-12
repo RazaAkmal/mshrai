@@ -81,6 +81,9 @@ export default function Resault(props) {
       case "brand_id":
         dispatch(setSearchForm({ ...searchForm, brand_id: value, index: 0 }));
         break;
+      case "source_id":
+        dispatch(setSearchForm({ ...searchForm, source_id: value, index: 0 }));
+        break;
       case "city_id":
         dispatch(setSearchForm({ ...searchForm, city_id: value, index: 0 }));
         break;
@@ -172,6 +175,17 @@ export default function Resault(props) {
     ) {
       query += ` AND city_id:(`;
       searchForm.city_id.forEach((id, index) => {
+        query += index === 0 ? id : ` OR ${id}`;
+      });
+      query += ")";
+    }
+    if (
+      searchForm.source_id &&
+      searchForm.source_id != null &&
+      searchForm.source_id.length > 0
+    ) {
+      query += ` AND source_id:(`;
+      searchForm.source_id.forEach((id, index) => {
         query += index === 0 ? id : ` OR ${id}`;
       });
       query += ")";
