@@ -377,7 +377,10 @@ export default function Search() {
                   </div>
                   {/* <!--End Row--> */}
 
-                  <button type="button" disabled={!resultsNumber > 0}  className={resultsNumber > 0 ? "search-button" : "disable-button" } onClick={navigateToResult}>
+                  {/* <button type="button" disabled={!resultsNumber > 0}  className={resultsNumber > 0 ? "search-button" : "disable-button" } onClick={navigateToResult}>
+                    شاهد {resultsNumber} سيارة
+                  </button> */}
+                  <button type="button"  className="search-button" onClick={navigateToResult}>
                     شاهد {resultsNumber} سيارة
                   </button>
                 </form>
