@@ -34,7 +34,7 @@ export default function Cars({ cars }) {
 
     const dateArray = dateSlice.split('/')
     const dateOne = moment([year, month, day]);
-    const dateTwo = moment([dateArray[2], dateArray[1], dateArray[0]]);
+    const dateTwo = moment([Number(dateArray[2]), Number(dateArray[1]) - 1, Number(dateArray[0])]);
     const resultDays = dateOne.diff(dateTwo, 'days')
     const resultWeek = dateOne.diff(dateTwo, 'week')
     const resultMonth = dateOne.diff(dateTwo, 'month')
@@ -80,7 +80,7 @@ export default function Cars({ cars }) {
         <div className="col-lg-4 col-md-6 col-sm-6" key={car.id}>
           <Link to={{ pathname:car.url }} className="car_item" target="_blank" rel="noopener noreferrer">
             <div className="car_img">
-              <img onError={(e)=>{e.target.onerror = null; e.target.src=`${apiUrl}/upload/default.jpg`}} src={car.image || car.description} alt="" id={car.id}/>
+              <img onError={(e)=>{e.target.onerror = null; e.target.src=`${apiUrl}/upload/default.jpg`}} src={car.product_images} alt="" id={car.id}/>
             </div>
             <div className="car_cont">
               <h3>{car.brand + " - " + car.brand_type}</h3>
@@ -99,7 +99,7 @@ export default function Cars({ cars }) {
                 <div className="price">
                   <span> السعر </span> {!car.price ? "لايوجد سعر" : car.price + "ريال"} 
                 </div>
-                <img src={apiUrl+"/upload/"+car.source_image || "./images/olx.jpg"} alt="" />
+                <img src={apiUrl+"/upload/"+car.source_image} alt="" />
               </div>
             </div>
           </Link>
