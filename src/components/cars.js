@@ -97,7 +97,7 @@ export default function Cars({ cars }) {
               </p>
               <div className="bottom">
                 <div className="price">
-                  <span> السعر </span> {!car.price ? (car.price2 ? car.price2 : "لايوجد سعر") : car.price + "ريال"} 
+                  <span> السعر </span> {!car.price ? (car.price2 ? car.price2 : "لايوجد سعر") : car.price + " ريال"} 
                 </div>
                 <img src={apiUrl+"/upload/"+car.source_image} alt="" />
               </div>
