@@ -698,12 +698,9 @@ header form .link i {
   position: relative;
 }
 .car_item .car_img img {
+  object-fit: contain;
   width: 100%;
   height: 100%;
-  object-fit: fill;
-  position: absolute;
-  top: 0;
-  right: 0;
 }
 .car_item .car_img li {
   margin-top: 10px;
