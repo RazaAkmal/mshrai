@@ -582,6 +582,7 @@ header form .link i {
   position: relative;
   background-color: #f5f7fb;
   font-weight: 600;
+  cursor: pointer;
 }
 .search_hint .dropdown .dropdown-item:hover {
   color: var(--primary_color);

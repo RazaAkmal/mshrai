@@ -43,7 +43,7 @@ export default function Cars({ cars }) {
     const arabicMonth = e2a(resultMonth.toString())
     let message
     if (resultMonth > 0) {
-      return  `منذ أكثر من شهر`
+      return  'أكثر من شهر'
     } else if (resultWeek > 0) {
       let morethan = false
         if (resultDays > 7 &&  resultDays !== 14 && resultDays !== 21 && resultDays !== 28) {

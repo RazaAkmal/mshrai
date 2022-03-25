@@ -473,6 +473,24 @@ export default function Resault(props) {
                       {" "}
                       السعر [ الأكثر ]{" "}
                     </div>
+                    <div
+                      className="dropdown-item"
+                      onClick={() =>
+                        _handleStartSearch("sort", "sort=date+asc")
+                      }
+                    >
+                      {" "}
+                      التاريخ [ أحدث ]{" "}
+                    </div>
+                    <div
+                      className="dropdown-item"
+                      onClick={() =>
+                        _handleStartSearch("sort", "sort=date+desc")
+                      }
+                    >
+                      {" "}
+                      التاريخ [ الأقدم ]{" "}
+                    </div>
                     {/* <div
                       className="dropdown-item"
                       onClick={() =>
