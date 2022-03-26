@@ -1,4 +1,4 @@
-import { Range } from "rc-slider";
+import Slider from "rc-slider";
 import React, { useEffect, useState } from "react";
 import $ from "jquery";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,6 +6,9 @@ import { fetchSearchInputs } from "../features/search/searchApi";
 import { getSearchInputs } from "../features/search/searchSlice";
 import { Accordion } from 'react-bootstrap';
 import { apiUrl } from "../features/constants";
+
+const { createSliderWithTooltip } = Slider;
+const Range = createSliderWithTooltip(Slider.Range);
 
 export default function Filters(props) {
   const searchInputs = useSelector((state) => state.search.searchInputs);
@@ -726,64 +729,64 @@ export default function Filters(props) {
         <Accordion.Item eventKey="2">
           <Accordion.Header>سنة الصنع</Accordion.Header>
           <Accordion.Body>
-          <div className="panel-content" style={{ height: "90px" }}>
-            <Range
-              onAfterChange={(value) => addValue("years", value)}
-              marks={{
-                1990: `1990`,
-                2021: `2021`,
-              }}
-              min={1990}
-              max={new Date().getFullYear()}
-              defaultValue={[
-                props.searchState.model_year_start,
-                props.searchState.model_year_end,
-              ]}
-              tipFormatter={(value) => `${value}`}
-              tipProps={{
-                placement: "top",
-                visible: true,
-              }}
-              railStyle={{
-                background: "#fff",
-                height: "12px",
-                borderRadius: "3px",
-                border: "1px solid #e0e0e0",
-              }}
-              dotStyle={{ display: "none" }}
-              activeDotStyle={{}}
-              trackStyle={[
-                {
-                  height: "100%",
-                  background: "#dfdfdf",
-                  borderRadius: 0,
-                },
-              ]}
-              handleStyle={[
-                {
-                  background: "#3e0292",
-                  color: "#555555",
-                  width: "9px",
-                  borderRadius: "3px",
-                  border: 0,
-                  cursor: "pointer",
-                  height: "20px",
-                  bottom: "-7px",
-                },
-                {
-                  background: "#3e0292",
-                  color: "#555555",
-                  width: "9px",
-                  borderRadius: "3px",
-                  border: 0,
-                  cursor: "pointer",
-                  height: "20px",
-                  bottom: "-7px",
-                },
-              ]}
-            />
-            {/* <div className="year_slider" name="slider"></div> */}
-          </div>
+              <div className="panel-content" style={{ height: "90px"}}>
+              <div style={{ marginTop: "20px", padding: '5px'}}>
+                <Range
+                  onChange={(value) => addValue("years", value)}
+                  marks={{
+                    1990: `1990`,
+                    2021: `2021`,
+                  }}
+                  min={1990}
+                  max={new Date().getFullYear()}
+                  value={[props.searchState.model_year_start,
+                  props.searchState.model_year_end,]}
+                  tipFormatter={(value) => `${value}`}
+                  tipProps={{
+                    placement: "top",
+                    visible: true,
+                  }}
+                  railStyle={{
+                    background: "#fff",
+                    height: "12px",
+                    borderRadius: "3px",
+                    border: "1px solid #e0e0e0",
+                  }}
+                  dotStyle={{ display: "none" }}
+                  activeDotStyle={{}}
+                  trackStyle={[
+                    {
+                      height: "100%",
+                      background: "#dfdfdf",
+                      borderRadius: 0,
+                    },
+                  ]}
+                  handleStyle={[
+                    {
+                      background: "#3e0292",
+                      color: "#555555",
+                      width: "9px",
+                      borderRadius: "3px",
+                      border: 0,
+                      cursor: "pointer",
+                      height: "20px",
+                      bottom: "-7px",
+                    },
+                    {
+                      background: "#3e0292",
+                      color: "#555555",
+                      width: "9px",
+                      borderRadius: "3px",
+                      border: 0,
+                      cursor: "pointer",
+                      height: "20px",
+                      bottom: "-7px",
+                    },
+                  ]}
+                />
+                </div>
+                {/* <div className="year_slider" name="slider"></div> */}
+              </div>
           </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item eventKey="3">
