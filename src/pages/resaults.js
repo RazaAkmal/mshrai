@@ -366,9 +366,24 @@ export default function Resault(props) {
                         );
                       })
                     : ""}
+                    {searchForm.model_year_end && (searchForm.model_year_end < new Date().getFullYear() || searchForm.model_year_start > 1990)
+                    ? <li>
+                    {searchForm.model_year_start + "-" + searchForm.model_year_end}
+                    <span onClick={() => {
+                      _handleStartSearch("model_year", {
+                        model_year_start: 1990,
+                        model_year_end: new Date().getFullYear(),
+                      });
+                    }}>
+                      <IoIosClose />
+                    </span>
+                  </li>
+                    : ""}
                   {(searchForm.city_id.length > 0 ||
                     searchForm.shape_id.length > 0 ||
                     searchForm.brand_type_id.length > 0 ||
+                    searchForm.model_year_end < new Date().getFullYear() || 
+                    searchForm.model_year_start > 1990 ||
                     searchForm.brand_id.length > 0) &&
                     <li key={"searchcitiesclear"} onClick={() => _handleStartSearch('clearall')} key={"searchcities clear"}>
                       امسح الكل
