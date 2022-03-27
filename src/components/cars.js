@@ -32,9 +32,9 @@ export default function Cars({ cars }) {
     const index = date.indexOf(' ')
     const dateSlice = date.slice(0, index)
 
-    const dateArray = dateSlice.split('/')
+    const dateArray = dateSlice.split('-')
     const dateOne = moment([year, month, day]);
-    const dateTwo = moment([Number(dateArray[2]), Number(dateArray[1]) - 1, Number(dateArray[0])]);
+    const dateTwo = moment([Number(dateArray[0]), Number(dateArray[1]), Number(dateArray[2])]);
     const resultDays = dateOne.diff(dateTwo, 'days')
     const resultWeek = dateOne.diff(dateTwo, 'week')
     const resultMonth = dateOne.diff(dateTwo, 'month')
@@ -51,6 +51,9 @@ export default function Cars({ cars }) {
         }
         if (resultWeek > 0 && !morethan) {
           message = "منذ اسبوع "
+        }
+        if (resultWeek > 0 && morethan) {
+          message = "أكثر من أسبوع"
         }
         if (resultWeek > 1) {
           message = "اسبوعين واكثر"
