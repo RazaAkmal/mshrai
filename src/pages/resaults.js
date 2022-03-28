@@ -491,7 +491,7 @@ export default function Resault(props) {
                     <div
                       className="dropdown-item"
                       onClick={() =>
-                        _handleStartSearch("sort", "sort=date+asc")
+                        _handleStartSearch("sort", "sort=date+desc")
                       }
                     >
                       {" "}
@@ -500,7 +500,7 @@ export default function Resault(props) {
                     <div
                       className="dropdown-item"
                       onClick={() =>
-                        _handleStartSearch("sort", "sort=date+desc")
+                        _handleStartSearch("sort", "sort=date+asc")
                       }
                     >
                       {" "}
