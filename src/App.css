@@ -982,6 +982,7 @@ header form .link i {
 .d-block img {
   width: 30px !important;
   height: 30px;
+  object-fit: contain;
 }
 
 
