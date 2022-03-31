@@ -30,7 +30,7 @@ export default function Resault(props) {
     isOpen: false,
     cars: [],
   });
-
+  const [loading, setLoading] = useState(false)
   const cars = useSelector((state) => state.search.cars);
   const searchForm = useSelector((state) => state.search.searchForm);
   const searchInputs = useSelector((state) => state.search.searchInputs);
@@ -131,6 +131,7 @@ export default function Resault(props) {
   };
 
   useEffect(() => {
+    setLoading(true)
     var query = `model_year:[${searchForm.model_year_start} TO ${searchForm.model_year_end}]`;
     if (searchForm.keyword && searchForm.keyword !== "") {
       query += ` AND (brand:"${searchForm.keyword}" OR brand_type:"${searchForm.keyword}")`;
@@ -216,7 +217,7 @@ export default function Resault(props) {
         $("body").css({ "overflow-y": "visible" });
       });
       if (res && res.response && res.response.docs) {
-        console.log(res.response.docs);
+        setLoading(false)
         let carsArray =
           searchForm.index > 0
             ? [...cars, ...res.response.docs]
@@ -532,23 +533,30 @@ export default function Resault(props) {
                 style={{
                   height: 800,
                   overflow: 'auto',
+                  position: 'relative',
                 }}
               >
-                <InfiniteScroll
-                  dataLength={searchForm.index + 12} //This is important field to render the next data
-                  next={() => _handleStartSearch("paginate", searchForm.index + 12)}
-                  hasMore={searchForm.index + 12 < resultsNumber}
-                  loader={          <img src="./images/loading.gif" alt="loading" />
+                {loading ? <div style={{
+                  position: "absolute",
+                  left: "50%",
+                  top: "20%"
+                }}><img src="./images/loading.gif" alt="loading" /></div> :
+                  <InfiniteScroll
+                    dataLength={searchForm.index + 12} //This is important field to render the next data
+                    next={() => _handleStartSearch("paginate", searchForm.index + 12)}
+                    hasMore={searchForm.index + 12 < resultsNumber}
+                    loader={<img src="./images/loading.gif" alt="loading" />
+                    }
+                    scrollWindow={false}
+                    scrollableTarget="scrollableDiv"
+                    endMessage={
+                      <p style={{ textAlign: 'center' }}>
+                        <h2>ياي! لقد رأيت كل شيء</h2>
+                      </p>
+                    }>
+                    <Cars cars={cars} />
+                  </InfiniteScroll>
                 }
-                  scrollWindow={false}
-                  scrollableTarget="scrollableDiv"
-                  endMessage={
-                    <p style={{ textAlign: 'center' }}>
-                      <h2>ياي! لقد رأيت كل شيء</h2>
-                    </p>
-                  }>
-                  <Cars cars={cars} />
-                </InfiniteScroll>
               </div>
               <div className="w-100 text-left">
                 {/* <button className="link green_bc" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">حفظ نتائج البحث</button> */}
