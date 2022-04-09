@@ -273,8 +273,8 @@ export default function Resault(props) {
           </div>
         </div>
       </header>
-      <section>
-        <div className="container">
+      <section className="section-gray">
+        <div className="container-fluid">
           <div className="row">
             <div className="col-lg-7 col-md-8">
               <div className="search_hint">
@@ -429,7 +429,7 @@ export default function Resault(props) {
             </div>
           </div>
           <div className="row">
-            <div className="col-lg-3">
+            <div className="col-lg-2">
               <Filters
                 closeFilterMenuHandle={closeFilterMenuHandle}
                 handleStartSearch={(type, value) =>
@@ -438,7 +438,7 @@ export default function Resault(props) {
                 searchState={searchForm}
               />
             </div>
-            <div className="col-lg-9">
+            <div className="col-lg-10">
               <div className="search_hint">
                 <button
                   className="filter_btn link"
@@ -447,9 +447,9 @@ export default function Resault(props) {
                   <i className="fas fa-sliders-h"></i>
                   فلتر البحث
                 </button>
-                <div className="dropdown" onClick={toggleOpen}>
+                <div className="dropdown bg-white border rounded" onClick={toggleOpen}>
                   <button
-                    className="btn btn-secondary dropdown-toggle"
+                    className="btn btn-secondary dropdown-toggle bg-white"
                     type="button"
                     id="dropdownMenuButton"
                     data-toggle="dropdown"
@@ -531,16 +531,17 @@ export default function Resault(props) {
               <div
                 id="scrollableDiv"
                 style={{
-                  height: 800,
+                  height: '100vh',
                   overflow: 'auto',
                   position: 'relative',
                 }}
               >
-                {loading ? <div style={{
+                {/* {loading ? <div style={{
                   position: "absolute",
                   left: "50%",
-                  top: "20%"
-                }}><img src="./images/loading.gif" alt="loading" /></div> :
+                  top: "50%",
+                  backgroundColor: "#e9e9e9"
+                }}><img src="./images/loading.gif" alt="loading" /></div> : */}
                   <InfiniteScroll
                     dataLength={searchForm.index + 12} //This is important field to render the next data
                     next={() => _handleStartSearch("paginate", searchForm.index + 12)}
@@ -556,7 +557,7 @@ export default function Resault(props) {
                     }>
                     <Cars cars={cars} />
                   </InfiniteScroll>
-                }
+                {/* } */}
               </div>
               <div className="w-100 text-left">
                 {/* <button className="link green_bc" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">حفظ نتائج البحث</button> */}
