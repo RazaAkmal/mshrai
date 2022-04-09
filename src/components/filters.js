@@ -138,6 +138,8 @@ export default function Filters(props) {
   }
 
   return (
+    <div>
+      <div className="filter-title">فلترة</div>
     <form className="toggle-container" id="accordion1">
       <button
         className="icon_link close_btn"
@@ -1028,6 +1030,6 @@ export default function Filters(props) {
         </Accordion.Item>
         </div>
       </Accordion>
-    </form>
+    </form></div>
   );
 }

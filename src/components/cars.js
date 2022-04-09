@@ -76,12 +76,34 @@ export default function Cars({ cars }) {
     }
   }
 
+  const checkAddAvialble = async (carUrl) => {
+    let splitedUrl = carUrl.split('/')
+    let id = splitedUrl[splitedUrl.length - 1].slice(2)
+    let url = 'https://graphql.haraj.com.sa/?queryName=postLikeInfo,postContact&token=&clientId=12c874b0-2150-45a4-8ba2-84c73d129111&version=8.2.1%20,%206%209%20-%209%20-%2021/'
+    let post_data = {"query":"query($ids:[Int]) { posts( id:$ids) {\n\t\titems {\n\t\t\tid status authorUsername title city postDate updateDate hasImage thumbURL authorId bodyTEXT city tags imagesList commentStatus commentCount upRank downRank geoHash\n\t\t}\n\t\tpageInfo {\n\t\t\thasNextPage\n\t\t}\n\t\t} }","variables":{"ids":[Number(id)]}}
+    await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(post_data),
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      const {posts} = data.data
+      console.log(posts.items[0].status, "data here")
+    })
+      .catch((err) => console.log(err));
+  }
+
+  const numberWithCommas = (x) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 
   return (
     <div className="row">
       {cars.length > 0 ? cars.map((car) => (
-        <div className="col-lg-4 col-md-6 col-sm-6" key={car.id}>
-          <Link to={{ pathname:car.url }} className="car_item" target="_blank" rel="noopener noreferrer">
+        <div className="col-lg-3 col-md-6 col-sm-6" key={car.id}>
+          <Link onClick={() => checkAddAvialble(car.url)} to={{ pathname:car.url }} className="car_item" target="_blank" rel="noopener noreferrer">
             <div className="car_img">
               <img onError={(e)=>{e.target.onerror = null; e.target.src=`${apiUrl}/upload/default.jpg`}} src={car.image2 ? car.image2 : `${apiUrl}/upload/default.jpg`} alt="" id={car.id}/>
             </div>
@@ -100,7 +122,7 @@ export default function Cars({ cars }) {
               </p>
               <div className="bottom">
                 <div className="price">
-                  <span> السعر </span> {!car.price ? (car.price2 ? car.price2 : "لايوجد سعر") : car.price === -1 ? "على السوم" : car.price + " ريال"} 
+                  <span> السعر </span> {!car.price ? (car.price2 ? numberWithCommas(car.price2) : "لايوجد سعر") : car.price === -1 ? "على السوم" : numberWithCommas(car.price) + " ريال"} 
                 </div>
                 <img src={apiUrl+"/upload/"+car.source_image} alt="" />
               </div>
