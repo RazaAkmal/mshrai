@@ -1,11 +1,25 @@
+import React, { useEffect } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Resault from "./pages/resaults";
 import Search from "./pages/search";
 import { Provider } from "react-redux";
 import { store } from "./app/store";
+import Cookies from 'js-cookie'
+import uniqid from 'uniqid';
 
-function App() {
+const App = () => {
+
+  useEffect(() => {
+    const getID = Cookies.get('id')
+    if (!getID) {
+      let userId = uniqid('userId-')
+      Cookies.set('id', userId)
+    }
+  }, [])
+  
+
+
   return (
     <Provider store={store}>
     <Router basename="/">
