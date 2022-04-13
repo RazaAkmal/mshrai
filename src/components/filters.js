@@ -134,7 +134,7 @@ export default function Filters(props) {
   };
 
   const filterValue = (val, filter) => {
-    return val.label.toLowerCase().includes(filter.toLowerCase())
+    return val.label && val.label.toLowerCase().includes(filter.toLowerCase())
   }
 
   return (
