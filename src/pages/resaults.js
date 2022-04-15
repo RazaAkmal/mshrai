@@ -236,6 +236,21 @@ export default function Resault(props) {
   const closeFilterMenuHandle = () => {
     $(".toggle-container").removeClass("move");
   };
+  const getBrandValueAswell = (model, index) => {
+    let filteredBrand = searchInputs.marksOptions.filter((item) => item.value === model.brandId)
+    return (<li key={"searchMarks" + index}>
+    {model.label} {filteredBrand[0] ? " - " + filteredBrand[0].label: ''}
+    <span onClick={() => {
+      let brandModel = [...searchForm.brand_type_id];
+      if (brandModel.includes(model.value)) {
+        brandModel.splice(brandModel.indexOf(model.value), 1);
+      }
+      _handleStartSearch("brand_type_id", brandModel);
+    }}>
+      <IoIosClose />
+    </span>
+  </li>)
+  };
 
   const menuClass = `dropdown-menu${state.isOpen ? " show" : ""}`;
   return (
@@ -310,18 +325,7 @@ export default function Resault(props) {
                         return searchForm.brand_type_id.includes(
                           model.value
                         ) ? (
-                          <li key={"searchMarks" + index}>
-                            {model.label}
-                            <span onClick={() => {
-                              let brandModel = [...searchForm.brand_type_id];
-                              if (brandModel.includes(model.value)) {
-                                brandModel.splice(brandModel.indexOf(model.value), 1);
-                              }
-                              _handleStartSearch("brand_type_id", brandModel);
-                            }}>
-                              <IoIosClose />
-                            </span>
-                          </li>
+                          getBrandValueAswell(model, index)
                         ) : (
                           false
                         );
