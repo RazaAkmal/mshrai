@@ -2,19 +2,8 @@ import { Link } from "react-router-dom";
 import { apiUrl } from "../features/constants";
 import { MdOutlineLocationOn } from 'react-icons/md'
 import moment from 'moment';
-
-function validURL(str) {
-  var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-    
-    let isValid = pattern.test(str);
-    let src = isValid ? `${apiUrl}/upload/` : "";
-  return src + str;
-}
+import axios from 'axios'
+import Cookies from 'js-cookie'
 
 
 export default function Cars({ cars }) {
@@ -76,20 +65,52 @@ export default function Cars({ cars }) {
     }
   }
 
-  const checkAddAvialble = async (carUrl) => {
-    let splitedUrl = carUrl.split('/')
+  const addUserActivity = (car) => {
+    let userId = Cookies.get('id')
+    let bodyFormData = new FormData();
+    bodyFormData.append('user_id', userId);
+    bodyFormData.append('id', car.id);
+    bodyFormData.append('username', 'guest');
+    axios({
+      method: "post",
+      url: "http://admin.mshrai.com/public/api/user_activity",
+      data: bodyFormData,
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+  }
+
+  const checkAddAvialble = async (car) => {
+    addUserActivity(car)
+    let splitedUrl = car.url.split('/')
     let id = splitedUrl[splitedUrl.length - 1].slice(2)
     let url = 'https://graphql.haraj.com.sa/?queryName=postLikeInfo,postContact&token=&clientId=12c874b0-2150-45a4-8ba2-84c73d129111&version=8.2.1%20,%206%209%20-%209%20-%2021/'
     let post_data = {"query":"query($ids:[Int]) { posts( id:$ids) {\n\t\titems {\n\t\t\tid status authorUsername title city postDate updateDate hasImage thumbURL authorId bodyTEXT city tags imagesList commentStatus commentCount upRank downRank geoHash\n\t\t}\n\t\tpageInfo {\n\t\t\thasNextPage\n\t\t}\n\t\t} }","variables":{"ids":[Number(id)]}}
-    await fetch(url, {
-      method: 'POST',
+
+    await axios({
+      url: url,
+      method: 'post',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(post_data),
+      data: JSON.stringify(post_data),
     })
-    .then((res) => res.json())
-    .then((data) => {
-      const {posts} = data.data
-      console.log(posts.items[0].status, "data here")
+    .then(async (data) => {
+      const {posts} = data.data.data
+      if (!posts.items[0].status) {
+        let bodyFormData = new FormData();
+        bodyFormData.append('status', posts.items[0].status);
+        bodyFormData.append('id', car.id);
+        axios({
+          method: "post",
+          url: "http://admin.mshrai.com/public/api/product_status",
+          data: bodyFormData,
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (response) {
+            console.log(response);
+          });
+      }
     })
       .catch((err) => console.log(err));
   }
@@ -103,7 +124,7 @@ export default function Cars({ cars }) {
     <div className="row">
       {cars.length > 0 ? cars.map((car) => (
         <div className="col-lg-3 col-md-6 col-sm-6" key={car.id}>
-          <Link onClick={() => checkAddAvialble(car.url)} to={{ pathname:car.url }} className="car_item" target="_blank" rel="noopener noreferrer">
+          <Link onClick={() => checkAddAvialble(car)} to={{ pathname:car.url }} className="car_item" target="_blank" rel="noopener noreferrer">
             <div className="car_img">
               <img onError={(e)=>{e.target.onerror = null; e.target.src=`${apiUrl}/upload/default.jpg`}} src={car.image2 ? car.image2 : `${apiUrl}/upload/default.jpg`} alt="" id={car.id}/>
             </div>
