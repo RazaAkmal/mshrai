@@ -69,7 +69,7 @@ export default function Cars({ cars }) {
     let userId = Cookies.get('id')
     let bodyFormData = new FormData();
     bodyFormData.append('user_id', userId);
-    bodyFormData.append('id', car.id);
+    bodyFormData.append('ad_id', car.id);
     bodyFormData.append('username', 'guest');
     axios({
       method: "post",
