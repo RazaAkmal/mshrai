@@ -331,6 +331,8 @@ export default function Resault(props) {
                         );
                       })
                     : ""}
+                    </ul>
+                    <ul className="search_tags">
                   {searchForm.shape_id && searchForm.shape_id.length > 0
                     ? searchInputs.shapes.map((shape, index) => {
                         return searchForm.shape_id.includes(shape.id) ? (
@@ -390,7 +392,7 @@ export default function Resault(props) {
                     searchForm.model_year_end < new Date().getFullYear() || 
                     searchForm.model_year_start > 1990 ||
                     searchForm.brand_id.length > 0) &&
-                    <li key={"searchcitiesclear"} onClick={() => _handleStartSearch('clearall')} key={"searchcities clear"}>
+                    <li className="search_tags-remove" key={"searchcitiesclear"} onClick={() => _handleStartSearch('clearall')} >
                       امسح الكل
                     </li>
                   }
@@ -556,7 +558,7 @@ export default function Resault(props) {
                     scrollableTarget="scrollableDiv"
                     endMessage={
                       <p style={{ textAlign: 'center' }}>
-                        <h2>ياي! لقد رأيت كل شيء</h2>
+                        <h2>لاتوجد نتائج اضافية</h2>
                       </p>
                     }>
                     <Cars cars={cars} />

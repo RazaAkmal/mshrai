@@ -639,10 +639,10 @@ header form .link i {
   height: 20px;
 }
 
-.search_tags li:last-child {
+.search_tags-remove {
   cursor: pointer;
-  background-color: var(--gray_color);
-  margin-right: 5px;
+  background-color: var(--gray_color) !important;
+  margin-right: 5px !important;
 }
 
 .search_tags li .close {
