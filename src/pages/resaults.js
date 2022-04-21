@@ -353,6 +353,58 @@ export default function Resault(props) {
                         );
                       })
                     : ""}
+                    {searchForm.source_id && searchForm.source_id.length > 0
+                    ? searchInputs.sources.map((source, index) => {
+                        return searchForm.source_id.includes(source.value) ? (
+                          <li key={"searchcities" + index}>
+                            {source.label}
+                            <span onClick={() => {
+                              let sources = [...searchForm.source_id];
+                              if (sources.includes(source.value)) {
+                                sources.splice(sources.indexOf(source.value), 1);
+                              }
+                              _handleStartSearch("source_id", sources);
+                            }}>
+                              <IoIosClose />
+                            </span>
+                          </li>
+                        ) : (
+                          false
+                        );
+                      })
+                    : ""}
+                    {searchForm.price && searchForm.price.length > 0
+                    ? searchForm.price.map((price, index) => {
+                        return (
+                          <li style={{direction: "ltr"}} key={"searchcities" + index}>
+                          {price}
+                          <span onClick={() => {
+                            let prices = [...searchForm.price];
+                            prices.splice(prices.indexOf(price), 1);
+                            _handleStartSearch("price", prices);
+                          }}>
+                            <IoIosClose />
+                          </span>
+                        </li>
+                        )
+                      })
+                    : ""}
+                    {searchForm.kilometer && searchForm.kilometer.length > 0
+                    ? searchForm.kilometer.map((kilometer, index) => {
+                        return (
+                          <li style={{direction: "ltr"}} key={"searchcities" + index}>
+                          {kilometer}
+                          <span onClick={() => {
+                            let kilometers = [...searchForm.kilometer];
+                            kilometers.splice(kilometers.indexOf(kilometer), 1);
+                            _handleStartSearch("kilometer", kilometers);
+                          }}>
+                            <IoIosClose />
+                          </span>
+                        </li>
+                        )
+                      })
+                    : ""}
                     {searchForm.city_id && searchForm.city_id.length > 0
                     ? searchInputs.cityOptions.map((city, index) => {
                         return searchForm.city_id.includes(city.value) ? (
@@ -580,7 +632,7 @@ export default function Resault(props) {
           </div>
         </div>
       </section>
-      <div className="copyrights">جميع الحقوق محفوظة | موقع سيارتى {new Date().getFullYear()}</div>
+      <div className="copyrights">جميع الحقوق محفوظة | مشراي {new Date().getFullYear()}</div>
       <Loader />
     </>
   );
