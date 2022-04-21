@@ -7,6 +7,9 @@ const initialState = {
     cityOptions: [],
     shapes: [],
     sources: [],
+    kilometer:[],
+    price: [],
+
   },
   cars: [],
   numFound: 0,
