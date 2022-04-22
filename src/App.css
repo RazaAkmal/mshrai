@@ -535,6 +535,12 @@ header form .link i {
     display: inline-block;
     margin: 0;
   }
+  .filter-title {
+    display: none;
+  }
+  .subscribe {
+    display: none;
+  }
 }
 
 .section-gray {
@@ -973,7 +979,7 @@ header form .link i {
     flex-direction: column;
   }
   header img {
-    margin: 0 0 15px;
+    /* margin: 0 0 15px; */
     width: auto;
   }
 }
