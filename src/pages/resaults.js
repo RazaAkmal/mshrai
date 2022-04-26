@@ -251,6 +251,15 @@ export default function Resault(props) {
     </span>
   </li>)
   };
+  const modalOfbrandNotSelected = (brand, index) => {
+    let returnVal = true
+    searchInputs.modelOptions.map((model) => {
+       if(searchForm.brand_type_id.includes(model.value) && model.brandId === brand) {
+        returnVal = false
+       }
+    })
+    return returnVal
+  };
 
   const menuClass = `dropdown-menu${state.isOpen ? " show" : ""}`;
   return (
@@ -300,7 +309,7 @@ export default function Resault(props) {
                 <ul className="search_tags">
                   {searchForm.brand_id && searchForm.brand_id.length > 0
                     ? searchInputs.marksOptions.map((mark, index) => {
-                        return searchForm.brand_id.includes(mark.value) ? (
+                        return (searchForm.brand_id.includes(mark.value) && modalOfbrandNotSelected(mark.value, index)) ? (
                           <li
                             key={"searchMarks" + index}>
                             {mark.label}
