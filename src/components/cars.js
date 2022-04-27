@@ -129,7 +129,7 @@ export default function Cars({ cars }) {
               <img onError={(e)=>{e.target.onerror = null; e.target.src=`${apiUrl}/upload/default.jpg`}} src={car.image2 ? car.image2 : `${apiUrl}/upload/default.jpg`} alt="" id={car.id}/>
             </div>
             <div className="car_cont">
-              <h3>{car.brand + " - " + car.brand_type}</h3>
+              {car.brand ? <h3>{car.brand + " - " + car.brand_type}</h3> : ''}
               <p>
                 <i className="far fa-clock"></i>
                 {getDate(car.date)}
