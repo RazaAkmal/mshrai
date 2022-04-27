@@ -11,6 +11,8 @@ import { setCars, setQuery, setResultsNumebr, setSearchForm, setSearchFormToInit
 import SaveResults from "../components/saveResultModal";
 import { Link } from "react-router-dom";
 import { IoIosClose } from "react-icons/io"
+import {ToastContainer,toast} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Resault(props) {
   useEffect(() => {
@@ -126,7 +128,15 @@ export default function Resault(props) {
     };
 
     saveResults(data).then((res) => {
-      console.log(res);
+      toast.success(res.msg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
     });
   };
 
@@ -643,6 +653,7 @@ export default function Resault(props) {
       </section>
       <div className="copyrights">جميع الحقوق محفوظة | مشراي {new Date().getFullYear()}</div>
       <Loader />
+      <ToastContainer />
     </>
   );
 }
