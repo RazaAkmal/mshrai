@@ -26,7 +26,7 @@ const initialState = {
     shape_id: [],
     city_id: [],
     keyword: "",
-    sort:"",
+    sort:"sort=date+desc",
     index: 0,
   }
 };
