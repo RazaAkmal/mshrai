@@ -218,7 +218,7 @@ export default function Resault(props) {
     if (searchForm.sort && searchForm.sort !== "") {
       query += `&${searchForm.sort}`;
     }
-    query += `&rows=12&start=${searchForm.index}`;
+    query += `&rows=12&start=${searchForm.index}&fl=date,city,source,gear_id,gear,_version_,sid,city_id,id,source_id,brand,brand_type,brand_type_id,shape,model_year,published,image2,url,brand_id,source_image,shape_id`;
     dispatch(setQuery(query));
     console.log(query);
     fetchCars(query).then((res) => {
