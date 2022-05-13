@@ -114,7 +114,7 @@ export default function Search() {
     if (state.sort && state.sort !== "") {
       query += `&${state.sort}`;
     }
-    query += `&rows=12&start=${state.index}`;
+    query += `&rows=12&start=${searchForm.index}&fl=date,city,source,gear_id,gear,_version_,sid,city_id,id,source_id,brand,brand_type,brand_type_id,shape,model_year,published,image2,url,brand_id,source_image,shape_id`;
     fetchCars(query).then((res) => {
       if (res && res.response && res.response.docs) {
         console.log(res.response.docs);
