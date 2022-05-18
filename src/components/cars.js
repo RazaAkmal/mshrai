@@ -17,16 +17,25 @@ export default function Cars({ cars }) {
     const month = dateObj.getUTCMonth() + 1; //months from 1-12
     const day = dateObj.getUTCDate();
     const year = dateObj.getUTCFullYear();
+    const hours = dateObj.getHours();
+    const minutes = dateObj.getMinutes();
 
-    const index = date.indexOf(' ')
-    const dateSlice = date.slice(0, index)
+    const index = date.indexOf('.')
+    const dateIndex = date.indexOf(' ')
+    const dateSlice = date.slice(0, dateIndex)
+    const timeSlice = date.slice(dateIndex + 1, index)
 
     const dateArray = dateSlice.split('-')
-    const dateOne = moment([year, month, day]);
-    const dateTwo = moment([Number(dateArray[0]), Number(dateArray[1]), Number(dateArray[2])]);
+    const timeArray = timeSlice.split(':')
+    const dateOne = moment([year, month, day, hours, minutes]);
+    const dateTwo = moment([Number(dateArray[0]), Number(dateArray[1]), Number(dateArray[2]), Number(timeArray[0]), Number(timeArray[1])]);
+    const resultHours = dateOne.diff(dateTwo, 'hours')
+    const resultMinutes = dateOne.diff(dateTwo, 'minutes')
     const resultDays = dateOne.diff(dateTwo, 'days')
     const resultWeek = dateOne.diff(dateTwo, 'week')
     const resultMonth = dateOne.diff(dateTwo, 'month')
+    const arabicHours = e2a(resultHours.toString())
+    const arabicMinutes = e2a(resultMinutes.toString())
     const arabicDays = e2a(resultDays.toString())
     const arabicWeek = e2a(resultWeek.toString())
     const arabicMonth = e2a(resultMonth.toString())
@@ -60,7 +69,12 @@ export default function Cars({ cars }) {
           message = ` قبل ${arabicDays} ايام `
         }
         return message
-    } else {
+    } else if (resultHours > 0) {
+        return `منذ ${arabicHours} ساعة`
+    } else if (resultMinutes > 0) {
+        return `منذ ${arabicMinutes} دقيقة`
+    } 
+    else {
       return 'أضيف اليوم'
     }
   }

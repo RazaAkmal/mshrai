@@ -218,7 +218,7 @@ export default function Resault(props) {
     if (searchForm.sort && searchForm.sort !== "") {
       query += `&${searchForm.sort}`;
     }
-    query += `&rows=12&start=${searchForm.index}&fl=date,city,source,gear_id,gear,_version_,sid,city_id,id,source_id,brand,brand_type,brand_type_id,shape,model_year,published,image2,url,brand_id,source_image,shape_id`;
+    query += `&rows=12&start=${searchForm.index}&fl=date,city,price,source,gear_id,gear,_version_,sid,city_id,id,source_id,brand,brand_type,brand_type_id,shape,model_year,published,image2,url,brand_id,source_image,shape_id`;
     dispatch(setQuery(query));
     console.log(query);
     fetchCars(query).then((res) => {
@@ -376,7 +376,7 @@ export default function Resault(props) {
                     ? searchInputs.sources.map((source, index) => {
                         return searchForm.source_id.includes(source.value) ? (
                           <li key={"searchcities" + index}>
-                            {source.label}
+                            {source.label === "Snap" ? "Social Media" : source.label}
                             <span onClick={() => {
                               let sources = [...searchForm.source_id];
                               if (sources.includes(source.value)) {
