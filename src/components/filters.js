@@ -1017,10 +1017,10 @@ export default function Filters(props) {
                   />
                   <label className="d-block" htmlFor={"source" + index}>
                   <span>
-                    <img src={`${apiUrl}/upload/${source.label !== 'Snap' ? source.image : 'default.jpg'}`} alt="" />
+                    <img src={`${apiUrl}/upload/${source.image}`} alt="" />
                   </span>
                     {" "}
-                    {source.label === 'Snap' ? "Other" : source.label}{" "}
+                    {source.label === 'Snap' ? "Social Media" : source.label}{" "}
                   </label>
                 </div>
               );
