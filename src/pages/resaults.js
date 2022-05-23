@@ -41,6 +41,14 @@ export default function Resault(props) {
 
   const dispatch = useDispatch();
 
+  const showSubscribeDiv = () => {
+    if ($("#display-search").hasClass("visible")) {
+      $("#display-search").removeClass("visible");
+  } else {
+      $("#display-search").addClass("visible");
+  }
+  }
+
   const _handleSubscripeToNewsletter = () => {
     if(state.email === "") return;
     let data = {email: state.email, type: "newsletter"}
@@ -603,6 +611,37 @@ export default function Resault(props) {
                       قوة المحرك [ الأعلى ]{" "}
                     </div> */}
                   </div>
+                </div>
+                <button
+                  className="subscribe_btn link"
+                  onClick={showSubscribeDiv}
+                >
+                  حفظ نتائج البحث
+                </button>
+                <div id="display-search">
+                <div 
+                style={{display: 'block'}}
+                className="subscribe_mobile"
+              >
+                <input
+                  type="email"
+                  placeholder=" البريد الألكترونى "
+                  value={state.email}
+                  onChange={(e) =>
+                    setState({ ...state, email: e.target.value })
+                  }
+                />
+                <button
+                  type="button"
+                  className="btn btn-success"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    _handleSaveResults();
+                  }}
+                >
+              حفظ نتائج البحث
+            </button>
+              </div>
                 </div>
               </div>
               <div

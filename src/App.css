@@ -268,7 +268,7 @@ input[type="radio"] + label img {
 =======================*/
 section {
   position: relative;
-  padding: 40px 0;
+  padding: 10px 0;
   text-align: right;
   background-color: #fff;
 }
@@ -522,6 +522,9 @@ header form .link i {
   height: 40px;
 }
 
+.subscribe_btn {
+  display: none;
+}
 .filter_btn {
   display: none;
 }
@@ -531,6 +534,11 @@ header form .link i {
 }
 
 @media all and (max-width: 991.98px) {
+  .subscribe_btn {
+    display: inline-block;
+    float: left;
+    margin: 0;
+  }
   .filter_btn {
     display: inline-block;
     margin: 0;
@@ -538,6 +546,20 @@ header form .link i {
   .filter-title {
     display: none;
   }
+}
+
+#display-search {
+  visibility: hidden;
+  height: 0px;
+  background: transparent;
+  overflow: hidden;
+  transition: 0.5s;
+  -webkit-transition: 0.5s;
+}
+
+#display-search.visible {
+  visibility: visible;
+  height: 65px;
 }
 
 .section-gray {
@@ -663,6 +685,42 @@ header form .link i {
   display: flex;
   align-items: flex-start;
   line-height: 1;
+}
+.subscribe_mobile {
+    display: none;
+}
+.subscribe_mobile input{
+  text-align: right;
+  width: 70%;
+  color: var(--main_color);
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  margin: 15px 10px 0px 0px;
+  padding: 0 15px;
+  height: 41px;
+  font-size: 13px;
+  outline: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  font-weight: 700;
+  border-radius: 0 5px 5px 0 !important;
+  -webkit-border-radius: 5px;
+}
+.subscribe_mobile button{
+    width: 25%;
+    bottom: 0;
+    left: 0;
+    height: 40px;
+    border: 0;
+    background-color: var(--primary_color);
+    padding: 0 15px;
+    color: #fff;
+    border-radius: 5px 0 0 5px !important;
+
+}
+.subscribe_mobile button:focus,
+.subscribe_mobile button:hover{
+  background-color: var(--main_color);
 }
 .subscribe{
     max-width: 360px;
@@ -867,6 +925,9 @@ header form .link i {
   }
 }
 @media all and (max-width: 991.98px) {
+  .subscribe {
+    display: none;
+  }
   .toggle-container {
     position: fixed;
     margin: auto;
@@ -951,6 +1012,10 @@ header form .link i {
   }
   .main_screen .cont p {
     font-size: 12px;
+  }
+  .subscribe_mobile{
+    max-width: 100%;
+    margin: 0 auto 25px;
   }
   .subscribe{
     max-width: 100%;
