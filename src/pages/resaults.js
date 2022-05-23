@@ -317,6 +317,14 @@ export default function Resault(props) {
       </header>
       <section className="section-gray">
         <div className="container-fluid">
+          <div
+            id="scrollableDiv"
+            style={{
+              height: '100vh',
+              overflow: 'auto',
+              position: 'relative',
+            }}
+          >
           <div className="row">
             <div className="col-lg-7 col-md-8">
               <div className="search_hint">
@@ -644,20 +652,7 @@ export default function Resault(props) {
               </div>
                 </div>
               </div>
-              <div
-                id="scrollableDiv"
-                style={{
-                  height: '100vh',
-                  overflow: 'auto',
-                  position: 'relative',
-                }}
-              >
-                {/* {loading ? <div style={{
-                  position: "absolute",
-                  left: "50%",
-                  top: "50%",
-                  backgroundColor: "#e9e9e9"
-                }}><img src="./images/loading.gif" alt="loading" /></div> : */}
+              
                   <InfiniteScroll
                     dataLength={searchForm.index + 12} //This is important field to render the next data
                     next={() => _handleStartSearch("paginate", searchForm.index + 12)}
@@ -673,7 +668,6 @@ export default function Resault(props) {
                     }>
                     <Cars cars={cars} />
                   </InfiniteScroll>
-                {/* } */}
               </div>
               <div className="w-100 text-left">
                 {/* <button className="link green_bc" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">حفظ نتائج البحث</button> */}
