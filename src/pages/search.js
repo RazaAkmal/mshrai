@@ -229,7 +229,16 @@ export default function Search() {
                 <img src="../images/logo_color.png" alt="" className="logo" />
                 <h1>أفضل منصة لتحصل على أفضل السيارات المستعملة</h1>
                 <form className="search_form">
-                  <div className="row">
+                  <div className="row w-100 no-gutters">
+                  <div className="col-6 col-md-6 p-0">
+                      <button className="active tabs-btn w-100">Find a Car</button>
+                    </div>
+                    <div className="col-6 col-md-6 p-0">
+                      <button className="tabs-btn w-100">Find a Car</button>
+                    </div>
+                  </div>
+                  <div className="row px-1">
+                   
                     {/* Commenting this Code is its not required yet
                     <div className="col-12">
                       <input
@@ -240,7 +249,7 @@ export default function Search() {
                         onChange={(e)=> setState({...state, keyword:e.target.value})}
                       />
                     </div> */}
-                    <div className="col-md-6  mb-3">
+                    <div className="col-md-6 col-6  mb-3 d-none d-sm-block">
                       <label className="text-end d-block"> الماركة </label>
                       <Select
                         // defaultValue={searchInputs.marksOptions.map(i => state.brand_id.indexOf(i.value) !== -1 ? i : false)}
@@ -255,7 +264,7 @@ export default function Search() {
                         // classNamePrefix="select"
                       />
                     </div>
-                    <div className="col-md-6  mb-3">
+                    <div className="col-md-6 col-6  mb-3">
                       <label className="text-end d-block"> المودل </label>
                       <Select
                         defaultValue={searchInputs.modelOptions.map(i => state.brand_type_id.indexOf(i.value) !== -1 ? i : false)}
@@ -269,7 +278,7 @@ export default function Search() {
                       // classNamePrefix="select"
                       />
                     </div>
-                    <div className="col-md-6  mb-3">
+                    <div className="col-md-6 col-6 mb-3">
                       <label className="text-end d-block">سنة تصنيع محددة</label>
                       <Select
                         value={state.model_year_end === state.model_year_start && [{label: state.model_year_end}]}
@@ -282,7 +291,7 @@ export default function Search() {
                         // classNamePrefix="select"
                       />
                     </div>
-                    <div className="col-md-6  mb-3">
+                    <div className="col-md-6 col-6  mb-3">
                       <label className="text-end d-block">سنة الصنع</label>
                       <div className="mt-3">
                         <Range
@@ -340,7 +349,7 @@ export default function Search() {
                       </div>
                       {/* <div className="year_slider" name="slider"></div> */}
                     </div>
-                    <div className="col-md-6  mb-3">
+                    <div className="col-md-6 col-6  mb-3">
                       <label className="text-end d-block"> المدينة </label>
                       <Select
                         defaultValue={searchInputs.cityOptions.map(i => state.city_id.indexOf(i.value) != -1 ? i : false)}
@@ -354,7 +363,22 @@ export default function Search() {
                         // classNamePrefix="select"
                       />
                     </div>
-                    <div className="col-md-6  mb-3"></div>
+                    <div className="col-md-12 mb-3 d-block d-sm-none">
+                      <label className="text-end d-block"> الماركة </label>
+                      <Select
+                        // defaultValue={searchInputs.marksOptions.map(i => state.brand_id.indexOf(i.value) !== -1 ? i : false)}
+                        value={brandOptions}
+                        isMulti
+                        name="brand"
+                        options={searchInputs.marksOptions}
+                        className="basic-multi-select"
+                        placeholder="أي علامة تجارية"
+                        styles={colourStyles}
+                        onChange={(value)=> setBrand(value)}
+                        // classNamePrefix="select"
+                      />
+                    </div>
+                    {/* <div className="col-md-6 col-6  mb-3"></div> */}
                     {/* Commenting this Code is its not required yet
                      <div className="col-12 flex_col  mb-3">
                       {searchInputs.shapes.map((shape, i) => {
