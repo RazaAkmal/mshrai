@@ -1166,4 +1166,9 @@ header form .link i {
   .search_form .tabs-btn{
     display: block;
   }
+  .search_hint .link{
+    font-size: 11px;
+    padding: 0 7px;
+
+  }
 }
