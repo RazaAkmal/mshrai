@@ -5,6 +5,7 @@ import Select from "react-select";
 import { colourStyles } from "../constants";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
+import { Tabs, Tab } from "react-bootstrap";
 import { fetchSearchInputs, fetchCars } from "../features/search/searchApi";
 import { useDispatch, useSelector } from "react-redux";
 import { getSearchInputs, setSearchForm, setResultsNumebr } from "../features/search/searchSlice";
@@ -22,7 +23,7 @@ export default function Search() {
   const [brandOptions, setBrandOptions] = useState([])
 
   const dispatch = useDispatch();
-  const [state, setState] = useState({...searchForm});
+  const [state, setState] = useState({ ...searchForm });
   useEffect(() => {
     fetchSearchInputs().then((result) => {
       $(".load_cont").fadeOut(function () {
@@ -38,7 +39,7 @@ export default function Search() {
   useEffect(() => {
     const yearOption = []
     for (let index = 1990; index < new Date().getFullYear(); index++) {
-      yearOption.push({id: index, label: index})
+      yearOption.push({ id: index, label: index })
     }
     setYearList(yearOption)
   }, [])
@@ -122,15 +123,15 @@ export default function Search() {
       }
     });
   }, [state]);
-  
-  
+
+
 
   const addShape = (i) => {
     let shapes = [...state.shape_id];
     console.log(shapes);
-    if(shapes.includes(i)){
-      shapes.splice(shapes.indexOf(i),1);
-    }else{
+    if (shapes.includes(i)) {
+      shapes.splice(shapes.indexOf(i), 1);
+    } else {
       shapes.push(i);
     }
     setState({
@@ -183,17 +184,17 @@ export default function Search() {
         return searchInputs.marksOptions.map((brand) => {
           //this condition check the same brand should not print again, and also check and print brand of selected model
           if (brand.value === id && prevId !== newId) {
-            newId=id
+            newId = id
             selectedBrands.push(brand)
           }
         })
       })
       setBrandOptions(selectedBrands)
     }
-   
+
   }, [state.model_brand_id])
-  
-  
+
+
 
   const setBrandType = (values) => {
     let brands_types = values.map(value => value.value);
@@ -213,12 +214,13 @@ export default function Search() {
     })
   }
 
-  function navigateToResult(){
+  function navigateToResult() {
     dispatch(setSearchForm(state));
-    localStorage.setItem( 'savedSearch', JSON.stringify(state) );
+    localStorage.setItem('savedSearch', JSON.stringify(state));
     console.log(state);
     history.push("/results");
   }
+  const [key, setKey] = useState('findCar');
   return (
     <>
       <div className="main_screen img_bc">
@@ -229,8 +231,17 @@ export default function Search() {
                 <img src="../images/logo_color.png" alt="" className="logo" />
                 <h1>أفضل منصة لتحصل على أفضل السيارات المستعملة</h1>
                 <form className="search_form">
-                  <div className="row">
-                    {/* Commenting this Code is its not required yet
+                  <Tabs
+                    id="controlled-tab-example"
+                    activeKey={key}
+                    onSelect={(k) => setKey(k)}
+                    className="mb-3"
+                  >
+                    <Tab eventKey="findCar" title="ابحث عن سيارتي">
+
+                      <div className="row px-2">
+
+                        {/* Commenting this Code is its not required yet
                     <div className="col-12">
                       <input
                         type="text"
@@ -240,122 +251,137 @@ export default function Search() {
                         onChange={(e)=> setState({...state, keyword:e.target.value})}
                       />
                     </div> */}
-                    <div className="col-md-6  mb-3">
-                      <label className="text-end d-block"> الماركة </label>
-                      <Select
-                        // defaultValue={searchInputs.marksOptions.map(i => state.brand_id.indexOf(i.value) !== -1 ? i : false)}
-                        value={brandOptions}
-                        isMulti
-                        name="brand"
-                        options={searchInputs.marksOptions}
-                        className="basic-multi-select"
-                        placeholder="أي علامة تجارية"
-                        styles={colourStyles}
-                        onChange={(value)=> setBrand(value)}
-                        // classNamePrefix="select"
-                      />
-                    </div>
-                    <div className="col-md-6  mb-3">
-                      <label className="text-end d-block"> المودل </label>
-                      <Select
-                        defaultValue={searchInputs.modelOptions.map(i => state.brand_type_id.indexOf(i.value) !== -1 ? i : false)}
-                        isMulti
-                        name="brand"
-                        options={modelOptions}
-                        className="basic-multi-select"
-                        placeholder="أي نموذج"
-                        styles={colourStyles}
-                        onChange={(value) => setBrandType(value)}
-                      // classNamePrefix="select"
-                      />
-                    </div>
-                    <div className="col-md-6  mb-3">
-                      <label className="text-end d-block">سنة تصنيع محددة</label>
-                      <Select
-                        value={state.model_year_end === state.model_year_start && [{label: state.model_year_end}]}
-                        name="brand"
-                        options={yearList}
-                        className="basic-multi-select"
-                        placeholder=""
-                        styles={colourStyles}
-                        onChange={(value)=> setYearRange([value.label,value.label])}
-                        // classNamePrefix="select"
-                      />
-                    </div>
-                    <div className="col-md-6  mb-3">
-                      <label className="text-end d-block">سنة الصنع</label>
-                      <div className="mt-3">
-                        <Range
-                          onChange={(value)=> setYearRange(value)}
-                          marks={{
-                            1990: `1990`,
-                            2021: `2021`,
-                          }}
-                          min={1990}
-                          max={new Date().getFullYear()}
-                          value={[state.model_year_start, state.model_year_end]}
-                          tipFormatter={(value) => `${value}`}
-                          tipProps={{
-                            placement: "top",
-                            visible: true,
-                          }}
-                          railStyle={{
-                            background: "#fff",
-                            height: "12px",
-                            borderRadius: "3px",
-                            border: "1px solid #e0e0e0",
-                          }}
-                          dotStyle={{ display: "none" }}
-                          activeDotStyle={{}}
-                          trackStyle={[
-                            {
-                              height: "100%",
-                              background: "#dfdfdf",
-                              borderRadius: 0,
-                            },
-                          ]}
-                          handleStyle={[
-                            {
-                              background: "#3e0292",
-                              color: "#555555",
-                              width: "9px",
-                              borderRadius: "3px",
-                              border: 0,
-                              cursor: "pointer",
-                              height: "20px",
-                              bottom: "-7px",
-                            },
-                            {
-                              background: "#3e0292",
-                              color: "#555555",
-                              width: "9px",
-                              borderRadius: "3px",
-                              border: 0,
-                              cursor: "pointer",
-                              height: "20px",
-                              bottom: "-7px",
-                            },
-                          ]}
-                        />
-                      </div>
-                      {/* <div className="year_slider" name="slider"></div> */}
-                    </div>
-                    <div className="col-md-6  mb-3">
-                      <label className="text-end d-block"> المدينة </label>
-                      <Select
-                        defaultValue={searchInputs.cityOptions.map(i => state.city_id.indexOf(i.value) != -1 ? i : false)}
-                        isMulti
-                        name="brand"
-                        options={searchInputs.cityOptions}
-                        className="basic-multi-select"
-                        placeholder="أي مدينة"
-                        styles={colourStyles}
-                        onChange={(value)=> addCity(value)}
-                        // classNamePrefix="select"
-                      />
-                    </div>
-                    <div className="col-md-6  mb-3"></div>
-                    {/* Commenting this Code is its not required yet
+                        <div className="col-md-6 col-6  mb-3 d-none d-sm-block">
+                          <label className="text-end d-block"> الماركة </label>
+                          <Select
+                            // defaultValue={searchInputs.marksOptions.map(i => state.brand_id.indexOf(i.value) !== -1 ? i : false)}
+                            value={brandOptions}
+                            isMulti
+                            name="brand"
+                            options={searchInputs.marksOptions}
+                            className="basic-multi-select"
+                            placeholder="أي علامة تجارية"
+                            styles={colourStyles}
+                            onChange={(value) => setBrand(value)}
+                          // classNamePrefix="select"
+                          />
+                        </div>
+                        <div className="col-md-6 col-6  mb-3">
+                          <label className="text-end d-block"> المودل </label>
+                          <Select
+                            defaultValue={searchInputs.modelOptions.map(i => state.brand_type_id.indexOf(i.value) !== -1 ? i : false)}
+                            isMulti
+                            name="brand"
+                            options={modelOptions}
+                            className="basic-multi-select"
+                            placeholder="أي نموذج"
+                            styles={colourStyles}
+                            onChange={(value) => setBrandType(value)}
+                          // classNamePrefix="select"
+                          />
+                        </div>
+                        <div className="col-md-6 col-6 mb-3">
+                          <label className="text-end d-block">سنة تصنيع محددة</label>
+                          <Select
+                            value={state.model_year_end === state.model_year_start && [{ label: state.model_year_end }]}
+                            name="brand"
+                            options={yearList}
+                            className="basic-multi-select"
+                            placeholder=""
+                            styles={colourStyles}
+                            onChange={(value) => setYearRange([value.label, value.label])}
+                          // classNamePrefix="select"
+                          />
+                        </div>
+                        <div className="col-md-6 col-6  mb-3">
+                          <label className="text-end d-block">سنة الصنع</label>
+                          <div className="mt-3">
+                            <Range
+                              onChange={(value) => setYearRange(value)}
+                              marks={{
+                                1990: `1990`,
+                                2021: `2021`,
+                              }}
+                              min={1990}
+                              max={new Date().getFullYear()}
+                              value={[state.model_year_start, state.model_year_end]}
+                              tipFormatter={(value) => `${value}`}
+                              tipProps={{
+                                placement: "top",
+                                visible: true,
+                              }}
+                              railStyle={{
+                                background: "#fff",
+                                height: "12px",
+                                borderRadius: "3px",
+                                border: "1px solid #e0e0e0",
+                              }}
+                              dotStyle={{ display: "none" }}
+                              activeDotStyle={{}}
+                              trackStyle={[
+                                {
+                                  height: "100%",
+                                  background: "#dfdfdf",
+                                  borderRadius: 0,
+                                },
+                              ]}
+                              handleStyle={[
+                                {
+                                  background: "#3e0292",
+                                  color: "#555555",
+                                  width: "9px",
+                                  borderRadius: "3px",
+                                  border: 0,
+                                  cursor: "pointer",
+                                  height: "20px",
+                                  bottom: "-7px",
+                                },
+                                {
+                                  background: "#3e0292",
+                                  color: "#555555",
+                                  width: "9px",
+                                  borderRadius: "3px",
+                                  border: 0,
+                                  cursor: "pointer",
+                                  height: "20px",
+                                  bottom: "-7px",
+                                },
+                              ]}
+                            />
+                          </div>
+                          {/* <div className="year_slider" name="slider"></div> */}
+                        </div>
+                        <div className="col-md-6 col-6  mb-3">
+                          <label className="text-end d-block"> المدينة </label>
+                          <Select
+                            defaultValue={searchInputs.cityOptions.map(i => state.city_id.indexOf(i.value) != -1 ? i : false)}
+                            isMulti
+                            name="brand"
+                            options={searchInputs.cityOptions}
+                            className="basic-multi-select"
+                            placeholder="أي مدينة"
+                            styles={colourStyles}
+                            onChange={(value) => addCity(value)}
+                          // classNamePrefix="select"
+                          />
+                        </div>
+                        <div className="col-md-12 mb-3 d-block d-sm-none">
+                          <label className="text-end d-block"> الماركة </label>
+                          <Select
+                            // defaultValue={searchInputs.marksOptions.map(i => state.brand_id.indexOf(i.value) !== -1 ? i : false)}
+                            value={brandOptions}
+                            isMulti
+                            name="brand"
+                            options={searchInputs.marksOptions}
+                            className="basic-multi-select"
+                            placeholder="أي علامة تجارية"
+                            styles={colourStyles}
+                            onChange={(value) => setBrand(value)}
+                          // classNamePrefix="select"
+                          />
+                        </div>
+                        {/* <div className="col-md-6 col-6  mb-3"></div> */}
+                        {/* Commenting this Code is its not required yet
                      <div className="col-12 flex_col  mb-3">
                       {searchInputs.shapes.map((shape, i) => {
                         return (
@@ -373,14 +399,21 @@ export default function Search() {
                         );
                       })}
                     </div> */}
-                    {/* <!--End Col-12--> */}
-                  </div>
+                        {/* <!--End Col-12--> */}
+                      </div>
+                    </Tab>
+                    <Tab eventKey="valueCar" title="قيمة سيارتي" disabled>
+
+                    </Tab>
+
+                  </Tabs>
+                 
                   {/* <!--End Row--> */}
 
                   {/* <button type="button" disabled={!resultsNumber > 0}  className={resultsNumber > 0 ? "search-button" : "disable-button" } onClick={navigateToResult}>
                     شاهد {resultsNumber} سيارة
                   </button> */}
-                  <button type="button"  className="search-button" onClick={navigateToResult}>
+                  <button type="button" className="search-button" onClick={navigateToResult}>
                     شاهد {resultsNumber} سيارة
                   </button>
                 </form>
