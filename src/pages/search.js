@@ -5,6 +5,7 @@ import Select from "react-select";
 import { colourStyles } from "../constants";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
+import { Tabs, Tab } from "react-bootstrap";
 import { fetchSearchInputs, fetchCars } from "../features/search/searchApi";
 import { useDispatch, useSelector } from "react-redux";
 import { getSearchInputs, setSearchForm, setResultsNumebr } from "../features/search/searchSlice";
@@ -22,7 +23,7 @@ export default function Search() {
   const [brandOptions, setBrandOptions] = useState([])
 
   const dispatch = useDispatch();
-  const [state, setState] = useState({...searchForm});
+  const [state, setState] = useState({ ...searchForm });
   useEffect(() => {
     fetchSearchInputs().then((result) => {
       $(".load_cont").fadeOut(function () {
@@ -38,7 +39,7 @@ export default function Search() {
   useEffect(() => {
     const yearOption = []
     for (let index = 1990; index < new Date().getFullYear(); index++) {
-      yearOption.push({id: index, label: index})
+      yearOption.push({ id: index, label: index })
     }
     setYearList(yearOption)
   }, [])
@@ -122,15 +123,15 @@ export default function Search() {
       }
     });
   }, [state]);
-  
-  
+
+
 
   const addShape = (i) => {
     let shapes = [...state.shape_id];
     console.log(shapes);
-    if(shapes.includes(i)){
-      shapes.splice(shapes.indexOf(i),1);
-    }else{
+    if (shapes.includes(i)) {
+      shapes.splice(shapes.indexOf(i), 1);
+    } else {
       shapes.push(i);
     }
     setState({
@@ -183,17 +184,17 @@ export default function Search() {
         return searchInputs.marksOptions.map((brand) => {
           //this condition check the same brand should not print again, and also check and print brand of selected model
           if (brand.value === id && prevId !== newId) {
-            newId=id
+            newId = id
             selectedBrands.push(brand)
           }
         })
       })
       setBrandOptions(selectedBrands)
     }
-   
+
   }, [state.model_brand_id])
-  
-  
+
+
 
   const setBrandType = (values) => {
     let brands_types = values.map(value => value.value);
@@ -213,12 +214,13 @@ export default function Search() {
     })
   }
 
-  function navigateToResult(){
+  function navigateToResult() {
     dispatch(setSearchForm(state));
-    localStorage.setItem( 'savedSearch', JSON.stringify(state) );
+    localStorage.setItem('savedSearch', JSON.stringify(state));
     console.log(state);
     history.push("/results");
   }
+  const [key, setKey] = useState('home');
   return (
     <>
       <div className="main_screen img_bc">
@@ -229,16 +231,16 @@ export default function Search() {
                 <img src="../images/logo_color.png" alt="" className="logo" />
                 <h1>أفضل منصة لتحصل على أفضل السيارات المستعملة</h1>
                 <form className="search_form">
-                  <div className="row w-100 no-gutters">
-                  <div className="col-6 col-md-6 p-0">
-                      <button className="active tabs-btn w-100">Find a Car</button>
-                    </div>
-                    <div className="col-6 col-md-6 p-0">
-                      <button className="tabs-btn w-100">Find a Car</button>
-                    </div>
-                  </div>
-                  <div className="row px-1">
-                   
+                  <Tabs
+                    id="controlled-tab-example"
+                    activeKey={key}
+                    onSelect={(k) => setKey(k)}
+                    className="mb-3"
+                  >
+                    <Tab eventKey="home" title="Git a Car">
+                    
+                  <div className="row px-2">
+
                     {/* Commenting this Code is its not required yet
                     <div className="col-12">
                       <input
@@ -260,8 +262,8 @@ export default function Search() {
                         className="basic-multi-select"
                         placeholder="أي علامة تجارية"
                         styles={colourStyles}
-                        onChange={(value)=> setBrand(value)}
-                        // classNamePrefix="select"
+                        onChange={(value) => setBrand(value)}
+                      // classNamePrefix="select"
                       />
                     </div>
                     <div className="col-md-6 col-6  mb-3">
@@ -281,21 +283,21 @@ export default function Search() {
                     <div className="col-md-6 col-6 mb-3">
                       <label className="text-end d-block">سنة تصنيع محددة</label>
                       <Select
-                        value={state.model_year_end === state.model_year_start && [{label: state.model_year_end}]}
+                        value={state.model_year_end === state.model_year_start && [{ label: state.model_year_end }]}
                         name="brand"
                         options={yearList}
                         className="basic-multi-select"
                         placeholder=""
                         styles={colourStyles}
-                        onChange={(value)=> setYearRange([value.label,value.label])}
-                        // classNamePrefix="select"
+                        onChange={(value) => setYearRange([value.label, value.label])}
+                      // classNamePrefix="select"
                       />
                     </div>
                     <div className="col-md-6 col-6  mb-3">
                       <label className="text-end d-block">سنة الصنع</label>
                       <div className="mt-3">
                         <Range
-                          onChange={(value)=> setYearRange(value)}
+                          onChange={(value) => setYearRange(value)}
                           marks={{
                             1990: `1990`,
                             2021: `2021`,
@@ -359,8 +361,8 @@ export default function Search() {
                         className="basic-multi-select"
                         placeholder="أي مدينة"
                         styles={colourStyles}
-                        onChange={(value)=> addCity(value)}
-                        // classNamePrefix="select"
+                        onChange={(value) => addCity(value)}
+                      // classNamePrefix="select"
                       />
                     </div>
                     <div className="col-md-12 mb-3 d-block d-sm-none">
@@ -374,8 +376,8 @@ export default function Search() {
                         className="basic-multi-select"
                         placeholder="أي علامة تجارية"
                         styles={colourStyles}
-                        onChange={(value)=> setBrand(value)}
-                        // classNamePrefix="select"
+                        onChange={(value) => setBrand(value)}
+                      // classNamePrefix="select"
                       />
                     </div>
                     {/* <div className="col-md-6 col-6  mb-3"></div> */}
@@ -399,12 +401,19 @@ export default function Search() {
                     </div> */}
                     {/* <!--End Col-12--> */}
                   </div>
+                    </Tab>
+                    <Tab eventKey="profile" title="Profile">
+
+                    </Tab>
+
+                  </Tabs>
+                 
                   {/* <!--End Row--> */}
 
                   {/* <button type="button" disabled={!resultsNumber > 0}  className={resultsNumber > 0 ? "search-button" : "disable-button" } onClick={navigateToResult}>
                     شاهد {resultsNumber} سيارة
                   </button> */}
-                  <button type="button"  className="search-button" onClick={navigateToResult}>
+                  <button type="button" className="search-button" onClick={navigateToResult}>
                     شاهد {resultsNumber} سيارة
                   </button>
                 </form>
