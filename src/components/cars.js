@@ -87,7 +87,7 @@ export default function Cars({ cars }) {
     bodyFormData.append('username', 'guest');
     axios({
       method: "post",
-      url: "http://admin.mshrai.com/public/api/user_activity",
+      url: "http://admin.mshrai.com/api/user_activity",
       data: bodyFormData,
       headers: { "Content-Type": "multipart/form-data" },
     })
@@ -114,7 +114,7 @@ export default function Cars({ cars }) {
         bodyFormData.append('id', car.id);
         axios({
           method: "post",
-          url: "http://admin.mshrai.com/public/api/product_status",
+          url: "http://admin.mshrai.com/api/product_status",
           data: bodyFormData,
           headers: { "Content-Type": "multipart/form-data" },
         })
