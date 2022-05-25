@@ -41,6 +41,14 @@ export default function Resault(props) {
 
   const dispatch = useDispatch();
 
+  const showSubscribeDiv = () => {
+    if ($("#display-search").hasClass("visible")) {
+      $("#display-search").removeClass("visible");
+  } else {
+      $("#display-search").addClass("visible");
+  }
+  }
+
   const _handleSubscripeToNewsletter = () => {
     if(state.email === "") return;
     let data = {email: state.email, type: "newsletter"}
@@ -309,6 +317,14 @@ export default function Resault(props) {
       </header>
       <section className="section-gray">
         <div className="container-fluid">
+          <div
+            id="scrollableDiv"
+            style={{
+              height: '100vh',
+              overflow: 'auto',
+              position: 'relative',
+            }}
+          >
           <div className="row">
             <div className="col-lg-7 col-md-8">
               <div className="search_hint">
@@ -604,21 +620,39 @@ export default function Resault(props) {
                     </div> */}
                   </div>
                 </div>
-              </div>
-              <div
-                id="scrollableDiv"
-                style={{
-                  height: '100vh',
-                  overflow: 'auto',
-                  position: 'relative',
-                }}
+                <button
+                  className="subscribe_btn link"
+                  onClick={showSubscribeDiv}
+                >
+                  حفظ نتائج البحث
+                </button>
+                <div id="display-search">
+                <div 
+                style={{display: 'block'}}
+                className="subscribe_mobile"
               >
-                {/* {loading ? <div style={{
-                  position: "absolute",
-                  left: "50%",
-                  top: "50%",
-                  backgroundColor: "#e9e9e9"
-                }}><img src="./images/loading.gif" alt="loading" /></div> : */}
+                <input
+                  type="email"
+                  placeholder=" البريد الألكترونى "
+                  value={state.email}
+                  onChange={(e) =>
+                    setState({ ...state, email: e.target.value })
+                  }
+                />
+                <button
+                  type="button"
+                  className="btn btn-success"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    _handleSaveResults();
+                  }}
+                >
+              حفظ نتائج البحث
+            </button>
+              </div>
+                </div>
+              </div>
+              
                   <InfiniteScroll
                     dataLength={searchForm.index + 12} //This is important field to render the next data
                     next={() => _handleStartSearch("paginate", searchForm.index + 12)}
@@ -634,7 +668,6 @@ export default function Resault(props) {
                     }>
                     <Cars cars={cars} />
                   </InfiniteScroll>
-                {/* } */}
               </div>
               <div className="w-100 text-left">
                 {/* <button className="link green_bc" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">حفظ نتائج البحث</button> */}

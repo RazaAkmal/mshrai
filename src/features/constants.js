@@ -1,1 +1,1 @@
-export const apiUrl = "http://admin.mshrai.com/public";
+export const apiUrl = "http://admin.mshrai.com";
