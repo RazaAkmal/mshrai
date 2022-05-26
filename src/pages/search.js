@@ -402,10 +402,6 @@ export default function Search() {
                         {/* <!--End Col-12--> */}
                       </div>
                     </Tab>
-                    <Tab eventKey="valueCar" title="قيمة سيارتي" disabled>
-
-                    </Tab>
-
                   </Tabs>
                  
                   {/* <!--End Row--> */}
