@@ -697,7 +697,7 @@ header form .link i {
   border: 1px solid #e0e0e0;
   margin: 15px 10px 0px 0px;
   padding: 0 15px;
-  height: 41px;
+  height: 51px;
   font-size: 13px;
   outline: 0;
   -webkit-box-shadow: none;
@@ -710,7 +710,7 @@ header form .link i {
     width: 25%;
     bottom: 0;
     left: 0;
-    height: 40px;
+    height: 50px;
     border: 0;
     background-color: var(--primary_color);
     padding: 0 15px;
