@@ -260,7 +260,7 @@ export default function Search() {
                             name="brand"
                             options={searchInputs.marksOptions}
                             className="basic-multi-select"
-                            placeholder="أي علامة تجارية"
+                            placeholder=""
                             styles={colourStyles}
                             onChange={(value) => setBrand(value)}
                           // classNamePrefix="select"
@@ -274,7 +274,7 @@ export default function Search() {
                             name="brand"
                             options={modelOptions}
                             className="basic-multi-select"
-                            placeholder="أي نموذج"
+                            placeholder=""
                             styles={colourStyles}
                             onChange={(value) => setBrandType(value)}
                           // classNamePrefix="select"

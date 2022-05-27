@@ -150,7 +150,7 @@ export default function Cars({ cars }) {
               </p>
               <ul className="tags">
                 <li>{car.model_year}</li>
-                <li>{car.kilometer} كم</li>
+                {car.kilometer ?<li>{car.kilometer} كم</li> : ''}
               </ul>
               <p>
               <MdOutlineLocationOn /> {car.city}
