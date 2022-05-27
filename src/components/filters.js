@@ -688,7 +688,7 @@ export default function Filters(props) {
                   />
                   <label className="d-block" htmlFor={"brand" + index}>
                   <span>
-                    <img src={apiUrl+"/upload/"+brand.image} alt="" />
+                    <img src={brand.image} alt="" />
                   </span>
                     {" "}
                     {brand.label}{" "}
@@ -1017,7 +1017,7 @@ export default function Filters(props) {
                   />
                   <label className="d-block" htmlFor={"source" + index}>
                   <span>
-                    <img src={`${apiUrl}/upload/${source.image}`} alt="" />
+                    <img src={`${source.image}`} alt="" />
                   </span>
                     {" "}
                     {source.label === 'Snap' ? "Social Media" : source.label}{" "}
