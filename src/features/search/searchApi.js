@@ -1,4 +1,4 @@
-import { apiUrl } from "../constants";
+import { apiUrl, solrUrl } from "../constants";
 
 export async function fetchSearchInputs() {
   
@@ -51,7 +51,7 @@ export async function fetchCars(query) {
     redirect: 'follow'
   };
   try{
-    var response = await fetch("http://18.193.172.213:8983/solr/syarty/select?q="+query, requestOptions);
+    var response = await fetch(`${solrUrl}/solr/syarty/select?q=${query}`, requestOptions);
     return response.json();
   }catch(err){
     console.log(err)
