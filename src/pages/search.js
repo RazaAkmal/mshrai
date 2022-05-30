@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import $ from "jquery";
 import { useHistory } from "react-router-dom";
-import Select from "react-select";
+import Select, { components } from "react-select";
 import { colourStyles } from "../constants";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
@@ -17,6 +17,22 @@ import { useTranslation, Trans } from "react-i18next";
 
 const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range);
+
+const { Option } = components;
+
+const IconOption = props => (
+  <Option {...props}>
+    <div>
+    <img
+      src={props.data.image}
+      style={{ width: 36 }}
+      alt={props.data.label}
+    />
+    {props.data.label}
+    </div>
+  </Option>
+);
+
 
 export default function Search() {
   let history = useHistory();
@@ -254,6 +270,7 @@ export default function Search() {
                             options={searchInputs.marksOptions}
                             className="basic-multi-select"
                             placeholder=""
+                            components={{ Option: IconOption }}
                             styles={colourStyles}
                             onChange={(value) => setBrand(value)}
                             // classNamePrefix="select"
