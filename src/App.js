@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Resault from "./pages/resaults";
@@ -8,12 +8,11 @@ import { store } from "./app/store";
 import Cookies from "js-cookie";
 import uniqid from "uniqid";
 import "./i18n";
-import { useTranslation, Trans } from "react-i18next";
 
-const lngs = {
-  ar: { nativeName: "Arabic" },
-  en: { nativeName: "English" },
-};
+// const lngs = {
+//   sa: { nativeName: "Arabic" },
+//   us: { nativeName: "English" },
+// };
 
 const App = () => {
   useEffect(() => {
@@ -24,11 +23,11 @@ const App = () => {
     }
   }, []);
 
-  const { t, i18n } = useTranslation();
-
   return (
     <>
-      <div>
+      {/* <Navbar /> */}
+
+      {/* <div>
         {Object.keys(lngs).map((lng) => (
           <button
             key={lng}
@@ -41,7 +40,7 @@ const App = () => {
             {lngs[lng].nativeName}
           </button>
         ))}
-      </div>
+      </div> */}
 
       <Provider store={store}>
         <Router basename="/">

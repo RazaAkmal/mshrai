@@ -14,25 +14,25 @@ import {
   setResultsNumebr,
 } from "../features/search/searchSlice";
 import { useTranslation, Trans } from "react-i18next";
+import Translator from "../components/Translator";
 
 const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range);
 
 const { Option } = components;
 
-const IconOption = props => (
+const IconOption = (props) => (
   <Option {...props}>
     <div>
-    <img
-      src={props.data.image}
-      style={{ width: 36 }}
-      alt={props.data.label}
-    />
-    {props.data.label}
+      <img
+        src={props.data.image}
+        style={{ width: 36 }}
+        alt={props.data.label}
+      />
+      {props.data.label}
     </div>
   </Option>
 );
-
 
 export default function Search() {
   let history = useHistory();
@@ -236,6 +236,29 @@ export default function Search() {
         <div className="container">
           <div className="row">
             <div className="col-12">
+              <div
+                className="d-none d-sm-block"
+                style={{
+                  position: "absolute",
+                  display: "flex",
+                  top: "10px",
+                  left: "0%",
+                }}
+              >
+                <Translator />
+              </div>
+
+              <div
+                className="col-md-12 mb-3 d-block d-sm-none"
+                style={{
+                  position: "relative",
+                  display: "flex",
+                  top: "10px",
+                  left: "0%",
+                }}
+              >
+                <Translator />
+              </div>
               <div className="cont">
                 <img src="../images/logo_color.png" alt="" className="logo" />
                 <h1>
@@ -260,7 +283,8 @@ export default function Search() {
                         onChange={(e)=> setState({...state, keyword:e.target.value})}
                       />
                     </div> */}
-                        <div className="col-md-6 col-6  mb-3 d-none d-sm-block">
+                        <div className="col-md-6 col-6  mb-3">
+                          {/*these classNames would be required to made it disappear on small screen "col-md-6 col-6  mb-3 d-none d-sm-block" */}
                           <label className="text-end d-block"> الماركة </label>
                           <Select
                             // defaultValue={searchInputs.marksOptions.map(i => state.brand_id.indexOf(i.value) !== -1 ? i : false)}
@@ -400,6 +424,8 @@ export default function Search() {
                             // classNamePrefix="select"
                           />
                         </div>
+                        {/* 
+                        to make الماركة visible at the end of mobile screens
                         <div className="col-md-12 mb-3 d-block d-sm-none">
                           <label className="text-end d-block"> الماركة </label>
                           <Select
@@ -414,7 +440,7 @@ export default function Search() {
                             onChange={(value) => setBrand(value)}
                             // classNamePrefix="select"
                           />
-                        </div>
+                        </div> */}
                         {/* <div className="col-md-6 col-6  mb-3"></div> */}
                         {/* Commenting this Code is its not required yet
                      <div className="col-12 flex_col  mb-3">

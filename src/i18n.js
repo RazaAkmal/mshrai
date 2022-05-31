@@ -12,12 +12,12 @@ i18n
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
     debug: true,
-    fallbackLng: "ar",
+    fallbackLng: "sa",
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
     },
     resources: {
-      ar: {
+      sa: {
         translation: {
           description: {
             Header: "أفضل منصة لتحصل على أفضل السيارات المستعملة",
@@ -26,7 +26,7 @@ i18n
         },
       },
 
-      en: {
+      us: {
         translation: {
           description: {
             Header: "The best platform to get the best used cars",

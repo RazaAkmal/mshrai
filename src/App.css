@@ -13,11 +13,11 @@
 :root {
   --main_color: #000000;
   --primary_color: #3e0292;
-  --primary_color_2: #00CEBD;
-  --second_color: #00CEE0;
-  --acent_color: #AAF3FF;
+  --primary_color_2: #00cebd;
+  --second_color: #00cee0;
+  --acent_color: #aaf3ff;
   --third_color: #3e3636;
-  --gray_color: #BBBBBB;
+  --gray_color: #bbbbbb;
 }
 ::-moz-selection {
   background-color: var(--main_color) !important;
@@ -296,7 +296,7 @@ section {
 }
 .img_bc {
   /* background: url("./images/bc.jpg") center no-repeat; */
-  background: #00CEE0;
+  background: #00cee0;
   background-size: cover;
   position: relative;
 }
@@ -429,13 +429,13 @@ header form .link i {
 
 .toggle-container {
   background: white;
-    padding: 10px;
-    height: 100vh;
-    overflow: auto;
-    overflow-y: auto;
-    scroll-behavior: smooth;
-    padding-bottom: 20px;
-    box-sizing: border-box;
+  padding: 10px;
+  height: 100vh;
+  overflow: auto;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 20px;
+  box-sizing: border-box;
 }
 
 .toggle-container .close_btn {
@@ -655,11 +655,11 @@ header form .link i {
   margin-right: 2px;
 }
 
-.search_tags li span{
+.search_tags li span {
   cursor: pointer;
   float: left;
 }
-.search_tags li span svg{
+.search_tags li span svg {
   width: 20px;
   height: 20px;
 }
@@ -687,9 +687,9 @@ header form .link i {
   line-height: 1;
 }
 .subscribe_mobile {
-    display: none;
+  display: none;
 }
-.subscribe_mobile input{
+.subscribe_mobile input {
   text-align: right;
   width: 70%;
   color: var(--main_color);
@@ -706,30 +706,29 @@ header form .link i {
   border-radius: 0 5px 5px 0 !important;
   -webkit-border-radius: 5px;
 }
-.subscribe_mobile button{
-    width: 25%;
-    bottom: 0;
-    left: 0;
-    height: 50px;
-    border: 0;
-    background-color: var(--primary_color);
-    padding: 0 15px;
-    color: #fff;
-    border-radius: 5px 0 0 5px !important;
-
+.subscribe_mobile button {
+  width: 25%;
+  bottom: 0;
+  left: 0;
+  height: 50px;
+  border: 0;
+  background-color: var(--primary_color);
+  padding: 0 15px;
+  color: #fff;
+  border-radius: 5px 0 0 5px !important;
 }
 .subscribe_mobile button:focus,
-.subscribe_mobile button:hover{
+.subscribe_mobile button:hover {
   background-color: var(--main_color);
 }
-.subscribe{
-    max-width: 360px;
-    margin: 0 auto 25px 0;
+.subscribe {
+  max-width: 360px;
+  margin: 0 auto 25px 0;
 }
-.subscribe label{
-    margin: 10px 0 0;
+.subscribe label {
+  margin: 10px 0 0;
 }
-.subscribe input{
+.subscribe input {
   text-align: right;
   width: 70%;
   color: var(--main_color);
@@ -746,20 +745,19 @@ header form .link i {
   border-radius: 0 5px 5px 0 !important;
   -webkit-border-radius: 5px;
 }
-.subscribe button{
-    width: 30%;
-    bottom: 0;
-    left: 0;
-    height: 50px;
-    border: 0;
-    background-color: var(--primary_color);
-    padding: 0 15px;
-    color: #fff;
-    border-radius: 5px 0 0 5px !important;
-
+.subscribe button {
+  width: 30%;
+  bottom: 0;
+  left: 0;
+  height: 50px;
+  border: 0;
+  background-color: var(--primary_color);
+  padding: 0 15px;
+  color: #fff;
+  border-radius: 5px 0 0 5px !important;
 }
 .subscribe button:focus,
-.subscribe button:hover{
+.subscribe button:hover {
   background-color: var(--main_color);
 }
 .car_item {
@@ -770,8 +768,8 @@ header form .link i {
   border-bottom: 1px solid var(--primary_color);
   transition: all 0.2s ease;
   /* border: 1px solid #fff; */
-    border-radius: 5px;
-    /* padding: 5px; */
+  border-radius: 5px;
+  /* padding: 5px; */
 }
 .car_item:hover {
   transform: translateY(-20px);
@@ -779,7 +777,7 @@ header form .link i {
 .car_item.visited {
   opacity: 50%;
 }
-.car_item .car_img{
+.car_item .car_img {
   height: 170px;
   overflow: hidden;
   width: 100%;
@@ -1013,11 +1011,11 @@ header form .link i {
   .main_screen .cont p {
     font-size: 12px;
   }
-  .subscribe_mobile{
+  .subscribe_mobile {
     max-width: 100%;
     margin: 0 auto 25px;
   }
-  .subscribe{
+  .subscribe {
     max-width: 100%;
     margin: 0 auto 25px;
   }
@@ -1030,9 +1028,8 @@ header form .link i {
     display: flex;
     border-bottom: none;
   }
- .infinite-scroll-component {
+  .infinite-scroll-component {
     width: 100%;
-
   }
   .search_hint p {
     line-height: 25px;
@@ -1070,15 +1067,14 @@ header form .link i {
   background-color: var(--gray_color) !important;
 }
 
-.search-button a{
+.search-button a {
   color: #fff;
   text-decoration: none;
 }
-.search-button a:hover{
+.search-button a:hover {
   color: #fff;
   text-decoration: none;
 }
-
 
 .d-block img {
   width: 30px !important;
@@ -1086,16 +1082,16 @@ header form .link i {
   object-fit: contain;
 }
 
-
 .filter-accordion .accordion-button {
   padding: 0.7rem 0.7rem;
   justify-content: space-between;
+  text-align: right;
 }
 .filter-accordion .accordion-button:focus {
   box-shadow: none;
 }
 .filter-accordion .accordion-item {
-  border: none
+  border: none;
 }
 .filter-accordion .accordion-header {
   border: 1px solid #e0e0e0;
@@ -1108,6 +1104,15 @@ header form .link i {
   padding: 0;
 }
 
+.languageTogg {
+  /* position: absolute; */
+  /* object-fit: contain; */
+  min-width: 150px;
+  max-width: 250px;
+  background: null;
+  /* z-index: -1; */
+}
+
 .filter-accordion .accordion-button::after {
   margin-left: 0 !important;
 }
@@ -1115,32 +1120,31 @@ header form .link i {
   margin-bottom: 25px;
 }
 
-.search_form .nav-tabs button{
+.search_form .nav-tabs button {
   max-width: 100%;
-    height: 50px;
-    margin-top: 0px;
-    background-color: transparent!important;
-    color: #3e0292!important;
-    font-size: 18px;
-    border:none;
-    width: 100%;
+  height: 50px;
+  margin-top: 0px;
+  background-color: transparent !important;
+  color: #3e0292 !important;
+  font-size: 18px;
+  border: none;
+  width: 100%;
 }
 
-.search_form .nav-tabs .active{
-  background-color: #3e0292!important;
-  color: white!important;
+.search_form .nav-tabs .active {
+  background-color: #3e0292 !important;
+  color: white !important;
   border-radius: 0px;
 }
 .search_form .tabs-btn:hover {
-   background-color: #3e0292;
-   color: white;
+  background-color: #3e0292;
+  color: white;
 }
-.search_form .tabs-btn{
+.search_form .tabs-btn {
   display: none;
 }
 
-
-.search_form .nav-tabs{
+.search_form .nav-tabs {
   border-bottom: 0;
   width: 100%;
 }
@@ -1148,27 +1152,24 @@ header form .link i {
   width: 50%;
 }
 
-
-@media (max-width:600px)
-{
+@media (max-width: 600px) {
   .search_form button {
     max-width: 100%;
     width: 98%;
     height: 50px;
     border-radius: 0px;
   }
-  .search_form  .css-tlfecz-indicatorContainer{
-    padding: 0!important;
+  .search_form .css-tlfecz-indicatorContainer {
+    padding: 0 !important;
   }
-  .search_form .css-bvegwb-control{
-    padding: 4px!important;
+  .search_form .css-bvegwb-control {
+    padding: 4px !important;
   }
-  .search_form .tabs-btn{
+  .search_form .tabs-btn {
     display: block;
   }
-  .search_hint .link{
+  .search_hint .link {
     font-size: 11px;
     padding: 0 7px;
-
   }
 }
