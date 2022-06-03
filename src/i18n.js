@@ -22,6 +22,7 @@ i18n
           description: {
             Header: "أفضل منصة لتحصل على أفضل السيارات المستعملة",
             Footer: "ابحث في اكثر من موقع ومصدر لبيع السيارات المستعمله",
+            Filter: "فلترة"
           },
         },
       },
@@ -31,6 +32,7 @@ i18n
           description: {
             Header: "The best platform to get the best used cars",
             Footer: "Search more than one site and source to sell used cars",
+            Filter: "Filter"
           },
         },
       },

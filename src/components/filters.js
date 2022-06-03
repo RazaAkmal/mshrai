@@ -6,6 +6,7 @@ import { fetchSearchInputs } from "../features/search/searchApi";
 import { getSearchInputs } from "../features/search/searchSlice";
 import { Accordion } from 'react-bootstrap';
 import { apiUrl } from "../features/constants";
+import { Trans } from "react-i18next";
 
 const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range);
@@ -139,7 +140,7 @@ export default function Filters(props) {
 
   return (
     <div>
-      <div className="filter-title">{localStorage.getItem('lang') === "en" ? "Filter": "فلترة"}</div>
+      <div className="filter-title"><Trans i18nKey="description.Filter" /></div>
       <form className="toggle-container" id="accordion1">
         <button
           className="icon_link close_btn"
