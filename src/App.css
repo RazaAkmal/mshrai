@@ -277,7 +277,7 @@ section {
 }
 .row {
   position: relative;
-  z-index: 999;
+  /* z-index: 999; */
 }
 .related {
   padding: 35px 0 50px 0;
@@ -1171,4 +1171,10 @@ header form .link i {
     padding: 0 7px;
 
   }
+}
+.language-button {
+  position: absolute;
+  top: 12px;
+  left: 15px;
+  z-index: 1;
 }
