@@ -20,7 +20,7 @@ export async function fetchSearchInputs() {
   if(result.code === "0"){
     if(result.marks && result.marks.length > 0){
       result.marks.forEach(mark => {
-        options.marksOptions.push({value: mark.id, label: mark.brand, label_en: mark.brand_en, image: mark.image})
+        options.marksOptions.push({value: mark.id, label: mark.brand, image: mark.image})
       });
     }
     if(result.model && result.model.length > 0){
