@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import $ from "jquery";
 import { useHistory } from "react-router-dom";
 import Select from "react-select";
@@ -8,7 +8,12 @@ import "rc-slider/assets/index.css";
 import { Tabs, Tab } from "react-bootstrap";
 import { fetchSearchInputs, fetchCars } from "../features/search/searchApi";
 import { useDispatch, useSelector } from "react-redux";
-import { getSearchInputs, setSearchForm, setResultsNumebr } from "../features/search/searchSlice";
+import {
+  getSearchInputs,
+  setSearchForm,
+  setResultsNumebr,
+} from "../features/search/searchSlice";
+import { useTranslation, Trans } from "react-i18next";
 
 const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range);
@@ -19,8 +24,8 @@ export default function Search() {
   const searchForm = useSelector((state) => state.search.searchForm);
   const resultsNumber = useSelector((state) => state.search.numFound);
 
-  const [modelOptions, setModelOptions] = useState([])
-  const [brandOptions, setBrandOptions] = useState([])
+  const [modelOptions, setModelOptions] = useState([]);
+  const [brandOptions, setBrandOptions] = useState([]);
 
   const dispatch = useDispatch();
   const [state, setState] = useState({ ...searchForm });
@@ -34,31 +39,29 @@ export default function Search() {
     });
   }, [dispatch]);
 
-  const [yearList, setYearList] = useState([])
+  const [yearList, setYearList] = useState([]);
 
   useEffect(() => {
-    const yearOption = []
+    const yearOption = [];
     for (let index = 1990; index < new Date().getFullYear(); index++) {
-      yearOption.push({ id: index, label: index })
+      yearOption.push({ id: index, label: index });
     }
-    setYearList(yearOption)
-  }, [])
+    setYearList(yearOption);
+  }, []);
 
   useEffect(() => {
-    const brandOptionsStored = searchInputs.marksOptions.map(i => state.brand_id.indexOf(i.value) !== -1 ? i : false)
-    setBrandOptions(brandOptionsStored)
-  }, [searchInputs])
+    const brandOptionsStored = searchInputs.marksOptions.map((i) =>
+      state.brand_id.indexOf(i.value) !== -1 ? i : false
+    );
+    setBrandOptions(brandOptionsStored);
+  }, [searchInputs]);
 
   useEffect(() => {
     var query = `model_year:[${state.model_year_start} TO ${state.model_year_end}]`;
     if (state.keyword && state.keyword !== "") {
       query += ` AND (brand:"${state.keyword}" OR brand_type:"${state.keyword}")`;
     }
-    if (
-      state.brand_id &&
-      state.brand_id != null &&
-      state.brand_id.length > 0
-    ) {
+    if (state.brand_id && state.brand_id != null && state.brand_id.length > 0) {
       query += ` AND brand_id:(`;
       state.brand_id.forEach((id, index) => {
         query += index === 0 ? id : ` OR ${id}`;
@@ -76,22 +79,14 @@ export default function Search() {
       });
       query += ")";
     }
-    if (
-      state.shape_id &&
-      state.shape_id != null &&
-      state.shape_id.length > 0
-    ) {
+    if (state.shape_id && state.shape_id != null && state.shape_id.length > 0) {
       query += ` AND shape_id:(`;
       state.shape_id.forEach((id, index) => {
         query += index === 0 ? id : ` OR ${id}`;
       });
       query += ")";
     }
-    if (
-      state.city_id &&
-      state.city_id != null &&
-      state.city_id.length > 0
-    ) {
+    if (state.city_id && state.city_id != null && state.city_id.length > 0) {
       query += ` AND city_id:(`;
       state.city_id.forEach((id, index) => {
         query += index === 0 ? id : ` OR ${id}`;
@@ -124,8 +119,6 @@ export default function Search() {
     });
   }, [state]);
 
-
-
   const addShape = (i) => {
     let shapes = [...state.shape_id];
     console.log(shapes);
@@ -136,91 +129,91 @@ export default function Search() {
     }
     setState({
       ...state,
-      shape_id: [...shapes]
-    })
-  }
+      shape_id: [...shapes],
+    });
+  };
   const addCity = (values) => {
-    let cities = values.map(value => value.value);
+    let cities = values.map((value) => value.value);
     setState({
       ...state,
-      city_id: [...cities]
-    })
-  }
+      city_id: [...cities],
+    });
+  };
 
   const setBrand = (values) => {
-    let brands = values.map(value => value.value);
+    let brands = values.map((value) => value.value);
     setState({
       ...state,
-      brand_id: [...brands]
-    })
-    setBrandOptions(values)
-  }
+      brand_id: [...brands],
+    });
+    setBrandOptions(values);
+  };
 
   useEffect(() => {
-    const models = []
+    const models = [];
     if (state.brand_id.length) {
       state.brand_id.map((id) => {
         return searchInputs.modelOptions.map((model) => {
           if (model.brandId === id) {
-            models.push(model)
+            models.push(model);
           }
-        })
-      })
+        });
+      });
     } else {
-      searchInputs.modelOptions.map((model) => models.push(model))
+      searchInputs.modelOptions.map((model) => models.push(model));
     }
-    setModelOptions(models)
-  }, [state.brand_id, searchInputs.modelOptions])
-
-
+    setModelOptions(models);
+  }, [state.brand_id, searchInputs.modelOptions]);
 
   useEffect(() => {
-    const selectedBrands = []
-    let prevId
-    let newId = ''
+    const selectedBrands = [];
+    let prevId;
+    let newId = "";
     if (state.model_brand_id && state.model_brand_id.length) {
       state.model_brand_id.map((id) => {
-        prevId = id
+        prevId = id;
         return searchInputs.marksOptions.map((brand) => {
           //this condition check the same brand should not print again, and also check and print brand of selected model
           if (brand.value === id && prevId !== newId) {
-            newId = id
-            selectedBrands.push(brand)
+            newId = id;
+            selectedBrands.push(brand);
           }
-        })
-      })
-      setBrandOptions(selectedBrands)
+        });
+      });
+      setBrandOptions(selectedBrands);
     }
-
-  }, [state.model_brand_id])
-
-
+  }, [state.model_brand_id]);
 
   const setBrandType = (values) => {
-    let brands_types = values.map(value => value.value);
-    let brands_type_id = values.map(value => value.brandId);
+    let brands_types = values.map((value) => value.value);
+    let brands_type_id = values.map((value) => value.brandId);
     setState({
       ...state,
       brand_type_id: [...brands_types],
-      model_brand_id: [...brands_type_id]
-    })
-  }
+      model_brand_id: [...brands_type_id],
+    });
+  };
 
   const setYearRange = (values) => {
     setState({
       ...state,
       model_year_start: values[0],
-      model_year_end: values[1]
-    })
-  }
+      model_year_end: values[1],
+    });
+  };
 
   function navigateToResult() {
     dispatch(setSearchForm(state));
-    localStorage.setItem('savedSearch', JSON.stringify(state));
+    localStorage.setItem("savedSearch", JSON.stringify(state));
     console.log(state);
     history.push("/results");
   }
-  const [key, setKey] = useState('findCar');
+  const [key, setKey] = useState("findCar");
+
+  const { t } = useTranslation();
+  const textareaRef = useRef();
+  const cursorPosition = 0;
+
   return (
     <>
       <div className="main_screen img_bc">
@@ -229,7 +222,9 @@ export default function Search() {
             <div className="col-12">
               <div className="cont">
                 <img src="../images/logo_color.png" alt="" className="logo" />
-                <h1>أفضل منصة لتحصل على أفضل السيارات المستعملة</h1>
+                <h1>
+                  <Trans i18nKey="description.Header" />
+                </h1>
                 <form className="search_form">
                   <Tabs
                     id="controlled-tab-example"
@@ -238,9 +233,7 @@ export default function Search() {
                     className="mb-3"
                   >
                     <Tab eventKey="findCar" title="ابحث عن سيارتي">
-
                       <div className="row px-2">
-
                         {/* Commenting this Code is its not required yet
                     <div className="col-12">
                       <input
@@ -263,34 +256,54 @@ export default function Search() {
                             placeholder=""
                             styles={colourStyles}
                             onChange={(value) => setBrand(value)}
-                          // classNamePrefix="select"
+                            // classNamePrefix="select"
                           />
                         </div>
                         <div className="col-md-6 col-6  mb-3">
                           <label className="text-end d-block"> المودل </label>
                           <Select
-                            defaultValue={searchInputs.modelOptions.map(i => state.brand_type_id.indexOf(i.value) !== -1 ? i : false)}
+                            defaultValue={searchInputs.modelOptions.map((i) =>
+                              state.brand_type_id.indexOf(i.value) !== -1
+                                ? i
+                                : false
+                            )}
                             isMulti
+                            ref={textareaRef}
+                            onBlur={() =>
+                              textareaRef.current.setSelectionRange(
+                                cursorPosition,
+                                cursorPosition
+                              )
+                            }
                             name="brand"
                             options={modelOptions}
                             className="basic-multi-select"
                             placeholder=""
                             styles={colourStyles}
                             onChange={(value) => setBrandType(value)}
-                          // classNamePrefix="select"
+                            // classNamePrefix="select"
                           />
                         </div>
                         <div className="col-md-6 col-6 mb-3">
-                          <label className="text-end d-block">سنة تصنيع محددة</label>
+                          <label className="text-end d-block">
+                            سنة تصنيع محددة
+                          </label>
                           <Select
-                            value={state.model_year_end === state.model_year_start && [{ label: state.model_year_end }]}
+                            value={
+                              state.model_year_end ===
+                                state.model_year_start && [
+                                { label: state.model_year_end },
+                              ]
+                            }
                             name="brand"
                             options={yearList}
                             className="basic-multi-select"
                             placeholder=""
                             styles={colourStyles}
-                            onChange={(value) => setYearRange([value.label, value.label])}
-                          // classNamePrefix="select"
+                            onChange={(value) =>
+                              setYearRange([value.label, value.label])
+                            }
+                            // classNamePrefix="select"
                           />
                         </div>
                         <div className="col-md-6 col-6  mb-3">
@@ -304,7 +317,10 @@ export default function Search() {
                               }}
                               min={1990}
                               max={new Date().getFullYear()}
-                              value={[state.model_year_start, state.model_year_end]}
+                              value={[
+                                state.model_year_start,
+                                state.model_year_end,
+                              ]}
                               tipFormatter={(value) => `${value}`}
                               tipProps={{
                                 placement: "top",
@@ -354,7 +370,9 @@ export default function Search() {
                         <div className="col-md-6 col-6  mb-3">
                           <label className="text-end d-block"> المدينة </label>
                           <Select
-                            defaultValue={searchInputs.cityOptions.map(i => state.city_id.indexOf(i.value) != -1 ? i : false)}
+                            defaultValue={searchInputs.cityOptions.map((i) =>
+                              state.city_id.indexOf(i.value) != -1 ? i : false
+                            )}
                             isMulti
                             name="brand"
                             options={searchInputs.cityOptions}
@@ -362,7 +380,7 @@ export default function Search() {
                             placeholder="أي مدينة"
                             styles={colourStyles}
                             onChange={(value) => addCity(value)}
-                          // classNamePrefix="select"
+                            // classNamePrefix="select"
                           />
                         </div>
                         <div className="col-md-12 mb-3 d-block d-sm-none">
@@ -377,7 +395,7 @@ export default function Search() {
                             placeholder="أي علامة تجارية"
                             styles={colourStyles}
                             onChange={(value) => setBrand(value)}
-                          // classNamePrefix="select"
+                            // classNamePrefix="select"
                           />
                         </div>
                         {/* <div className="col-md-6 col-6  mb-3"></div> */}
@@ -403,19 +421,21 @@ export default function Search() {
                       </div>
                     </Tab>
                   </Tabs>
-                 
+
                   {/* <!--End Row--> */}
 
                   {/* <button type="button" disabled={!resultsNumber > 0}  className={resultsNumber > 0 ? "search-button" : "disable-button" } onClick={navigateToResult}>
                     شاهد {resultsNumber} سيارة
                   </button> */}
-                  <button type="button" className="search-button" onClick={navigateToResult}>
+                  <button
+                    type="button"
+                    className="search-button"
+                    onClick={navigateToResult}
+                  >
                     شاهد {resultsNumber} سيارة
                   </button>
                 </form>
-                <p>
-                  ابحث في اكثر من موقع ومصدر لبيع السيارات المستعمله
-                </p>
+                <p>{t("description.Footer")}</p>
               </div>
             </div>
           </div>
