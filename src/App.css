@@ -538,6 +538,7 @@ header form .link i {
     display: inline-block;
     float: left;
     margin: 0;
+    margin-top: 2px;
   }
   .filter_btn {
     display: inline-block;
@@ -1030,6 +1031,7 @@ header form .link i {
     display: flex;
     border-bottom: none;
   }
+ 
  .infinite-scroll-component {
     width: 100%;
 
@@ -1055,7 +1057,29 @@ header form .link i {
   .car_item {
     width: 100%;
     max-width: 100%;
+    align-items: flex-start;
   }
+  .car_item .car_img img {
+    height: 130px;
+    width: 180px;
+    /* position: absolute;
+    top: 0; */
+  }
+  .car_item .car_cont .price {
+    position: absolute;
+    right: 22px;
+    margin-right: 10px;
+  }
+  .car_item .car_cont .bottom {
+    border-top: none;
+    height: 60px;
+
+  }
+  .car_item .car_cont .bottom img {
+    position: absolute;
+    left: 30px;
+  }
+
 }
 .collapseArea {
   margin-bottom: 100px;
