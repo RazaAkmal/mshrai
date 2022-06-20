@@ -1,171 +1,182 @@
 import { Link } from "react-router-dom";
 import { apiUrl } from "../features/constants";
-import { MdOutlineLocationOn } from 'react-icons/md'
-import moment from 'moment';
-import axios from 'axios'
-import Cookies from 'js-cookie'
-
+import { MdOutlineLocationOn } from "react-icons/md";
+import moment from "moment";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { t } from "i18next";
+import { useTranslation } from "react-i18next";
+import { useState } from "react";
+import { ReportModal } from "./reportModal";
 
 export default function Cars({ cars }) {
-
-  const e2a = s => s.replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d])
-
-  
-  const getDate = (date) => {
-
-    const dateObj = new Date();
-    const month = dateObj.getUTCMonth() + 1; //months from 1-12
-    const day = dateObj.getUTCDate();
-    const year = dateObj.getUTCFullYear();
-    const hours = dateObj.getHours();
-    const minutes = dateObj.getMinutes();
-
-    const index = date.indexOf('.')
-    const dateIndex = date.indexOf(' ')
-    const dateSlice = date.slice(0, dateIndex)
-    const timeSlice = date.slice(dateIndex + 1, index)
-
-    const dateArray = dateSlice.split('-')
-    const timeArray = timeSlice.split(':')
-    const dateOne = moment([year, month, day, hours, minutes]);
-    const dateTwo = moment([Number(dateArray[0]), Number(dateArray[1]), Number(dateArray[2]), Number(timeArray[0]), Number(timeArray[1])]);
-    const resultHours = dateOne.diff(dateTwo, 'hours')
-    const resultMinutes = dateOne.diff(dateTwo, 'minutes')
-    const resultDays = dateOne.diff(dateTwo, 'days')
-    const resultWeek = dateOne.diff(dateTwo, 'week')
-    const resultMonth = dateOne.diff(dateTwo, 'month')
-    const arabicHours = e2a(resultHours.toString())
-    const arabicMinutes = e2a(resultMinutes.toString())
-    const arabicDays = e2a(resultDays.toString())
-    const arabicWeek = e2a(resultWeek.toString())
-    const arabicMonth = e2a(resultMonth.toString())
-    let message
-    if (resultMonth > 0) {
-      return  'أكثر من شهر'
-    } else if (resultWeek > 0) {
-      let morethan = false
-        if (resultDays > 7 &&  resultDays !== 14 && resultDays !== 21 && resultDays !== 28) {
-          morethan = true
-        }
-        if (resultWeek > 0 && !morethan) {
-          message = "منذ اسبوع "
-        }
-        if (resultWeek > 0 && morethan) {
-          message = "أكثر من أسبوع"
-        }
-        if (resultWeek > 1) {
-          message = "اسبوعين واكثر"
-        }
-        if (resultWeek > 2) {
-          message = `${arabicWeek} اسابيع واكثر`
-        }
-      return message
-    } else if (resultDays > 0) {
-        message = "قبل يوم"
-        if (resultDays > 1) {
-          message = "قبل يومين"
-        }
-        if (resultDays > 2) {
-          message = ` قبل ${arabicDays} ايام `
-        }
-        return message
-    } else if (resultHours > 0) {
-        return `منذ ${arabicHours} ساعة`
-    } else if (resultMinutes > 0) {
-        return `منذ ${arabicMinutes} دقيقة`
-    } 
-    else {
-      return 'أضيف اليوم'
-    }
-  }
+  const { t } = useTranslation();
+  const [showReportModal, setshowReportModal] = useState(false);
 
   const addUserActivity = (car) => {
-    let userId = Cookies.get('id')
+    let userId = Cookies.get("id");
     let bodyFormData = new FormData();
-    bodyFormData.append('user_id', userId);
-    bodyFormData.append('ad_id', car.id);
-    bodyFormData.append('username', 'guest');
+    bodyFormData.append("user_id", userId);
+    bodyFormData.append("ad_id", car.id);
+    bodyFormData.append("username", "guest");
     axios({
       method: "post",
       url: "https://admin.mshrai.com/api/user_activity",
       data: bodyFormData,
       headers: { "Content-Type": "multipart/form-data" },
-    })
-  }
+    });
+  };
 
   const checkAddAvialble = async (car) => {
-    addUserActivity(car)
-    let splitedUrl = car.url.split('/')
-    let id = splitedUrl[splitedUrl.length - 1].slice(2)
-    let url = 'https://graphql.haraj.com.sa/?queryName=postLikeInfo,postContact&token=&clientId=12c874b0-2150-45a4-8ba2-84c73d129111&version=8.2.1%20,%206%209%20-%209%20-%2021/'
-    let post_data = {"query":"query($ids:[Int]) { posts( id:$ids) {\n\t\titems {\n\t\t\tid status authorUsername title city postDate updateDate hasImage thumbURL authorId bodyTEXT city tags imagesList commentStatus commentCount upRank downRank geoHash\n\t\t}\n\t\tpageInfo {\n\t\t\thasNextPage\n\t\t}\n\t\t} }","variables":{"ids":[Number(id)]}}
+    addUserActivity(car);
+    let splitedUrl = car.url.split("/");
+    let id = splitedUrl[splitedUrl.length - 1].slice(2);
+    let url =
+      "https://graphql.haraj.com.sa/?queryName=postLikeInfo,postContact&token=&clientId=12c874b0-2150-45a4-8ba2-84c73d129111&version=8.2.1%20,%206%209%20-%209%20-%2021/";
+    let post_data = {
+      query:
+        "query($ids:[Int]) { posts( id:$ids) {\n\t\titems {\n\t\t\tid status authorUsername title city postDate updateDate hasImage thumbURL authorId bodyTEXT city tags imagesList commentStatus commentCount upRank downRank geoHash\n\t\t}\n\t\tpageInfo {\n\t\t\thasNextPage\n\t\t}\n\t\t} }",
+      variables: { ids: [Number(id)] },
+    };
 
     await axios({
       url: url,
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
+      method: "post",
+      headers: { "Content-Type": "application/json" },
       data: JSON.stringify(post_data),
     })
-    .then(async (data) => {
-      const {posts} = data.data.data
-      if (!posts.items[0].status) {
-        let bodyFormData = new FormData();
-        bodyFormData.append('status', posts.items[0].status);
-        bodyFormData.append('id', car.id);
-        axios({
-          method: "post",
-          url: "https://admin.mshrai.com/api/product_status",
-          data: bodyFormData,
-          headers: { "Content-Type": "multipart/form-data" },
-        })
-          .then(function (response) {
-            console.log(response);
+      .then(async (data) => {
+        const { posts } = data.data.data;
+        if (!posts.items[0].status) {
+          let bodyFormData = new FormData();
+          bodyFormData.append("status", posts.items[0].status);
+          bodyFormData.append("id", car.id);
+          axios({
+            method: "post",
+            url: "https://admin.mshrai.com/api/product_status",
+            data: bodyFormData,
+            headers: { "Content-Type": "multipart/form-data" },
           })
-          .catch(function (response) {
-            console.log(response);
-          });
-      }
-    })
+            .then(function (response) {
+              console.log(response);
+            })
+            .catch(function (response) {
+              console.log(response);
+            });
+        }
+      })
       .catch((err) => console.log(err));
-  }
+  };
 
   const numberWithCommas = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+  };
 
+  const handleReport = (ev) => {
+    ev.stopPropagation();
+    ev.preventDefault();
+    setshowReportModal(true);
+  };
 
   return (
     <div className="row">
-      {cars.length > 0 ? cars.map((car) => (
-        <div className="col-lg-3 col-md-6 col-sm-6" key={car.id}>
-          <Link onClick={() => checkAddAvialble(car)} to={{ pathname:car.url }} className="car_item" target="_blank" rel="noopener noreferrer">
-            <div className="car_img">
-              <img onError={(e)=>{e.target.onerror = null; e.target.src=`${apiUrl}/upload/default.jpg`}} src={car.image2 ? car.image2 : `${apiUrl}/upload/default.jpg`} alt="" id={car.id}/>
-            </div>
-            <div className="car_cont">
-              {car.brand ? <h3>{car.brand + " - " + car.brand_type}</h3> : ''}
-              <p>
-                <i className="far fa-clock"></i>
-                {getDate(car.date)}
-              </p>
-              <ul className="tags">
-                <li>{car.model_year}</li>
-                {car.kilometer ?<li>{car.kilometer} كم</li> : ''}
-              </ul>
-              <p>
-              <MdOutlineLocationOn /> {car.city}
-              </p>
-              <div className="bottom">
-                <div className="price">
-                  <span> السعر </span> {!car.price ? (car.price2 ? numberWithCommas(car.price2) : "لايوجد سعر") : car.price === -1 ? "على السوم" : numberWithCommas(car.price) + " ريال"} 
-                </div>
-                <img src={apiUrl+"/upload/"+car.source_image} alt="" />
+      {cars.length > 0 ? (
+        cars.map((car) => (
+          <div className="col-lg-3 col-md-6 col-sm-6" key={car.id}>
+            <Link
+              onClick={() => checkAddAvialble(car)}
+              to={{ pathname: car.url }}
+              className="car_item"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div className="car_img">
+                <img
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = `${apiUrl}/upload/default.jpg`;
+                  }}
+                  src={car.image2 ? car.image2 : `${apiUrl}/upload/default.jpg`}
+                  alt=""
+                  id={car.id}
+                />
               </div>
-            </div>
-          </Link>
-          {/* <!--End Car ITem--> */}
+              <div className="car_cont">
+                <div className="car_details">
+                  {car.brand ? (
+                    <h3>{car.brand + " - " + car.brand_type}</h3>
+                  ) : (
+                    ""
+                  )}
+                  <p>
+                    <i className="far fa-clock"></i>
+                    {moment(car.date).fromNow()}
+                  </p>
+                  <div
+                    onClick={handleReport}
+                    className="report_btn"
+                    style={{ float: "left", marginLeft: 10, zIndex: 9999 }}
+                  >
+                    <p
+                      style={{
+                        color: "grey",
+                      }}
+                    >
+                      {t("car.report")}
+                    </p>
+                    <i
+                      className="fa fa-flag"
+                      style={{
+                        color: "red",
+                      }}
+                    ></i>
+                  </div>
+
+                  <ReportModal
+                    show={showReportModal}
+                    handleClose={() => setshowReportModal(false)}
+                  />
+
+                  <ul className="tags">
+                    <li>{car.model_year}</li>
+                    {car.kilometer ? (
+                      <li>
+                        {car.kilometer} {t("car.km")}
+                      </li>
+                    ) : (
+                      ""
+                    )}
+                  </ul>
+                  <p>
+                    <MdOutlineLocationOn /> {car.city}
+                  </p>
+                </div>
+                <div className="bottom">
+                  <div className="price">
+                    <span> {t("search.price")} </span>{" "}
+                    {!car.price
+                      ? car.price2
+                        ? numberWithCommas(car.price2)
+                        : t("results.noPrice")
+                      : car.price === -1
+                      ? t("car.onHaggle")
+                      : numberWithCommas(car.price) + ` ${t("results.riyal")}`}
+                  </div>
+                  <img src={apiUrl + "/upload/" + car.source_image} alt="" />
+                </div>
+              </div>
+            </Link>
+            {/* <!--End Car ITem--> */}
+          </div>
+        ))
+      ) : (
+        <div
+          className="col-12 text-center d-flex justify-content-center align-items-center"
+          style={{ minHeight: "50vh" }}
+        >
+          {t("results.noResult")}
         </div>
-      )): (<div className="col-12 text-center d-flex justify-content-center align-items-center" style={{"minHeight": "50vh"}}>لا يوجد نتائج توافق بحثك</div>)}
+      )}
     </div>
   );
 }

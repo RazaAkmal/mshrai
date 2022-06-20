@@ -8,7 +8,9 @@ import { store } from "./app/store";
 import Cookies from "js-cookie";
 import uniqid from "uniqid";
 import "./i18n";
-import { useTranslation, Trans } from "react-i18next";
+import { useTranslation } from "react-i18next";
+import moment from "moment";
+import { updateMomentLocaleToArabic } from "./helpers/helpers";
 
 const lngs = {
   ar: { nativeName: "Arabic" },
@@ -63,7 +65,7 @@ const App = () => {
           aria-haspopup="true"
           aria-expanded="false"
         >
-          <span style={{color: 'black'}}>Language</span>
+          <span style={{ color: "black" }}>{t("language")}</span>
         </button>
         <div
           className={menuClass}
@@ -75,21 +77,25 @@ const App = () => {
             top: "0px",
             left: "0px",
             willChange: "transform",
-            zIndex: '1000 !important'
+            zIndex: "1000 !important",
           }}
         >
-
           {Object.keys(lngs).map((lng) => (
             <div
+              key={lng}
               className="dropdown-item"
               onClick={() => {
-                i18n.changeLanguage(lng)
-                localStorage.setItem('lang', lng)
+                i18n.changeLanguage(lng);
+                localStorage.setItem("lang", lng);
+                if (lng === "ar") {
+                  updateMomentLocaleToArabic();
+                } else {
+                  moment.locale(lng);
+                }
               }}
             >
-              {lngs[lng].nativeName}
+              {t(lng)}
             </div>
-
           ))}
         </div>
       </div>

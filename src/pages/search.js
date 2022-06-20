@@ -21,6 +21,7 @@ const Range = createSliderWithTooltip(Slider.Range);
 export default function Search() {
   let history = useHistory();
   const searchInputs = useSelector((state) => state.search.searchInputs);
+
   const searchForm = useSelector((state) => state.search.searchForm);
   const resultsNumber = useSelector((state) => state.search.numFound);
 
@@ -113,7 +114,6 @@ export default function Search() {
     query += `&rows=12&start=${searchForm.index}&fl=date,city,source,gear_id,gear,_version_,sid,city_id,id,source_id,brand,brand_type,brand_type_id,shape,model_year,published,image2,url,brand_id,source_image,shape_id`;
     fetchCars(query).then((res) => {
       if (res && res.response && res.response.docs) {
-        console.log(res.response.docs);
         dispatch(setResultsNumebr(res.response.numFound));
       }
     });
@@ -214,12 +214,23 @@ export default function Search() {
   const textareaRef = useRef();
   const cursorPosition = 0;
 
+  const formatOptionLabel = ({ label, image }) => {
+    return (
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div>{label}</div>
+        <div>
+          <img alt="car-logo" height={50} width={50} src={image} />
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       <div className="main_screen img_bc">
         <div className="container">
           <div className="row">
-            <div className="col-12">
+            <div className="col-12 mt-5 pt-5">
               <div className="cont">
                 <img src="../images/logo_color.png" alt="" className="logo" />
                 <h1>
@@ -232,7 +243,7 @@ export default function Search() {
                     onSelect={(k) => setKey(k)}
                     className="mb-3"
                   >
-                    <Tab eventKey="findCar" title="ابحث عن سيارتي">
+                    <Tab eventKey="findCar" title={t("search.findMyCar")}>
                       <div className="row px-2">
                         {/* Commenting this Code is its not required yet
                     <div className="col-12">
@@ -244,8 +255,27 @@ export default function Search() {
                         onChange={(e)=> setState({...state, keyword:e.target.value})}
                       />
                     </div> */}
+                        <div className="col-md-12 mb-3 d-block d-sm-none">
+                          <label className="text-end d-block">
+                            {t("search.brand")}
+                          </label>
+                          <Select
+                            // defaultValue={searchInputs.marksOptions.map(i => state.brand_id.indexOf(i.value) !== -1 ? i : false)}
+                            value={brandOptions}
+                            isMulti
+                            name="brand"
+                            options={searchInputs.marksOptions}
+                            className="basic-multi-select"
+                            placeholder={t("search.anyBrand")}
+                            styles={colourStyles}
+                            onChange={(value) => setBrand(value)}
+                            formatOptionLabel={formatOptionLabel}
+                          />
+                        </div>
                         <div className="col-md-6 col-6  mb-3 d-none d-sm-block">
-                          <label className="text-end d-block"> الماركة </label>
+                          <label className="text-end d-block">
+                            {t("search.brand")}
+                          </label>
                           <Select
                             // defaultValue={searchInputs.marksOptions.map(i => state.brand_id.indexOf(i.value) !== -1 ? i : false)}
                             value={brandOptions}
@@ -256,11 +286,15 @@ export default function Search() {
                             placeholder=""
                             styles={colourStyles}
                             onChange={(value) => setBrand(value)}
+                            formatOptionLabel={formatOptionLabel}
+
                             // classNamePrefix="select"
                           />
                         </div>
                         <div className="col-md-6 col-6  mb-3">
-                          <label className="text-end d-block"> المودل </label>
+                          <label className="text-end d-block">
+                            {t("search.model")}
+                          </label>
                           <Select
                             defaultValue={searchInputs.modelOptions.map((i) =>
                               state.brand_type_id.indexOf(i.value) !== -1
@@ -286,7 +320,7 @@ export default function Search() {
                         </div>
                         <div className="col-md-6 col-6 mb-3">
                           <label className="text-end d-block">
-                            سنة تصنيع محددة
+                            {t("search.specificYearOfManufacture")}
                           </label>
                           <Select
                             value={
@@ -307,7 +341,9 @@ export default function Search() {
                           />
                         </div>
                         <div className="col-md-6 col-6  mb-3">
-                          <label className="text-end d-block">سنة الصنع</label>
+                          <label className="text-end d-block">
+                            {t("search.manufacturingYear")}
+                          </label>
                           <div className="mt-3">
                             <Range
                               onChange={(value) => setYearRange(value)}
@@ -368,7 +404,9 @@ export default function Search() {
                           {/* <div className="year_slider" name="slider"></div> */}
                         </div>
                         <div className="col-md-6 col-6  mb-3">
-                          <label className="text-end d-block"> المدينة </label>
+                          <label className="text-end d-block">
+                            {t("search.city")}
+                          </label>
                           <Select
                             defaultValue={searchInputs.cityOptions.map((i) =>
                               state.city_id.indexOf(i.value) != -1 ? i : false
@@ -377,27 +415,13 @@ export default function Search() {
                             name="brand"
                             options={searchInputs.cityOptions}
                             className="basic-multi-select"
-                            placeholder="أي مدينة"
+                            placeholder={t("search.anyCity")}
                             styles={colourStyles}
                             onChange={(value) => addCity(value)}
                             // classNamePrefix="select"
                           />
                         </div>
-                        <div className="col-md-12 mb-3 d-block d-sm-none">
-                          <label className="text-end d-block"> الماركة </label>
-                          <Select
-                            // defaultValue={searchInputs.marksOptions.map(i => state.brand_id.indexOf(i.value) !== -1 ? i : false)}
-                            value={brandOptions}
-                            isMulti
-                            name="brand"
-                            options={searchInputs.marksOptions}
-                            className="basic-multi-select"
-                            placeholder="أي علامة تجارية"
-                            styles={colourStyles}
-                            onChange={(value) => setBrand(value)}
-                            // classNamePrefix="select"
-                          />
-                        </div>
+
                         {/* <div className="col-md-6 col-6  mb-3"></div> */}
                         {/* Commenting this Code is its not required yet
                      <div className="col-12 flex_col  mb-3">
@@ -432,7 +456,7 @@ export default function Search() {
                     className="search-button"
                     onClick={navigateToResult}
                   >
-                    شاهد {resultsNumber} سيارة
+                    {t("search.see")} {resultsNumber} {t("search.car")}
                   </button>
                 </form>
                 <p>{t("description.Footer")}</p>
