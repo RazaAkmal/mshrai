@@ -19,6 +19,8 @@ const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range);
 
 export default function Search() {
+  const isEnglish = localStorage.getItem("lang") === "en";
+
   let history = useHistory();
   const searchInputs = useSelector((state) => state.search.searchInputs);
 
@@ -30,6 +32,7 @@ export default function Search() {
 
   const dispatch = useDispatch();
   const [state, setState] = useState({ ...searchForm });
+
   useEffect(() => {
     fetchSearchInputs().then((result) => {
       $(".load_cont").fadeOut(function () {
@@ -214,10 +217,10 @@ export default function Search() {
   const textareaRef = useRef();
   const cursorPosition = 0;
 
-  const formatOptionLabel = ({ label, image }) => {
+  const formatOptionLabel = ({ label, label_en, image }) => {
     return (
       <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <div>{label}</div>
+        <div>{isEnglish ? label_en : label}</div>
         <div>
           <img alt="car-logo" height={50} width={50} src={image} />
         </div>
@@ -303,14 +306,17 @@ export default function Search() {
                             )}
                             isMulti
                             ref={textareaRef}
-                            onBlur={() =>
-                              textareaRef.current.setSelectionRange(
-                                cursorPosition,
-                                cursorPosition
-                              )
-                            }
+                            // onBlur={() =>
+                            //   textareaRef.current.setSelectionRange(
+                            //     cursorPosition,
+                            //     cursorPosition
+                            //   )
+                            // }
                             name="brand"
-                            options={modelOptions}
+                            options={modelOptions.map((i) => ({
+                              ...i,
+                              label: isEnglish ? i.label_en : i.label,
+                            }))}
                             className="basic-multi-select"
                             placeholder=""
                             styles={colourStyles}
