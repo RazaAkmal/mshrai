@@ -132,13 +132,13 @@ export default function Filters(props) {
 
   useEffect(() => {
     fetchSearchInputs().then((result) => {
+      if (result) {
+        dispatch(getSearchInputs(result));
+      }
       $(".load_cont").fadeOut(function () {
         $(this).parent().fadeOut();
         $("body").css({ "overflow-y": "visible" });
       });
-      if (result) {
-        dispatch(getSearchInputs(result));
-      }
     });
   }, [dispatch]);
 
@@ -242,8 +242,9 @@ export default function Filters(props) {
                             className="d-block"
                             htmlFor={"brand_type" + index}
                           >
-                            {" "}
-                            {brand_type.label}{" "}
+                            {localStorage.getItem("lang") === "en"
+                              ? brand_type.label_en
+                              : brand_type.label}
                           </label>
                         </div>
                       );
@@ -590,9 +591,7 @@ export default function Filters(props) {
                             <span>
                               <img src={`${source.image}`} alt="" />
                             </span>{" "}
-                            {source.label === "Snap"
-                              ? "Social Media"
-                              : source.label}{" "}
+                            {t(`sources.${source.label}`)}
                           </label>
                         </div>
                       );
