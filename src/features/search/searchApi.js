@@ -33,6 +33,7 @@ export async function fetchSearchInputs() {
         options.modelOptions.push({
           value: model.id,
           label: model.brand_types,
+          label_en: model.brand_types_en,
           brandId: model.brand_id,
         });
       });
@@ -80,6 +81,15 @@ export async function fetchCars(query) {
 export async function saveResults(payload) {
   try {
     const { data } = await axios.post(`${apiUrl}/api/subscribe`, payload);
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function userActivity(payload) {
+  try {
+    const { data } = await axios.post(`${apiUrl}/api/activity`, payload);
     return data;
   } catch (err) {
     console.log(err);

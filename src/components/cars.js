@@ -8,8 +8,11 @@ import { t } from "i18next";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { ReportModal } from "./reportModal";
+import { useSelector } from "react-redux";
 
 export default function Cars({ cars }) {
+  const searchInputs = useSelector((state) => state.search.searchInputs);
+
   const { t } = useTranslation();
   const [showReportModal, setshowReportModal] = useState(false);
 
@@ -78,103 +81,121 @@ export default function Cars({ cars }) {
     setshowReportModal(true);
   };
 
+  const isEnglish = localStorage.getItem("lang") === "en";
+
+  const getBrandName = (car) => {
+    const brandDetails = searchInputs.marksOptions.find(
+      (i) => i.value === Number(car.brand_id)
+    );
+    return isEnglish ? brandDetails?.label_en : brandDetails?.label;
+  };
+  const getModelName = (car) => {
+    const brandDetails = searchInputs.modelOptions.find(
+      (i) => i.value === Number(car.brand_type_id)
+    );
+    return isEnglish ? brandDetails?.label_en : brandDetails?.label;
+  };
+
   return (
     <div className="row">
       {cars.length > 0 ? (
-        cars.map((car) => (
-          <div className="col-lg-3 col-md-6 col-sm-6" key={car.id}>
-            <Link
-              onClick={() => checkAddAvialble(car)}
-              to={{ pathname: car.url }}
-              className="car_item"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <div className="car_img">
-                <img
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = `${apiUrl}/upload/default.jpg`;
-                  }}
-                  src={car.image2 ? car.image2 : `${apiUrl}/upload/default.jpg`}
-                  alt=""
-                  id={car.id}
-                />
-              </div>
-              <div className="car_cont">
-                <div className="car_details">
-                  {car.brand ? (
-                    <h3>{car.brand + " - " + car.brand_type}</h3>
-                  ) : (
-                    ""
-                  )}
-                  <p>
-                    <i className="far fa-clock"></i>
-                    {moment(car.date).fromNow()}
-                  </p>
-                  <div
-                    onClick={handleReport}
-                    className="report_btn"
-                    style={{ float: "left", marginLeft: 10, zIndex: 9999 }}
-                  >
-                    <p
-                      style={{
-                        color: "grey",
-                      }}
-                    >
-                      {t("car.report")}
-                    </p>
-                    <i
-                      className="fa fa-flag"
-                      style={{
-                        color: "red",
-                      }}
-                    ></i>
-                  </div>
-
-                  <ReportModal
-                    show={showReportModal}
-                    handleClose={() => setshowReportModal(false)}
+        cars.map((car) => {
+          const brandName = getBrandName(car);
+          const modelName = getModelName(car);
+          return (
+            <div className="col-lg-3 col-md-6 col-sm-6" key={car.id}>
+              <Link
+                onClick={() => checkAddAvialble(car)}
+                to={{ pathname: car.url }}
+                className="car_item"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div className="car_img">
+                  <img
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = `${apiUrl}/upload/default.jpg`;
+                    }}
+                    src={
+                      car.image2 ? car.image2 : `${apiUrl}/upload/default.jpg`
+                    }
+                    alt=""
+                    id={car.id}
                   />
+                </div>
+                <div className="car_cont">
+                  <div className="car_details">
+                    {brandName ? <h3>{brandName + " - " + modelName}</h3> : ""}
+                    <p>
+                      <i className="far fa-clock"></i>
+                      {moment(car.date).fromNow()}
+                    </p>
+                    <div
+                      onClick={handleReport}
+                      className="report_btn"
+                      style={{ float: "left", marginLeft: 10, zIndex: 9999 }}
+                    >
+                      <p
+                        style={{
+                          color: "grey",
+                        }}
+                      >
+                        {t("car.report")}
+                      </p>
+                      <i
+                        className="fa fa-flag"
+                        style={{
+                          color: "red",
+                        }}
+                      ></i>
+                    </div>
 
-                  <ul className="tags">
-                    <li>{car.model_year}</li>
-                    {car.kilometer ? (
-                      <li>
-                        {car.kilometer} {t("car.km")}
-                      </li>
-                    ) : (
-                      ""
-                    )}
-                  </ul>
-                  <p>
-                    <MdOutlineLocationOn /> {car.city}
-                  </p>
-                </div>
-                <div className="bottom">
-                  <div className="price">
-                    <span> {t("search.price")} </span>{" "}
-                    {!car.price
-                      ? car.price2
-                        ? numberWithCommas(car.price2)
-                        : t("results.noPrice")
-                      : car.price === -1
-                      ? t("car.onHaggle")
-                      : numberWithCommas(car.price) + ` ${t("results.riyal")}`}
+                    <ReportModal
+                      show={showReportModal}
+                      handleClose={() => setshowReportModal(false)}
+                    />
+
+                    <ul className="tags">
+                      <li>{car.model_year}</li>
+                      {car.kilometer ? (
+                        <li>
+                          {car.kilometer} {t("car.km")}
+                        </li>
+                      ) : (
+                        ""
+                      )}
+                    </ul>
+                    <p>
+                      <MdOutlineLocationOn /> {car.city}
+                    </p>
                   </div>
-                  <img src={apiUrl + "/upload/" + car.source_image} alt="" />
+                  <div className="bottom">
+                    <div className="price">
+                      <span> {t("search.price")} </span>{" "}
+                      {!car.price
+                        ? car.price2
+                          ? numberWithCommas(car.price2)
+                          : t("results.noPrice")
+                        : car.price === -1
+                        ? t("car.onHaggle")
+                        : numberWithCommas(car.price) +
+                          ` ${t("results.riyal")}`}
+                    </div>
+                    <img src={apiUrl + "/upload/" + car.source_image} alt="" />
+                  </div>
                 </div>
-              </div>
-            </Link>
-            {/* <!--End Car ITem--> */}
-          </div>
-        ))
+              </Link>
+              {/* <!--End Car ITem--> */}
+            </div>
+          );
+        })
       ) : (
         <div
           className="col-12 text-center d-flex justify-content-center align-items-center"
           style={{ minHeight: "50vh" }}
         >
-          {t("results.noResult")}
+          {t("results.noResults")}
         </div>
       )}
     </div>

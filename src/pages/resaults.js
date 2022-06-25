@@ -5,7 +5,11 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import Filters from "../components/filters";
 import Cars from "../components/cars";
 import Loader from "../components/loader";
-import { fetchCars, saveResults } from "../features/search/searchApi";
+import {
+  fetchCars,
+  saveResults,
+  userActivity,
+} from "../features/search/searchApi";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setCars,
@@ -42,12 +46,14 @@ export default function Resault(props) {
   });
   const [loading, setLoading] = useState(false);
   const [isBusy, seIisBusy] = useState(false);
+  const [initialCars, setIinitialCars] = useState([]);
   const cars = useSelector((state) => state.search.cars);
   const searchForm = useSelector((state) => state.search.searchForm);
   const searchInputs = useSelector((state) => state.search.searchInputs);
   const resultsNumber = useSelector((state) => state.search.numFound);
   const query = useSelector((state) => state.search.query);
   const { t } = useTranslation();
+  const limit = 8;
 
   const dispatch = useDispatch();
 
@@ -178,9 +184,23 @@ export default function Resault(props) {
     });
   };
 
+  const carsContain = (source) => {
+    if (initialCars.length > 0) {
+      const filtered = initialCars.filter((i) => i.source === source);
+      return filtered.length === initialCars.length;
+    } else return true;
+  };
+
   useEffect(() => {
     setLoading(true);
     var query = `model_year:[${searchForm.model_year_start} TO ${searchForm.model_year_end}]`;
+
+    if (carsContain("Syarah") || carsContain("haraj")) {
+      query += "&sort=query($haraj_sort, 0) asc, query($sayarah_sort, 0) asc";
+      query += "&haraj_sort={!field f=source v=haraj}";
+      query += "&sayarah_sort={!field f=source v=Syarah}";
+    }
+
     if (searchForm.keyword && searchForm.keyword !== "") {
       query += ` AND (brand:"${searchForm.keyword}" OR brand_type:"${searchForm.keyword}")`;
     }
@@ -256,9 +276,14 @@ export default function Resault(props) {
     if (searchForm.sort && searchForm.sort !== "") {
       query += `&${searchForm.sort}`;
     }
-    query += `&rows=12&start=${searchForm.index}&fl=date,city,kilometer,price,source,gear_id,gear,_version_,sid,city_id,id,source_id,brand,brand_type,brand_type_id,shape,model_year,published,image2,url,brand_id,source_image,shape_id`;
+    query += `&rows=${limit}&start=${searchForm.index}&fl=date,city,kilometer,price,source,gear_id,gear,_version_,sid,city_id,id,source_id,brand,brand_type,brand_type_id,shape,model_year,published,image2,url,brand_id,source_image,shape_id`;
     dispatch(setQuery(query));
-    console.log(query);
+
+    userActivity({
+      data: { q: query, sort: searchForm.sort },
+      type: "search_query",
+    });
+
     fetchCars(query).then((res) => {
       $(".load_cont").fadeOut(function () {
         $(this).parent().fadeOut();
@@ -266,6 +291,8 @@ export default function Resault(props) {
       });
       if (res && res.response && res.response.docs) {
         setLoading(false);
+
+        setIinitialCars(res.response.docs);
         let carsArray =
           searchForm.index > 0
             ? [...cars, ...res.response.docs]
