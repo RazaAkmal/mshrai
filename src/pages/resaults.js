@@ -19,6 +19,7 @@ import {
   setSearchFormToInital,
 } from "../features/search/searchSlice";
 import SaveResults from "../components/saveResultModal";
+import SubscribeModal from "../components/subscribeModal";
 import { Link } from "react-router-dom";
 import { IoIosClose } from "react-icons/io";
 import { ToastContainer, toast } from "react-toastify";
@@ -348,7 +349,6 @@ export default function Resault(props) {
   const menuClass = `dropdown-menu${state.isOpen ? " show" : ""}`;
   return (
     <>
-      <SaveResults />
       <header>
         <div className="container">
           <div className="row">
@@ -618,7 +618,8 @@ export default function Resault(props) {
                   ></button>
                 </div>
                 <div className="subscribe">
-                  <label> {t("results.enterYourEmail")}</label>
+                  <SubscribeModal />
+                  {/* <label> {t("results.enterYourEmail")}</label>
                   <input
                     type="email"
                     placeholder={t("results.email")}
@@ -643,7 +644,7 @@ export default function Resault(props) {
                         {t("results.saveSearchResult")}
                       </span>
                     )}
-                  </button>
+                  </button> */}
                   {/* <button className="fa fa-search" type="button" onClick={(e) => {e.preventDefault(); _handleSubscripeToNewsletter();}}></button> */}
                 </div>
               </div>
@@ -750,7 +751,7 @@ export default function Resault(props) {
                     </div> */}
                     </div>
                   </div>
-                  <button
+                  {/* <button
                     className="subscribe_btn link"
                     onClick={showSubscribeDiv}
                   >
@@ -780,7 +781,7 @@ export default function Resault(props) {
                         حفظ نتائج البحث
                       </button>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
 
                 <InfiniteScroll

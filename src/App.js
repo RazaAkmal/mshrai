@@ -27,7 +27,7 @@ const App = () => {
   }, []);
 
   const { t, i18n } = useTranslation();
-
+  const [selectedLng, setSelectedLng] = useState('en')
   const [state, setState] = useState({
     isOpen: false,
   });
@@ -87,6 +87,7 @@ const App = () => {
               onClick={() => {
                 i18n.changeLanguage(lng);
                 localStorage.setItem("lang", lng);
+                setSelectedLng(lng)
                 if (lng === "ar") {
                   updateMomentLocaleToArabic();
                 } else {
@@ -102,6 +103,7 @@ const App = () => {
 
       <Provider store={store}>
         <Router basename="/">
+          {/* <div className="App" style={{direction: selectedLng === 'en'? "ltr" : 'rtl'}}> need to uncomment in case to change direction of text when language changed */}
           <div className="App">
             <Switch>
               <Route exact path="/results">

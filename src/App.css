@@ -724,13 +724,12 @@ header form .link i {
   background-color: var(--main_color);
 }
 .subscribe{
-    max-width: 360px;
-    margin: 0 auto 25px 0;
+    text-align: left;
 }
 .subscribe label{
     margin: 10px 0 0;
 }
-.subscribe input{
+/* .subscribe input{
   text-align: right;
   width: 70%;
   color: var(--main_color);
@@ -746,22 +745,18 @@ header form .link i {
   font-weight: 700;
   border-radius: 0 5px 5px 0 !important;
   -webkit-border-radius: 5px;
-}
+} */
 .subscribe button{
-    width: 30%;
-    bottom: 0;
-    left: 0;
-    height: 50px;
+    height: 40px;
     border: 0;
     background-color: var(--primary_color);
     padding: 0 15px;
     color: #fff;
-    border-radius: 5px 0 0 5px !important;
-
+    border-radius: 5px !important;
 }
 .subscribe button:focus,
 .subscribe button:hover{
-  background-color: var(--main_color);
+  background-color: var(--main_color) !important;
 }
 .car_item {
   display: block;
@@ -926,9 +921,6 @@ header form .link i {
   }
 }
 @media all and (max-width: 991.98px) {
-  .subscribe {
-    display: none;
-  }
   .toggle-container {
     position: fixed;
     margin: auto;
@@ -1201,4 +1193,28 @@ header form .link i {
   top: 12px;
   left: 15px;
   z-index: 1;
+}
+
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; 
+}
+
+.tabs-menu .nav-tabs {
+  border-bottom: none !important;
+}
+.tabs-menu .nav-link {
+  color: #495057 !important;
+  border: none !important;
+}
+.tabs-menu .nav-link.active {
+  color: #3e0292 !important;
+  border-bottom: 1px solid #3e0292 !important;
+}
+.btn-primary {
+  background-color: var(--primary_color) !important;
+  color: #fff !important;
 }
