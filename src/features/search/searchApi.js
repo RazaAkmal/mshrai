@@ -43,13 +43,14 @@ export async function fetchSearchInputs() {
         options.sources.push({
           value: source.id,
           label: source.title,
+          label_en: source.title_en,
           image: source.image,
         });
       });
     }
     if (result.cities && result.cities.length > 0) {
       result.cities.forEach((city) => {
-        options.cityOptions.push({ value: city.id, label: city.city });
+        options.cityOptions.push({ value: city.id, label: city.city, label_en: city.city_en });
       });
     }
     if (result.shapes && result.shapes.length > 0) {

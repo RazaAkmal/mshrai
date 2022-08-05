@@ -1,0 +1,113 @@
+import React, { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import { useTranslation } from "react-i18next";
+import Form from 'react-bootstrap/Form';
+import { parseParams } from "../helpers/helpers";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import {
+  saveResults,
+} from "../features/search/searchApi";
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
+
+const SubscribeModal = () => {
+  const [show, setShow] = useState(false);
+  const { t } = useTranslation();
+  const [kindOfSubscribe, setKindOfSubscribe] = useState('email');
+  const [email, setEmail] = useState('');
+  const [whatsapp, setWhatsapp] = useState('');
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const query = useSelector((state) => state.search.query);
+  const searchForm = useSelector((state) => state.search.searchForm);
+
+  const showError = (msg) => {
+    toast.error(msg, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  const _handleSaveResults = () => {
+    if ((kindOfSubscribe === "email" && email === "") || (kindOfSubscribe === "whatsapp" && whatsapp === "")) {
+      showError(t(kindOfSubscribe === "email" ? "results.pleaseEnterEmail" : "results.pleaseEnterPhone"));
+      return;
+    } else if (searchForm.brand_id.length === 0) {
+      showError("الرجاء تحديد علامة تجارية واحدة على الأقل");
+      return;
+    }
+
+    const queryParams = parseParams(query);
+
+    const data = {
+      email: email,
+      brand_id: searchForm.brand_id,
+      keys: queryParams,
+    };
+
+    saveResults(data).then((res) => {
+      handleClose()
+      toast.success(res.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+  };
+
+  return (
+    <>
+      <Button variant="primary" onClick={handleShow}>
+        {t("results.saveSearchResult")}
+      </Button>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header>
+          <Modal.Title>{t("results.saveSearchResult")}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="tabs-menu">
+          <Tabs
+            activeKey={kindOfSubscribe}
+            onSelect={(k) => setKindOfSubscribe(k)}
+            className="mb-3"
+          >
+
+            <Tab eventKey="email" title={<div style={{display: "flex"}}><span style={{marginLeft: "10px"}}>{t("tabTitleEmail")}</span><span><img style={{width: "24px", height: "24px"}} src="../images/mailicon.png" alt="logo" /> </span></div>}>
+              <Form.Group controlId="formBasicEmail">
+                <Form.Label style={{ marginTop: '10px' }}>{t("emailInputTitle")}</Form.Label>
+                <Form.Control style={{ marginTop: '0px' }} value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder={t("emailInputTitle")} />
+              </Form.Group>
+            </Tab>
+            <Tab disabled eventKey="whatsapp" title={<div style={{display: "flex"}}><span style={{marginLeft: "10px"}}>{t("tabTitleWhatsapp")}</span><span><img src="../images/whatsappicon.svg" alt="logo" /> </span></div>}>
+              <Form.Group controlId="formBasicPhone">
+                <Form.Label style={{ marginTop: '10px' }}>{t("phoneInputTitle")}</Form.Label>
+                <Form.Control style={{ marginTop: '0px' }} value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} type="number" placeholder={t("phoneInputTitle")} />
+              </Form.Group>
+            </Tab>
+          </Tabs>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+          {t("close")}
+          </Button>
+          <Button onClick={_handleSaveResults}>
+          {t("saveButton")}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+}
+
+export default SubscribeModal
