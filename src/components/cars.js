@@ -95,12 +95,12 @@ export default function Cars({ cars }) {
     );
     return isEnglish ? brandDetails?.label_en : brandDetails?.label;
   };
-  // const getCitylName = (car) => {
-  //   const cityDetails = searchInputs.cityOptions.find(
-  //     (i) => i.value === Number(car.city_id)
-  //   );
-  //   return isEnglish ? cityDetails?.label_en : cityDetails?.label;
-  // };
+  const getCitylName = (car) => {
+    const cityDetails = searchInputs.cityOptions.find(
+      (i) => i.value === Number(car.city_id)
+    );
+    return isEnglish ? cityDetails?.label_en : cityDetails?.label;
+  };
 
   return (
     <div className="row">
@@ -108,7 +108,7 @@ export default function Cars({ cars }) {
         cars.map((car) => {
           const brandName = getBrandName(car);
           const modelName = getModelName(car);
-          // const cityName = getCitylName(car);
+          const cityName = getCitylName(car);
           return (
             <div className="col-lg-3 col-md-6 col-sm-6" key={car.id}>
               <Link
@@ -174,7 +174,7 @@ export default function Cars({ cars }) {
                       )}
                     </ul>
                     <p>
-                      <MdOutlineLocationOn /> {car.city}
+                      <MdOutlineLocationOn /> {cityName}
                     </p>
                   </div>
                   <div className="bottom">
