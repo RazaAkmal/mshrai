@@ -84,7 +84,7 @@ export async function saveResults(payload) {
     const { data } = await axios.post(`${apiUrl}/api/subscribe`, payload);
     return data;
   } catch (err) {
-    console.log(err);
+    return err
   }
 }
 

@@ -429,8 +429,9 @@ export default function Filters(props) {
                             onChange={(v) => addValue("city_id", city.value)}
                           />
                           <label className="d-block" htmlFor={"city" + index}>
-                            {" "}
-                            {city.label}{" "}
+                            {localStorage.getItem("lang") === "en"
+                              ? city.label_en
+                              : city.label}{" "}
                           </label>
                         </div>
                       );
