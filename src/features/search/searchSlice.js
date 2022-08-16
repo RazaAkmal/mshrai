@@ -17,9 +17,11 @@ const initialState = {
   searchForm: {
     numFound: 0,
     price: [],
+    price_obj: [],
     model_year_start: 1990,
     model_year_end: Number(new Date().getFullYear()),
     kilometer:[],
+    kilometer_obj:[],
     brand_id: [],
     brand_type_id: [],
     source_id: [],
