@@ -83,7 +83,7 @@ export default function Resault(props) {
     });
   };
 
-  const _handleStartSearch = (type, value) => {
+  const _handleStartSearch = (type, value, value_obj) => {
     switch (type) {
       case "clearall":
         dispatch(setSearchFormToInital());
@@ -98,7 +98,7 @@ export default function Resault(props) {
         );
         break;
       case "price":
-        dispatch(setSearchForm({ ...searchForm, price: value, index: 0 }));
+        dispatch(setSearchForm({ ...searchForm, price: value, price_obj: value_obj, index: 0 }));
         break;
       case "brand_type_id":
         dispatch(
@@ -127,7 +127,7 @@ export default function Resault(props) {
         dispatch(setSearchForm({ ...searchForm, shape_id: value, index: 0 }));
         break;
       case "kilometer":
-        dispatch(setSearchForm({ ...searchForm, kilometer: value, index: 0 }));
+        dispatch(setSearchForm({ ...searchForm, kilometer: value, kilometer_obj: value_obj, index: 0 }));
         break;
       case "sort":
         dispatch(setSearchForm({ ...searchForm, sort: value, index: 0 }));
@@ -653,8 +653,8 @@ export default function Resault(props) {
               <div className="col-lg-2">
                 <Filters
                   closeFilterMenuHandle={closeFilterMenuHandle}
-                  handleStartSearch={(type, value) =>
-                    _handleStartSearch(type, value)
+                  handleStartSearch={(type, value, value_obj) =>
+                    _handleStartSearch(type, value, value_obj)
                   }
                   searchState={searchForm}
                 />

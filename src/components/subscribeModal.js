@@ -46,12 +46,18 @@ const SubscribeModal = () => {
     }
     seIisBusy(true);
 
-    const queryParams = parseParams(query);
-
     const data = {
       email: email,
-      brand_id: searchForm.brand_id,
-      keys: queryParams,
+      notification_medium: "email",
+      query: {
+        brand_id: searchForm.brand_id,
+        brand_type_id: searchForm.brand_type_id,
+        source_id: searchForm.source_id,
+        city_id: searchForm.city_id,
+        kilometer: searchForm.kilometer_obj,
+        price: searchForm.price_obj,
+        model_year: { min: searchForm.model_year_start, max: searchForm.model_year_end},
+      }
     };
 
     saveResults(data).then((res) => {
