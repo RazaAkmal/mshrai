@@ -46,18 +46,30 @@ const SubscribeModal = () => {
     }
     seIisBusy(true);
 
+    let query = {
+        brand_id: searchForm.brand_id,
+        model_year: [{ min: searchForm.model_year_start, max: searchForm.model_year_end}],
+    }
+
+    if (searchForm.brand_type_id.length > 0) {
+      query["brand_type_id"] = searchForm.brand_type_id;
+    }
+    if (searchForm.source_id.length > 0) {
+      query["source_id"] = searchForm.source_id;
+    }
+    if (searchForm.city_id.length > 0) {
+      query["city_id"] = searchForm.city_id;
+    }
+    if (searchForm.kilometer_obj.length > 0) {
+      query["kilometer"] = searchForm.kilometer_obj;
+    }
+    if (searchForm.price_obj.length > 0) {
+      query["price"] = searchForm.price_obj;
+    }
     const data = {
       email: email,
       notification_medium: "email",
-      query: {
-        brand_id: searchForm.brand_id,
-        brand_type_id: searchForm.brand_type_id,
-        source_id: searchForm.source_id,
-        city_id: searchForm.city_id,
-        kilometer: searchForm.kilometer_obj,
-        price: searchForm.price_obj,
-        model_year: { min: searchForm.model_year_start, max: searchForm.model_year_end},
-      }
+      query: query
     };
 
     saveResults(data).then((res) => {
