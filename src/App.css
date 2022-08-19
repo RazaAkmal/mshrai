@@ -8,7 +8,7 @@
 *:focus {
   outline: none !important;
   box-sizing: border-box;
-  direction: rtl;
+  /* direction: rtl; */
 }
 :root {
   --main_color: #000000;
@@ -1217,4 +1217,7 @@ input[type=number]::-webkit-outer-spin-button {
 .btn-primary {
   background-color: var(--primary_color) !important;
   color: #fff !important;
+}
+.App-en .main_screen label {
+  text-align: left !important;
 }
