@@ -103,8 +103,8 @@ const App = () => {
 
       <Provider store={store}>
         <Router basename="/">
-          {/* <div className="App" style={{direction: selectedLng === 'en'? "ltr" : 'rtl'}}> need to uncomment in case to change direction of text when language changed */}
-          <div className="App">
+          <div className={ selectedLng === 'en'? "App-en" : 'App-ar'} style={{direction: selectedLng === 'en'? "ltr" : 'rtl'}}>
+          {/* <div className="App"> */}
             <Switch>
               <Route exact path="/results">
                 <Resault />
