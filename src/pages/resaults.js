@@ -351,7 +351,7 @@ export default function Resault(props) {
     <>
       <header>
         <div className="container">
-          <div className="row">
+          <div className="row logo-row">
             <div className="col-6">
               <Link to="/">
                 <img src="./images/logo.png" alt="logo" />
