@@ -24,6 +24,7 @@ const SubscribeModal = () => {
   const handleShow = () => setShow(true);
   const query = useSelector((state) => state.search.query);
   const searchForm = useSelector((state) => state.search.searchForm);
+  const isEnglish = localStorage.getItem("lang") === "en";
 
   const showError = (msg) => {
     toast.error(msg, {
@@ -97,7 +98,7 @@ const SubscribeModal = () => {
       <Button variant="primary" onClick={handleShow}>
         {t("results.saveSearchResult")}
       </Button>
-      <Modal show={show} onHide={handleClose}>
+      <Modal className={ isEnglish ? "subscribe-modal-en" : 'subscribe-modal'} show={show} onHide={handleClose}>
         <Modal.Header>
           <Modal.Title>{t("results.saveSearchResult")}</Modal.Title>
         </Modal.Header>
@@ -108,7 +109,7 @@ const SubscribeModal = () => {
               onSelect={(k) => setKindOfSubscribe(k)}
               className="mb-3"
             >
-              <Tab eventKey="email" title={<div style={{ display: "flex" }}><span style={{ marginLeft: "10px" }}>{t("tabTitleEmail")}</span><span><img style={{ width: "24px", height: "24px" }} src="../images/mailicon.png" alt="logo" /> </span></div>}>
+              <Tab eventKey="email" title={<div className="Tab-inner"><span style={{ marginLeft: "10px" }}>{t("tabTitleEmail")}</span><span><img style={{ width: "24px", height: "24px" }} src="../images/mailicon.png" alt="logo" /> </span></div>}>
                 {isBusy ? (
                   <img src="./images/loading.gif" alt="loading" />
                 ) :
@@ -118,7 +119,7 @@ const SubscribeModal = () => {
                   </Form.Group>
                 }
               </Tab>
-              <Tab disabled eventKey="whatsapp" title={<div style={{ display: "flex" }}><span style={{ marginLeft: "10px" }}>{t("tabTitleWhatsapp")}</span><span><img src="../images/whatsappicon.svg" alt="logo" /> </span></div>}>
+              <Tab disabled eventKey="whatsapp" title={<div className="Tab-inner"><span style={{ marginLeft: "10px" }}>{t("tabTitleWhatsapp")}</span><span><img src="../images/whatsappicon.svg" alt="logo" /> </span></div>}>
                 {isBusy ? (
                   <img src="./images/loading.gif" alt="loading" />
                 ) :

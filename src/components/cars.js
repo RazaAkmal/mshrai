@@ -141,7 +141,6 @@ export default function Cars({ cars }) {
                     <div
                       onClick={handleReport}
                       className="report_btn"
-                      style={{ float: "left", marginLeft: 10, zIndex: 9999 }}
                     >
                       <p
                         style={{

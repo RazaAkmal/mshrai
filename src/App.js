@@ -27,7 +27,7 @@ const App = () => {
   }, []);
 
   const { t, i18n } = useTranslation();
-  const [selectedLng, setSelectedLng] = useState('en')
+  const [selectedLng, setSelectedLng] = useState(i18n.language)
   const [state, setState] = useState({
     isOpen: false,
   });

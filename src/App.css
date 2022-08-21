@@ -802,7 +802,7 @@ header form .link i {
   color: var(--main_color);
   font-weight: 600;
   font-size: 15px;
-  margin: 10px 15px 0px 15px;
+  margin: 10px 15px 0px 10px;
 }
 .car_item .car_cont p {
   color: var(--third_color);
@@ -848,6 +848,11 @@ header form .link i {
 }
 .car_item .car_cont .bottom img {
   width: 32px;
+}
+.report_btn {
+  float: left;
+  margin-left: 10px;
+  z-index: 9999;
 }
 .copyrights {
   padding: 25px;
@@ -1082,6 +1087,24 @@ header form .link i {
   margin: 0 auto;
 }
 
+
+.subscribe-modal .modal-title{
+  margin-left: auto;
+}
+.subscribe-modal .tabs-menu .nav-tabs {
+  justify-content: end;
+}
+.subscribe-modal .Tab-inner {
+  display: flex;
+}
+.subscribe-modal label {
+  text-align: right;
+  width: 100%;
+}
+.subscribe-modal input {
+  text-align: right;
+}
+
 .disable-button {
   background-color: var(--gray_color) !important;
 }
@@ -1219,5 +1242,74 @@ input[type=number]::-webkit-outer-spin-button {
   color: #fff !important;
 }
 .App-en .main_screen label {
+  text-align: left !important;
+}
+.App-en .section-gray .filter-title {
+  text-align: left !important;
+}
+.App-en .section-gray input {
+  text-align: left !important;
+}
+.App-en .section-gray 
+input[type=checkbox]+label:before, input[type=radio]+label:before {
+  left: unset !important;
+  right: 0 !important;
+}
+.App-en .section-gray input[type=checkbox]+label, input[type=radio]+label {
+  padding-right: 25px !important;
+  padding-left: 0 !important;
+  text-align: left !important;
+}
+.App-en header img {
+  margin-left: auto !important;
+}
+.App-en header .logo-row {
+  flex-direction: row-reverse !important;
+}
+.App-en .section-gray .subscribe {
+  text-align: end;
+}
+.App-en .section-gray .search_hint {
+  text-align: start;
+}
+.App-en .section-gray .search_tags li span {
+  float: revert;
+}
+.App-en .section-gray .search_hint .dropdown .dropdown-item {
+  text-align: start;
+}
+.App-en .section-gray .search_hint .dropdown .dropdown-item {
+  text-align: start;
+}
+.App-en .car_item .car_cont .bottom .price {
+  text-align: start;
+}
+.App-en .car_item .car_details {
+  text-align: start;
+}
+.App-en .car_item .report_btn {
+  float: right;
+  margin-right: 10px;
+}
+.App-en .car_item .tags {
+  padding-left: 0 !important;
+}
+.subscribe-modal-en .modal-title {
+  margin-left: unset !important;
+}
+.subscribe-modal-en .tabs-menu .nav-tabs {
+  flex-direction: row-reverse;
+}
+.subscribe-modal-en .Tab-inner {
+  display: flex;
+  flex-direction: row-reverse;
+}
+.subscribe-modal-en .tabs-menu .nav-tabs {
+  justify-content: start;
+}
+.subscribe-modal-en  label {
+  text-align: left !important;
+}
+.subscribe-modal-en  input {
   text-align: left !important;
 }
