@@ -58,30 +58,6 @@ export default function Resault(props) {
 
   const dispatch = useDispatch();
 
-  const showSubscribeDiv = () => {
-    if ($("#display-search").hasClass("visible")) {
-      $("#display-search").removeClass("visible");
-    } else {
-      $("#display-search").addClass("visible");
-    }
-  };
-
-  const _handleSubscripeToNewsletter = () => {
-    if (state.email === "") return;
-    let data = { email: state.email, type: "newsletter" };
-
-    saveResults(data).then((res) => {
-      if (res && res.code == 0) {
-        $(".alert-success").show();
-        setState({ ...state, email: "" });
-      } else {
-        $(".alert-danger").show();
-      }
-      setTimeout(() => {
-        $(".alert").hide();
-      }, 3000);
-    });
-  };
 
   const _handleStartSearch = (type, value, value_obj) => {
     switch (type) {
@@ -101,12 +77,20 @@ export default function Resault(props) {
         dispatch(setSearchForm({ ...searchForm, price: value, price_obj: value_obj, index: 0 }));
         break;
       case "brand_type_id":
-        dispatch(
-          setSearchForm({ ...searchForm, brand_type_id: value, index: 0 })
-        );
+        if (value.length > 3) {
+          showError(t("results.filterLimitError"))
+        } else {
+          dispatch(
+            setSearchForm({ ...searchForm, brand_type_id: value, index: 0 })
+          );
+        }
         break;
       case "brand_id":
-        dispatch(setSearchForm({ ...searchForm, brand_id: value, index: 0 }));
+        if (value.length > 3) {
+          showError(t("results.filterLimitError"))
+        } else {
+          dispatch(setSearchForm({ ...searchForm, brand_id: value, index: 0 }));
+        }
         break;
       case "source_id":
         dispatch(setSearchForm({ ...searchForm, source_id: value, index: 0 }));

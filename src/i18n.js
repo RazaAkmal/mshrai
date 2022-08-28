@@ -53,6 +53,7 @@ i18n
           },
           results: {
             searchResultForCar: "نتيجة بحث عن سيارة معروضة للبيع",
+            filterLimitError: "لا يمكنك تحديد أكثر من ثلاث خدمات",
             exist: "يوجد",
             enterYourEmail:
               "أدخل بريدك الألكترونى وسيتم إبلاغك عند توافر نتائج جديدة",
@@ -140,6 +141,7 @@ i18n
           results: {
             searchResultForCar: "Search result for a car for sale",
             exist: "There are",
+            filterLimitError: "you can’t select more than three services",
             enterYourEmail:
               "Enter your email and you will be notified when new results are available",
             email: "E-mail",
