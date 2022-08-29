@@ -122,10 +122,10 @@ export default function Cars({ cars }) {
                   <img
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = `${apiUrl}/upload/default.jpg`;
+                      e.target.src = `${apiUrl}/img/default.jpg`;
                     }}
                     src={
-                      car.image2 ? car.image2 : `${apiUrl}/upload/default.jpg`
+                      car.image2 ? car.image2 : `${apiUrl}/img/default.jpg`
                     }
                     alt=""
                     id={car.id}
