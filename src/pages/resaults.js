@@ -7,7 +7,7 @@ import Cars from "../components/cars";
 import Loader from "../components/loader";
 import {
   fetchCars,
-  saveResults,
+  searchResult,
   userActivity,
 } from "../features/search/searchApi";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,7 +18,6 @@ import {
   setSearchForm,
   setSearchFormToInital,
 } from "../features/search/searchSlice";
-import SaveResults from "../components/saveResultModal";
 import SubscribeModal from "../components/subscribeModal";
 import { Link } from "react-router-dom";
 import { IoIosClose } from "react-icons/io";
@@ -32,12 +31,88 @@ export default function Resault(props) {
   useEffect(() => {
     $(".alert").hide();
     const params = new URLSearchParams(window.location.search);
-    if (params.has("k")) {
-      let query = params.get("k");
-      let newSearchForm = JSON.parse(query);
-      console.log(JSON.parse(newSearchForm));
-      dispatch(setSearchForm(JSON.parse(newSearchForm)));
+
+    const brand_id = []
+    const brand_type_id = []
+    const source_id = []
+    const city_id = []
+    const kilometer = []
+    let model_year_start = ''
+    let model_year_end = ''
+    for (const [key, value] of params.entries()) {
+      if(key.includes('brand_id')) {
+        brand_id.push(Number(value))
+      }
+      if(key.includes('brand_type_id')) {
+        brand_type_id.push(Number(value))
+      }
+      if(key.includes('source_id')) {
+        source_id.push(Number(value))
+      }
+      if(key.includes('city_id')) {
+        city_id.push(Number(value))
+      }
+      if(key.includes('model_year[0][max]')) {
+        model_year_end = value
+      }
+      if(key.includes('model_year[0][min]')) {
+        model_year_start = value
+      }
+      if(key.includes('brand_type_id')) {
+        model_year_start = value
+      }
     }
+    // let model_year = {
+    //   model_year_start: model_year_start,
+    //   model_year_end: model_year_end
+    // }
+
+    let query = {
+      brand_id: brand_id,
+      model_year: [{ min: model_year_start, max: model_year_end}],
+  }
+    
+
+    if (brand_type_id.length > 0) {
+      query["brand_type_id"] = brand_type_id
+    }
+    if (source_id.length > 0) {
+      query["source_id"] = source_id
+    }
+    if (city_id.length > 0) {
+      query["city_id"] = city_id
+    }
+    let data = {
+      query: query
+    }
+
+    dispatch(setSearchForm({
+      ...searchForm,
+      model_year_start: model_year_start,
+      model_year_end: model_year_end,
+      brand_id: brand_id,
+      brand_type_id: brand_type_id,
+      source_id: source_id,
+      city_id: city_id,
+      index: 0
+    }));
+
+    // searchResult(data).then((res) => {
+    //   if (res.message === "Request failed with status code 422") {
+    //     showError("يجب أن يكون البريد الإلكتروني عنوان بريد إلكتروني صالحًا");
+    //   }
+    //   else {
+    //       setLoading(false);
+    //       setIinitialCars(res.data.response.docs);
+    //       let carsArray =
+    //         searchForm.index > 0
+    //           ? [...cars, ...res.data.response.docs]
+    //           : res.data.response.docs;
+    //       dispatch(setCars(carsArray));
+    //       dispatch(setResultsNumebr(res.data.response.numFound));
+    //   }
+    // });
+    
   }, []);
   const [state, setState] = useState({
     searchKeyWord: "",
@@ -136,38 +211,38 @@ export default function Resault(props) {
     });
   };
 
-  const _handleSaveResults = () => {
-    if (state.email === "") {
-      showError(t("results.pleaseEnterEmail"));
-      return;
-    } else if (searchForm.brand_id.length === 0) {
-      showError("الرجاء تحديد علامة تجارية واحدة على الأقل");
-      return;
-    }
-    seIisBusy(true);
+  // const _handleSaveResults = () => {
+  //   if (state.email === "") {
+  //     showError(t("results.pleaseEnterEmail"));
+  //     return;
+  //   } else if (searchForm.brand_id.length === 0) {
+  //     showError("الرجاء تحديد علامة تجارية واحدة على الأقل");
+  //     return;
+  //   }
+  //   seIisBusy(true);
 
-    const queryParams = parseParams(query);
+  //   const queryParams = parseParams(query);
 
-    const data = {
-      email: state.email,
-      brand_id: searchForm.brand_id,
-      keys: queryParams,
-    };
+  //   const data = {
+  //     email: state.email,
+  //     brand_id: searchForm.brand_id,
+  //     keys: queryParams,
+  //   };
 
-    saveResults(data).then((res) => {
-      seIisBusy(false);
+  //   saveResults(data).then((res) => {
+  //     seIisBusy(false);
 
-      toast.success(res.message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    });
-  };
+  //     toast.success(res.message, {
+  //       position: "top-right",
+  //       autoClose: 5000,
+  //       hideProgressBar: false,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //     });
+  //   });
+  // };
 
   const carsContain = (source) => {
     if (initialCars.length > 0) {
@@ -179,8 +254,6 @@ export default function Resault(props) {
   useEffect(() => {
     setLoading(true);
     var query = `model_year:[${searchForm.model_year_start} TO ${searchForm.model_year_end}]`;
-
-    
 
     if (searchForm.keyword && searchForm.keyword !== "") {
       query += ` AND (brand:"${searchForm.keyword}" OR brand_type:"${searchForm.keyword}")`;

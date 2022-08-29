@@ -87,6 +87,14 @@ export async function saveResults(payload) {
     return err
   }
 }
+export async function searchResult(payload) {
+  try {
+    const { data } = await axios.post(`${apiUrl}/api/search`, payload);
+    return data;
+  } catch (err) {
+    return err
+  }
+}
 
 export async function userActivity(payload) {
   try {
