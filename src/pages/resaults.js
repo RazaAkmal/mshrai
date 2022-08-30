@@ -58,8 +58,8 @@ export default function Resault(props) {
       if(key.includes('model_year[0][min]')) {
         model_year_start = value
       }
-      if(key.includes('brand_type_id')) {
-        model_year_start = value
+      if(key.includes('kilometer')) {
+        kilometer.push(Number(value))
       }
     }
     // let model_year = {
@@ -85,17 +85,19 @@ export default function Resault(props) {
     let data = {
       query: query
     }
-
-    dispatch(setSearchForm({
-      ...searchForm,
-      model_year_start: model_year_start,
-      model_year_end: model_year_end,
-      brand_id: brand_id,
-      brand_type_id: brand_type_id,
-      source_id: source_id,
-      city_id: city_id,
-      index: 0
-    }));
+    if (brand_id.length > 0) {
+      dispatch(setSearchForm({
+        ...searchForm,
+        model_year_start: model_year_start,
+        model_year_end: model_year_end,
+        brand_id: brand_id,
+        brand_type_id: brand_type_id,
+        source_id: source_id,
+        city_id: city_id,
+        index: 0
+      }));
+    }
+    
 
     // searchResult(data).then((res) => {
     //   if (res.message === "Request failed with status code 422") {
@@ -330,11 +332,11 @@ export default function Resault(props) {
     if (searchForm.sort && searchForm.sort !== "") {
       query += `&${searchForm.sort}`;
     }
-    if (carsContain("Syarah") || carsContain("haraj")) {
-      query += "&sort=query($haraj_sort, 0) asc, query($sayarah_sort, 0) asc";
-      query += "&haraj_sort={!field f=source v=haraj}";
-      query += "&sayarah_sort={!field f=source v=Syarah}";
-    }
+    // if (carsContain("Syarah") || carsContain("haraj")) {
+    //   query += "&sort=query($haraj_sort, 0) asc, query($sayarah_sort, 0) asc";
+    //   query += "&haraj_sort={!field f=source v=haraj}";
+    //   query += "&sayarah_sort={!field f=source v=Syarah}";
+    // }
     query += `&rows=${limit}&start=${searchForm.index}&fl=date,city,kilometer,price,source,gear_id,gear,_version_,sid,city_id,id,source_id,brand,brand_type,brand_type_id,shape,model_year,published,image2,url,brand_id,source_image,shape_id`;
     dispatch(setQuery(query));
 
