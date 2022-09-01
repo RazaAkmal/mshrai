@@ -87,6 +87,14 @@ export async function saveResults(payload) {
     return err
   }
 }
+export async function saveFeedback(payload) {
+  try {
+    const { data } = await axios.post(`${apiUrl}/api/feedback`, payload);
+    return data;
+  } catch (err) {
+    return err
+  }
+}
 export async function searchResult(payload) {
   try {
     const { data } = await axios.post(`${apiUrl}/api/search`, payload);

@@ -39,6 +39,7 @@ body {
   background-color: #fff;
   font-weight: 300;
   word-spacing: 2px;
+  scrollbar-width: none !important;
 }
 
 /* Lists  
@@ -1313,4 +1314,36 @@ input[type=checkbox]+label:before, input[type=radio]+label:before {
 }
 .subscribe-modal-en  input {
   text-align: left !important;
+}
+
+.float-en {
+	position:absolute !important;
+	bottom:40px;
+	right:40px;
+	color:#FFF;
+	text-align:center;
+	box-shadow: 2px 2px 3px #999;
+}
+.float-ar {
+	position:absolute !important;
+	bottom:40px;
+	left:40px;
+	color:#FFF;
+	text-align:center;
+	box-shadow: 2px 2px 3px #999;
+}
+
+.paper-en {
+  width: 500px;
+  margin-right: 50px;
+  margin-bottom: 10px;
+}
+.paper-ar {
+  width: 500px;
+  margin-left: 50px;
+  margin-bottom: 10px;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
