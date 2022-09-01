@@ -13,15 +13,14 @@ import { useTranslation } from "react-i18next";
 
 const feedback = [
   {
-    icon: "../images/happy.png",
-    iconActive: "../images/happy-active.png",
+    icon: "../images/sadest.png",
+    iconActive: "../images/sadest-active.png",
     rate: 1
   },
   {
-    icon: "../images/morehappy.png",
-    iconActive: "../images/morehappy-active.png",
+    icon: "../images/sad.png",
+    iconActive: "../images/sad-active.png",
     rate: 2
-
   },
   {
     icon: "../images/confused.png",
@@ -30,14 +29,15 @@ const feedback = [
 
   },
   {
-    icon: "../images/sad.png",
-    iconActive: "../images/sad-active.png",
+    icon: "../images/happy.png",
+    iconActive: "../images/happy-active.png",
     rate: 4
   },
   {
-    icon: "../images/sadest.png",
-    iconActive: "../images/sadest-active.png",
+    icon: "../images/morehappy.png",
+    iconActive: "../images/morehappy-active.png",
     rate: 5
+
   },
 ]
 const Feedback = ({selectedLng}) => {
