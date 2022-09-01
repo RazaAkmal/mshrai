@@ -3,6 +3,7 @@ import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Resault from "./pages/resaults";
 import Search from "./pages/search";
+import Feedback from "./components/feedback"
 import { Provider } from "react-redux";
 import { store } from "./app/store";
 import Cookies from "js-cookie";
@@ -37,25 +38,6 @@ const App = () => {
 
   return (
     <>
-      {/* <div>
-        {Object.keys(lngs).map((lng) => (
-          <button
-          className="lang-link"
-            key={lng}
-            style={{
-              fontWeight: i18n.resolvedLanguage === lng ? "bold" : "normal",
-            }}
-            type="submit"
-            onClick={() => {
-              i18n.changeLanguage(lng)
-              localStorage.setItem('lang', lng)
-            }}
-          >
-            {lngs[lng].nativeName}
-          </button>
-        ))}
-      </div> */}
-
       <div className="language-button" onClick={toggleOpen}>
         <button
           className="btn btn-secondary bg-white"
@@ -108,6 +90,7 @@ const App = () => {
             <Switch>
               <Route exact path="/results">
                 <Resault />
+                <Feedback selectedLng={selectedLng} />
               </Route>
               <Route exact path="/">
                 <Search />
