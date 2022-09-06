@@ -590,9 +590,9 @@ export default function Filters(props) {
                     onChange={(e) => setFilterSource(e.target.value)}
                   />
                   {sortedSearchSources
-                    .filter((v) =>
-                      filterValue(v !== "Snap" ? v : "other", filterSource)
-                    )
+                    // .filter((v) =>
+                    //   filterValue(v !== "Snap" ? v : "other", filterSource)
+                    // )
                     .map((source, index) => {
                       return (
                         <div className="form-group" key={"source" + index}>
