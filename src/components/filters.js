@@ -17,9 +17,10 @@ export default function Filters(props) {
   const [filterModal, setFilterModal] = useState("");
   const [filterCity, setFilterCity] = useState("");
   const [filterSource, setFilterSource] = useState("");
+  const isEnglish = localStorage.getItem("lang") === "en";
+
   const dispatch = useDispatch();
   const { t } = useTranslation();
-
   const sortedSearchSources = searchInputs.sources
     .reduce((acc, element) => {
       if (
@@ -167,7 +168,11 @@ export default function Filters(props) {
   };
 
   const filterValue = (val, filter) => {
-    return val.label && val.label.toLowerCase().includes(filter.toLowerCase());
+    if (isEnglish) {
+      return val.label_en && val.label_en.toLowerCase().includes(filter.toLowerCase()); 
+    } else {
+      return val.label && val.label.toLowerCase().includes(filter.toLowerCase());
+    }
   };
 
   return (
@@ -275,10 +280,10 @@ export default function Filters(props) {
                   <div style={{ marginTop: "20px", padding: "5px" }}>
                     <Range
                       onChange={(value) => addValue("years", value)}
-                      marks={{
-                        1990: `1990`,
-                        2021: `2021`,
-                      }}
+                      // marks={{
+                      //   1990: `1990`,
+                      //   2022: `2022`,
+                      // }}
                       min={1990}
                       max={new Date().getFullYear()}
                       value={[
