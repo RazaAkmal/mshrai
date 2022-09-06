@@ -353,10 +353,10 @@ export default function Search() {
                           <div className="mt-3">
                             <Range
                               onChange={(value) => setYearRange(value)}
-                              marks={{
-                                1990: `1990`,
-                                2021: `2021`,
-                              }}
+                              // marks={{
+                              //   1990: `1990`,
+                              //   2022: `2022`,
+                              // }}
                               min={1990}
                               max={new Date().getFullYear()}
                               value={[
@@ -365,7 +365,7 @@ export default function Search() {
                               ]}
                               tipFormatter={(value) => `${value}`}
                               tipProps={{
-                                placement: "top",
+                                placement: "bottom",
                                 visible: true,
                               }}
                               railStyle={{

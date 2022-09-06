@@ -56,7 +56,7 @@ const Feedback = ({selectedLng}) => {
       rate: rate,
     }
     if (note) {
-      data['note'] = note;
+      data['message'] = note;
     }
     saveFeedback(data).then((res) => {
       setRate('')

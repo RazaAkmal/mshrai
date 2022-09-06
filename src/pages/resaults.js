@@ -130,6 +130,8 @@ export default function Resault(props) {
   const searchInputs = useSelector((state) => state.search.searchInputs);
   const resultsNumber = useSelector((state) => state.search.numFound);
   const query = useSelector((state) => state.search.query);
+  const isEnglish = localStorage.getItem("lang") === "en";
+
   const { t } = useTranslation();
   const limit = 8;
 
@@ -377,7 +379,7 @@ export default function Resault(props) {
     );
     return (
       <li key={"searchMarks" + index}>
-        {model.label} {filteredBrand[0] ? " - " + filteredBrand[0].label : ""}
+        {isEnglish ? model.label_en : model.label} {filteredBrand[0] ? `- ${isEnglish ? filteredBrand[0].label_en : filteredBrand[0].label}` : ""}
         <span
           onClick={() => {
             let brandModel = [...searchForm.brand_type_id];
@@ -463,7 +465,7 @@ export default function Resault(props) {
                           return searchForm.brand_id.includes(mark.value) &&
                             modalOfbrandNotSelected(mark.value, index) ? (
                             <li key={"searchMarks" + index}>
-                              {mark.label}
+                              {isEnglish ? mark.label_en : mark.label}
                               <span
                                 onClick={() => {
                                   let marks = [...searchForm.brand_id];
@@ -495,7 +497,7 @@ export default function Resault(props) {
                       ? searchInputs.shapes.map((shape, index) => {
                           return searchForm.shape_id.includes(shape.id) ? (
                             <li key={"searchShapes" + index}>
-                              {shape.title}
+                              {isEnglish ? shape.title_en : shape.title}
                               <span
                                 onClick={() => {
                                   let shapes = [...searchForm.shape_id];
@@ -592,7 +594,7 @@ export default function Resault(props) {
                       ? searchInputs.cityOptions.map((city, index) => {
                           return searchForm.city_id.includes(city.value) ? (
                             <li key={"searchcities" + index}>
-                              {city.label}
+                               {isEnglish ? city.label_en : city.label}
                               <span
                                 onClick={() => {
                                   let cities = [...searchForm.city_id];
@@ -645,7 +647,7 @@ export default function Resault(props) {
                         key={"searchcitiesclear"}
                         onClick={() => _handleStartSearch("clearall")}
                       >
-                        امسح الكل
+                        {isEnglish ? "Clear All" : "امسح الكل"}
                       </li>
                     )}
                   </ul>
