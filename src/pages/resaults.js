@@ -132,6 +132,13 @@ export default function Resault(props) {
   const query = useSelector((state) => state.search.query);
   const isEnglish = localStorage.getItem("lang") === "en";
 
+  useEffect(() => {
+    setState((prevState) => ({
+      ...prevState,
+      cars: cars
+    }));
+  }, [cars])
+
   const { t } = useTranslation();
   const limit = 8;
 
@@ -357,7 +364,7 @@ export default function Resault(props) {
         setIinitialCars(res.response.docs);
         let carsArray =
           searchForm.index > 0
-            ? [...cars, ...res.response.docs]
+            ? [...state.cars, ...res.response.docs]
             : res.response.docs;
         dispatch(setCars(carsArray));
         dispatch(setResultsNumebr(res.response.numFound));
@@ -860,7 +867,7 @@ export default function Resault(props) {
                     </p>
                   }
                 >
-                  <Cars cars={cars} />
+                  <Cars cars={state.cars} />
                 </InfiniteScroll>
               </div>
               <div className="w-100 text-left">
