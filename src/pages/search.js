@@ -8,6 +8,8 @@ import "rc-slider/assets/index.css";
 import { Tabs, Tab } from "react-bootstrap";
 import { fetchSearchInputs, fetchCars } from "../features/search/searchApi";
 import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+
 import {
   getSearchInputs,
   setSearchForm,
@@ -18,9 +20,19 @@ import { useTranslation, Trans } from "react-i18next";
 const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range);
 
+
 export default function Search() {
   const isEnglish = localStorage.getItem("lang") === "en";
-
+  const showError = (msg) => {
+    toast.error(msg, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
   let history = useHistory();
   const searchInputs = useSelector((state) => state.search.searchInputs);
 
@@ -61,6 +73,24 @@ export default function Search() {
   }, [searchInputs]);
 
   useEffect(() => {
+    if (state.brand_id.length) {
+        if (state.brand_type_id.length > 3) {
+            state.model_brand_id = state.model_brand_id.slice(0,3);
+            state.brand_type_id = state.brand_type_id.slice(0,3);
+            showError(t("search.filterLimitError"));
+            return;
+        }
+        if (
+              state.brand_id.length > 3 &&
+              state.model_brand_id && state.model_brand_id.length >= 3 &&
+              state.brand_type_id && state.brand_type_id.length >= 3
+          ) {
+              state.brand_id = state.brand_id.slice(0,3);
+              showError(t("search.filterLimitError"));
+              return;
+        }
+    }
+
     var query = `model_year:[${state.model_year_start} TO ${state.model_year_end}]`;
     if (state.keyword && state.keyword !== "") {
       query += ` AND (brand:"${state.keyword}" OR brand_type:"${state.keyword}")`;
@@ -114,6 +144,7 @@ export default function Search() {
     if (state.sort && state.sort !== "") {
       query += `&${state.sort}`;
     }
+
     query += `&rows=12&start=${searchForm.index}&fl=date,city,source,gear_id,gear,_version_,sid,city_id,id,source_id,brand,brand_type,brand_type_id,shape,model_year,published,image2,url,brand_id,source_image,shape_id`;
     fetchCars(query).then((res) => {
       if (res && res.response && res.response.docs) {
@@ -190,6 +221,7 @@ export default function Search() {
   const setBrandType = (values) => {
     let brands_types = values.map((value) => value.value);
     let brands_type_id = values.map((value) => value.brandId);
+
     setState({
       ...state,
       brand_type_id: [...brands_types],
@@ -206,6 +238,7 @@ export default function Search() {
   };
 
   function navigateToResult() {
+    console.log()
     dispatch(setSearchForm(state));
     localStorage.setItem("savedSearch", JSON.stringify(state));
     console.log(state);
@@ -476,6 +509,7 @@ export default function Search() {
           <img src="./images/loading.gif" alt="loading" />
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 }

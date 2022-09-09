@@ -145,6 +145,7 @@ i18n
             moreThan: "more than",
             source: "Source",
             searchSource: "Serch source",
+            filterLimitError: "you can’t select more than three services",
           },
           results: {
             searchResultForCar: "Search result for a car for sale",
