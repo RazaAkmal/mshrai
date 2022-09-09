@@ -73,11 +73,22 @@ export default function Search() {
   }, [searchInputs]);
 
   useEffect(() => {
-    if (state.brand_id.length && state.brand_type_id.length > 3) {
-        state.model_brand_id.pop();
-        state.brand_type_id.pop();
-        showError(t("search.filterLimitError"));
-        return;
+    if (state.brand_id.length) {
+        if (state.brand_type_id.length > 3) {
+            state.model_brand_id = state.model_brand_id.slice(0,3);
+            state.brand_type_id = state.brand_type_id.slice(0,3);
+            showError(t("search.filterLimitError"));
+            return;
+        }
+        if (
+              state.brand_id.length > 3 &&
+              state.model_brand_id && state.model_brand_id.length >= 3 &&
+              state.brand_type_id && state.brand_type_id.length >= 3
+          ) {
+              state.brand_id = state.brand_id.slice(0,3);
+              showError(t("search.filterLimitError"));
+              return;
+        }
     }
 
     var query = `model_year:[${state.model_year_start} TO ${state.model_year_end}]`;
