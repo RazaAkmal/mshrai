@@ -258,7 +258,7 @@ export default function Search() {
                         onChange={(e)=> setState({...state, keyword:e.target.value})}
                       />
                     </div> */}
-                        <div className="col-md-12 mb-3 d-block d-sm-none">
+                        {/* <div className="col-md-12 mb-3 d-block d-sm-none">
                           <label className="text-end d-block">
                             {t("search.brand")}
                           </label>
@@ -274,7 +274,7 @@ export default function Search() {
                             onChange={(value) => setBrand(value)}
                             formatOptionLabel={formatOptionLabel}
                           />
-                        </div>
+                        </div> */}
                         <div className="col-md-6 col-6  mb-3 d-none d-sm-block">
                           <label className="text-end d-block">
                             {t("search.brand")}
@@ -312,7 +312,7 @@ export default function Search() {
                             //     cursorPosition
                             //   )
                             // }
-                            name="brand"
+                            name="modal"
                             options={modelOptions.map((i) => ({
                               ...i,
                               label: isEnglish ? i.label_en : i.label,
@@ -335,7 +335,7 @@ export default function Search() {
                                 { label: state.model_year_end },
                               ]
                             }
-                            name="brand"
+                            name="modal_year"
                             options={yearList}
                             className="basic-multi-select"
                             placeholder=""
@@ -418,8 +418,11 @@ export default function Search() {
                               state.city_id.indexOf(i.value) != -1 ? i : false
                             )}
                             isMulti
-                            name="brand"
-                            options={searchInputs.cityOptions}
+                            name="city"
+                            options={searchInputs.cityOptions.map((i) => ({
+                              ...i,
+                              label: isEnglish ? i.label_en : i.label,
+                            }))}
                             className="basic-multi-select"
                             placeholder={t("search.anyCity")}
                             styles={colourStyles}
