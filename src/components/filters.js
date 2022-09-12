@@ -24,9 +24,9 @@ export default function Filters(props) {
   const sortedSearchSources = searchInputs.sources
     .reduce((acc, element) => {
       if (
-        element.label !== "Snapchat" &&
-        element.label !== "Instagram" &&
-        element.label !== "Twitter"
+        element.label_en !== "Snapchat" &&
+        element.label_en !== "Instagram" &&
+        element.label_en !== "Twitter"
       ) {
         return [element, ...acc];
       }
@@ -34,9 +34,9 @@ export default function Filters(props) {
     }, [])
     .filter(
       (element) =>
-        element.label !== "Snapchat" &&
-        element.label !== "Instagram" &&
-        element.label !== "Twitter"
+        element.label_en !== "Snapchat" &&
+        element.label_en !== "Instagram" &&
+        element.label_en !== "Twitter"
     );
 
   useEffect(() => {
@@ -590,9 +590,9 @@ export default function Filters(props) {
                     onChange={(e) => setFilterSource(e.target.value)}
                   />
                   {sortedSearchSources
-                    // .filter((v) =>
-                    //   filterValue(v !== "Snap" ? v : "other", filterSource)
-                    // )
+                    .filter((v) =>
+                      filterValue(v !== "Snap" ? v : "other", filterSource)
+                    )
                     .map((source, index) => {
                       return (
                         <div className="form-group" key={"source" + index}>
@@ -611,7 +611,9 @@ export default function Filters(props) {
                             <span>
                               <img src={`${source.image}`} alt="" />
                             </span>{" "}
-                            {t(`sources.${source.label}`)}
+                            {localStorage.getItem("lang") === "en"
+                              ? source.label_en
+                              : source.label}{" "}
                           </label>
                         </div>
                       );
