@@ -540,7 +540,7 @@ export default function Resault(props) {
                             <li key={"searchcities" + index}>
                               {source.label === "Snap"
                                 ? "Social Media"
-                                : source.label}
+                                : isEnglish ? source.label_en : source.label}
                               <span
                                 onClick={() => {
                                   let sources = [...searchForm.source_id];
@@ -653,7 +653,7 @@ export default function Resault(props) {
                       ""
                     )}
                     {(searchForm.city_id.length > 0 ||
-                      searchForm.shape_id.length > 0 ||
+                      searchForm.source_id.length > 0 ||
                       searchForm.brand_type_id.length > 0 ||
                       searchForm.model_year_end < new Date().getFullYear() ||
                       searchForm.model_year_start > 1990 ||
@@ -828,37 +828,6 @@ export default function Resault(props) {
                     </div> */}
                     </div>
                   </div>
-                  {/* <button
-                    className="subscribe_btn link"
-                    onClick={showSubscribeDiv}
-                  >
-                    حفظ نتائج البحث
-                  </button>
-                  <div id="display-search">
-                    <div
-                      style={{ display: "block" }}
-                      className="subscribe_mobile"
-                    >
-                      <input
-                        type="email"
-                        placeholder=" البريد الألكترونى "
-                        value={state.email}
-                        onChange={(e) =>
-                          setState({ ...state, email: e.target.value })
-                        }
-                      />
-                      <button
-                        type="button"
-                        className="btn btn-success"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          _handleSaveResults();
-                        }}
-                      >
-                        حفظ نتائج البحث
-                      </button>
-                    </div>
-                  </div> */}
                 </div>
 
                 <InfiniteScroll
