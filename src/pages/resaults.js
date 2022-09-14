@@ -9,6 +9,7 @@ import {
   fetchCars,
   searchResult,
   userActivity,
+  reportReasons,
 } from "../features/search/searchApi";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -17,6 +18,7 @@ import {
   setResultsNumebr,
   setSearchForm,
   setSearchFormToInital,
+  setReportReasons
 } from "../features/search/searchSlice";
 import SubscribeModal from "../components/subscribeModal";
 import { Link } from "react-router-dom";
@@ -71,7 +73,7 @@ export default function Resault(props) {
       brand_id: brand_id,
       model_year: [{ min: model_year_start, max: model_year_end}],
   }
-    
+
 
     if (brand_type_id.length > 0) {
       query["brand_type_id"] = brand_type_id
@@ -97,7 +99,7 @@ export default function Resault(props) {
         index: 0
       }));
     }
-    
+
 
     // searchResult(data).then((res) => {
     //   if (res.message === "Request failed with status code 422") {
@@ -114,7 +116,7 @@ export default function Resault(props) {
     //       dispatch(setResultsNumebr(res.data.response.numFound));
     //   }
     // });
-    
+
   }, []);
   const [state, setState] = useState({
     searchKeyWord: "",
@@ -131,6 +133,7 @@ export default function Resault(props) {
   const resultsNumber = useSelector((state) => state.search.numFound);
   const query = useSelector((state) => state.search.query);
   const isEnglish = localStorage.getItem("lang") === "en";
+  const allReportReasons = useSelector((state) => state.search.allReportReasons);
 
   useEffect(() => {
     setState((prevState) => ({
@@ -369,6 +372,12 @@ export default function Resault(props) {
         dispatch(setCars(carsArray));
         dispatch(setResultsNumebr(res.response.numFound));
       }
+    });
+
+    reportReasons().then((res) => {
+      dispatch(setReportReasons(res.data));
+    }).catch((err) => {
+        console.log(err);
     });
   }, [dispatch, searchForm]);
 

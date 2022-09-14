@@ -112,3 +112,12 @@ export async function userActivity(payload) {
     console.log(err);
   }
 }
+
+export async function reportReasons() {
+  try {
+    const { data } = await axios.get(`${apiUrl}/api/report_reasons`);
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+}
