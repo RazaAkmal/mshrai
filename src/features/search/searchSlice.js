@@ -30,7 +30,8 @@ const initialState = {
     keyword: "",
     sort:"sort=date+desc",
     index: 0,
-  }
+  },
+  allReportReasons: [],
 };
 
 export const searchSlice = createSlice({
@@ -54,10 +55,13 @@ export const searchSlice = createSlice({
     },
     setResultsNumebr: (state, action) => {
       state.numFound = action.payload
-    }
+    },
+    setReportReasons: (state, action) => {
+      state.allReportReasons = action.payload;
+    },
   },
 });
 
-export const { getSearchInputs, setCars , setSearchForm,setSearchFormToInital, setQuery, setResultsNumebr } = searchSlice.actions;
+export const { getSearchInputs, setCars , setSearchForm,setSearchFormToInital, setQuery, setResultsNumebr, setReportReasons } = searchSlice.actions;
 
 export default searchSlice.reducer;
