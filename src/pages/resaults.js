@@ -123,7 +123,7 @@ export default function Resault(props) {
     cars: [],
   });
   const [loading, setLoading] = useState(false);
-  const [isBusy, seIisBusy] = useState(false);
+  const [nextPage, setNextPage] = useState(false);
   const [initialCars, setIinitialCars] = useState([]);
   const cars = useSelector((state) => state.search.cars);
   const searchForm = useSelector((state) => state.search.searchForm);
@@ -146,6 +146,7 @@ export default function Resault(props) {
 
 
   const _handleStartSearch = (type, value, value_obj) => {
+    setNextPage(false)
     switch (type) {
       case "clearall":
         dispatch(setSearchFormToInital());
@@ -203,6 +204,7 @@ export default function Resault(props) {
         dispatch(setSearchForm({ ...searchForm, sort: value, index: 0 }));
         break;
       case "paginate":
+        setNextPage(true)
         dispatch(setSearchForm({ ...searchForm, index: value }));
         break;
       default:
@@ -363,7 +365,7 @@ export default function Resault(props) {
         setLoading(false);
         setIinitialCars(res.response.docs);
         let carsArray =
-          searchForm.index > 0
+          nextPage
             ? [...state.cars, ...res.response.docs]
             : res.response.docs;
         dispatch(setCars(carsArray));
@@ -820,7 +822,6 @@ export default function Resault(props) {
                     </div>
                   </div>
                 </div>
-
                 <InfiniteScroll
                   dataLength={searchForm.index + 12} //This is important field to render the next data
                   next={() =>
