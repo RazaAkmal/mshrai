@@ -24,6 +24,8 @@ import * as Yup from 'yup';
 import axios from "axios"
 import { ToastContainer, toast } from "react-toastify";
 import Loader from "./components/loader";
+import { apiUrl } from "./features/constants";
+
 
 const lngs = {
   ar: { nativeName: "Arabic" },
@@ -67,7 +69,7 @@ const App = () => {
     onSubmit: (values, { setSubmitting }) => {
       let formatedDate = moment(date).format('YYYY-MM-DD')
       values.dob = formatedDate
-      axios.post("http://local.meshray-backend.co/api/register", values)
+      axios.post(`${apiUrl}/api/register`, values)
         .then(res => {
           toast.success(res.data.message, {
             position: "top-right",
