@@ -1231,6 +1231,7 @@ header form .link i {
   color: #6c757d;
   font-size: 14px;
   margin-bottom: 2px;
+  text-align: left;
 }
 .custom-modal .form-control {
   margin: 0;
@@ -1248,8 +1249,12 @@ header form .link i {
   border: none;
   position: absolute;
   left: 10px;
-  top: 10px;
+  top: 15px;
   z-index: 9;
+}
+.custom-modal .modal-header .btn-close,
+.custom-modal .modal-header .btn-close:hover {
+  padding: 0 !important;
 }
 .custom-modal .modal-body {
   padding: 40px;
@@ -1263,8 +1268,6 @@ header form .link i {
 }
 .custom-modal .modal-dialog {
   max-width: 380px;
-  max-height: calc(100vh - 3.25rem);
-  overflow-y: auto;
 }
 .custom-modal .form-link {
   cursor: pointer;
@@ -1288,7 +1291,12 @@ header form .link i {
 .custom-modal .form-select {
   font-size: 1rem;
   font-weight: 400;
+  min-height: 50px;
 }
+.modal-register .modal-dialog {
+  max-width: 550px;
+}
+
 .react-datepicker-wrapper input {
   display: block;
   width: 100%;
