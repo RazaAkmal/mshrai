@@ -25,6 +25,7 @@ import axios from "axios"
 import { ToastContainer, toast } from "react-toastify";
 import Loader from "./components/loader";
 import { apiUrl } from "./features/constants";
+import { Col, Row } from 'react-bootstrap';
 
 
 const lngs = {
@@ -181,7 +182,7 @@ const App = () => {
               <Form.Label>{t('formFields.password')}</Form.Label>
               <Form.Control type="password" />
             </Form.Group>
-            <Button variant="primary" type="button" disabled={true}>
+            <Button className="w-100 mt-2" size="lg" variant="primary" type="button" disabled={true}>
               {t("login")}
             </Button>
             <div className="text-center mt-2">
@@ -193,7 +194,7 @@ const App = () => {
 
 
       {/* ragister modal */}
-      <Modal className="custom-modal" show={showRegister} onHide={() => setShowRegister(false)}>
+      <Modal className="custom-modal modal-register" centered scrollable show={showRegister} onHide={() => setShowRegister(false)}>
         <Modal.Header closeButton>
         </Modal.Header>
         <Modal.Body>
@@ -202,23 +203,32 @@ const App = () => {
           </div>
           <Modal.Title>{t('formFields.createYourAccoutonMsh')}</Modal.Title>
           <Form onSubmit={handleSubmit}>
+            <Row>
+            <Col md="6">
             <Form.Group className="mb-3">
               <Form.Label>{t('formFields.Username')}</Form.Label>
               <Form.Control type="text" value={values.name} onChange={handleChange} name="name" id="name" />
               {validationError?.name && <span style={{ color: "red" }}>{validationError.name}</span>}
             </Form.Group>
-
+            </Col>
+            <Col md="6">
             <Form.Group className="mb-3">
               <Form.Label>{t('formFields.Email')}</Form.Label>
               <Form.Control type="text" value={values.email} onChange={handleChange} name="email" id="email" />
               {validationError?.email && <span style={{ color: "red" }}>{validationError.email}</span>}
-
             </Form.Group>
+            </Col>
+            </Row>
+
+            <Row>
+            <Col md="6">
             <Form.Group className="mb-3">
               <Form.Label>{t('formFields.phonenumber')}</Form.Label>
               <Form.Control type="text" value={values.phone} onChange={handleChange} name="phone" id="phone" />
               {validationError?.phone && <span style={{ color: "red" }}>{validationError.phone}</span>}
             </Form.Group>
+            </Col>
+            <Col md="6">
             <Form.Group className="mb-3">
               <Form.Label>{t('formFields.Gender')}</Form.Label>
               <Form.Select size="lg" name="gender" id="gender" value={values.gender} onChange={handleChange}>
@@ -226,14 +236,22 @@ const App = () => {
                 <option value="male">{t('formFields.Male')}</option>
                 <option value="female">{t('formFields.Female')}</option>
               </Form.Select>
-
               {validationError?.gender && <span style={{ color: "red" }}>{validationError.gender}</span>}
             </Form.Group>
+            </Col>
+            </Row>
+
+
+            <Row>
+            <Col md="6">
             <Form.Group className="mb-3">
               <Form.Label>{t('formFields.City')}</Form.Label>
               <Form.Control type="text" value={values.city} onChange={handleChange} name="city" id="city" />
               {validationError?.city && <span style={{ color: "red" }}>{validationError.city}</span>}
             </Form.Group>
+            </Col>
+
+            <Col md="6">
             <Form.Group className="mb-3">
               <Form.Label>{t('formFields.dateofbirth')}</Form.Label>
               <DatePicker
@@ -244,12 +262,16 @@ const App = () => {
               />
               {validationError?.dob && <span style={{ color: "red" }}>{validationError.dob}</span>}
             </Form.Group>
+            </Col>
+            </Row>
+
+
             <Form.Group className="mb-3">
               <Form.Label>{t("formFields.password")}</Form.Label>
               <Form.Control type="password" value={values.password} onChange={handleChange} name="password" id="password" />
               {validationError?.password && <span style={{ color: "red" }}>{validationError.password}</span>}
             </Form.Group>
-            <Button variant="primary" type="submit">
+            <Button className="w-100" size="lg" variant="primary" type="submit">
               {t("formFields.createaccount")}
             </Button>
           </Form>
