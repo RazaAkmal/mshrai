@@ -121,6 +121,17 @@ i18n
             phonenumber: "رقم الهاتف",
             Email:"البريد الإلكتروني",
             Username:"اسم المستخدم"
+          },
+          logoutSuccessfullyMessage: 'لقد تم تسجيل خروجك بنجاح!',
+          hiText:'أهلاً',
+          profileMenu:{
+            MyProfile:'الملف الشخصي الخاص بي',
+            MyRequest:'طلبي',
+            RelatedPosts:'المنشورات ذات الصلة',
+            CommentedPosts:'المشاركات المعلق عليها',
+            HiddenPosts:'المشاركات المخفية',
+            LogOut:'تسجيل خروج',
+            invalidCredentials:'بيانات الاعتماد غير صالحة'
           }
         },
       },
@@ -231,6 +242,18 @@ i18n
             Email:"Email",
             Username:"Username"
           },
+          logoutSuccessfullyMessage: 'You have been successfully logged out!',
+          hiText:'Hi',
+          profileMenu:{
+            MyProfile:'My Profile',
+            MyRequest:'My Request',
+            RelatedPosts:'Related',
+            CommentedPosts:'Commented Posts',
+            HiddenPosts:'Hidden Posts',
+            LogOut:'Log out',
+            invalidCredentials:'Invalid Credentials'
+          }
+
         },
       },
     },

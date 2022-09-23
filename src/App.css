@@ -533,6 +533,77 @@ header form .link i {
 .filter_btn i {
   margin-left: 5px;
 }
+body .login-drop {
+  position: absolute;
+  left: 125px;
+  top: 14px;
+  z-index: 9;
+}
+.login-drop .btn {
+  background-color: #fff;
+  border: none;
+  padding: 0;
+  color: #3e0292;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.login-drop.show>.btn-success.dropdown-toggle,
+.login-drop .btn-success:focus,
+.login-drop .btn-success:hover{
+  color: #3e0292;
+  background-color: #fff;
+  border: none;
+  box-shadow: none;
+}
+
+.login-drop .dropdown-toggle::after {
+  display: none;
+}
+.login-drop .dropdown-menu svg {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+}
+.login-drop .dropdown-item {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #ececec;
+  padding: 0.40rem 1rem;
+}
+.login-drop hr + .dropdown-item{
+border: none;
+}
+.login-drop .dropdown-item:focus, .login-drop .dropdown-item:hover {
+  color: #3e0292;
+  background-color: transparent;
+}
+.login-drop .dropdown-item:last-child:hover {
+  background-color: #3e0292;
+  color: #fff;
+}
+.login-drop .dropdown-item:last-child {
+  margin-top: -.5rem;
+}
+.login-drop .dropdown-menu {
+  padding-bottom: 0;
+}
+.login-drop .dropdown-item:first-child {
+  border-top: 0;
+}
+.login-drop .user-name svg {
+  width: 30px;
+  height: 30px;
+  background-color: #767676;
+  padding: 7px;
+  border-radius: 50%;
+}
+.login-drop .dropdown-item.user-name:hover svg {
+  background-color: #3e0292;
+}
+
 
 @media all and (max-width: 991.98px) {
   .subscribe_btn {
