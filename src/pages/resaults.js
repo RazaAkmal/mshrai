@@ -9,6 +9,7 @@ import {
   fetchCars,
   searchResult,
   userActivity,
+  reportReasons,
 } from "../features/search/searchApi";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -17,6 +18,7 @@ import {
   setResultsNumebr,
   setSearchForm,
   setSearchFormToInital,
+  setReportReasons
 } from "../features/search/searchSlice";
 import SubscribeModal from "../components/subscribeModal";
 import { Link } from "react-router-dom";
@@ -71,7 +73,7 @@ export default function Resault(props) {
       brand_id: brand_id,
       model_year: [{ min: model_year_start, max: model_year_end}],
   }
-    
+
 
     if (brand_type_id.length > 0) {
       query["brand_type_id"] = brand_type_id
@@ -97,7 +99,7 @@ export default function Resault(props) {
         index: 0
       }));
     }
-    
+
 
     // searchResult(data).then((res) => {
     //   if (res.message === "Request failed with status code 422") {
@@ -114,7 +116,7 @@ export default function Resault(props) {
     //       dispatch(setResultsNumebr(res.data.response.numFound));
     //   }
     // });
-    
+
   }, []);
   const [state, setState] = useState({
     searchKeyWord: "",
@@ -123,7 +125,7 @@ export default function Resault(props) {
     cars: [],
   });
   const [loading, setLoading] = useState(false);
-  const [isBusy, seIisBusy] = useState(false);
+  const [nextPage, setNextPage] = useState(false);
   const [initialCars, setIinitialCars] = useState([]);
   const cars = useSelector((state) => state.search.cars);
   const searchForm = useSelector((state) => state.search.searchForm);
@@ -131,6 +133,7 @@ export default function Resault(props) {
   const resultsNumber = useSelector((state) => state.search.numFound);
   const query = useSelector((state) => state.search.query);
   const isEnglish = localStorage.getItem("lang") === "en";
+  const allReportReasons = useSelector((state) => state.search.allReportReasons);
 
   useEffect(() => {
     setState((prevState) => ({
@@ -146,6 +149,7 @@ export default function Resault(props) {
 
 
   const _handleStartSearch = (type, value, value_obj) => {
+    setNextPage(false)
     switch (type) {
       case "clearall":
         dispatch(setSearchFormToInital());
@@ -203,6 +207,7 @@ export default function Resault(props) {
         dispatch(setSearchForm({ ...searchForm, sort: value, index: 0 }));
         break;
       case "paginate":
+        setNextPage(true)
         dispatch(setSearchForm({ ...searchForm, index: value }));
         break;
       default:
@@ -363,12 +368,18 @@ export default function Resault(props) {
         setLoading(false);
         setIinitialCars(res.response.docs);
         let carsArray =
-          searchForm.index > 0
+          nextPage
             ? [...state.cars, ...res.response.docs]
             : res.response.docs;
         dispatch(setCars(carsArray));
         dispatch(setResultsNumebr(res.response.numFound));
       }
+    });
+
+    reportReasons().then((res) => {
+      dispatch(setReportReasons(res.data));
+    }).catch((err) => {
+        console.log(err);
     });
   }, [dispatch, searchForm]);
 
@@ -531,7 +542,7 @@ export default function Resault(props) {
                             <li key={"searchcities" + index}>
                               {source.label === "Snap"
                                 ? "Social Media"
-                                : source.label}
+                                : isEnglish ? source.label_en : source.label}
                               <span
                                 onClick={() => {
                                   let sources = [...searchForm.source_id];
@@ -644,7 +655,7 @@ export default function Resault(props) {
                       ""
                     )}
                     {(searchForm.city_id.length > 0 ||
-                      searchForm.shape_id.length > 0 ||
+                      searchForm.source_id.length > 0 ||
                       searchForm.brand_type_id.length > 0 ||
                       searchForm.model_year_end < new Date().getFullYear() ||
                       searchForm.model_year_start > 1990 ||
@@ -819,39 +830,7 @@ export default function Resault(props) {
                     </div> */}
                     </div>
                   </div>
-                  {/* <button
-                    className="subscribe_btn link"
-                    onClick={showSubscribeDiv}
-                  >
-                    حفظ نتائج البحث
-                  </button>
-                  <div id="display-search">
-                    <div
-                      style={{ display: "block" }}
-                      className="subscribe_mobile"
-                    >
-                      <input
-                        type="email"
-                        placeholder=" البريد الألكترونى "
-                        value={state.email}
-                        onChange={(e) =>
-                          setState({ ...state, email: e.target.value })
-                        }
-                      />
-                      <button
-                        type="button"
-                        className="btn btn-success"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          _handleSaveResults();
-                        }}
-                      >
-                        حفظ نتائج البحث
-                      </button>
-                    </div>
-                  </div> */}
                 </div>
-
                 <InfiniteScroll
                   dataLength={searchForm.index + 12} //This is important field to render the next data
                   next={() =>

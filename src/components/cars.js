@@ -9,12 +9,14 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { ReportModal } from "./reportModal";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 export default function Cars({ cars }) {
   const searchInputs = useSelector((state) => state.search.searchInputs);
 
   const { t } = useTranslation();
   const [showReportModal, setshowReportModal] = useState(false);
+  const [selectedCar, setSelectedCar] = useState();
 
   const addUserActivity = (car) => {
     let userId = Cookies.get("id");
@@ -75,10 +77,11 @@ export default function Cars({ cars }) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
-  const handleReport = (ev) => {
+  const handleReport = (ev,car) => {
     ev.stopPropagation();
     ev.preventDefault();
     setshowReportModal(true);
+    setSelectedCar(car);
   };
 
   const isEnglish = localStorage.getItem("lang") === "en";
@@ -100,6 +103,37 @@ export default function Cars({ cars }) {
       (i) => i.value === Number(car.city_id)
     );
     return isEnglish ? cityDetails?.label_en : cityDetails?.label;
+  };
+
+  const submitReportReason = (selectedCar, selectedReasonId) => {
+    const brandName = getBrandName(selectedCar);
+    const modelName = getModelName(selectedCar);
+
+    const payload = {
+        'post_title': brandName ? `${brandName} - ${modelName}` : "",
+        'post_link': selectedCar.url,
+        'report_reason_id': selectedReasonId
+    }
+
+    axios({
+        method: "post",
+        url: "https://admin.mshrai.com/api/report_reasons",
+        data: payload,
+        headers: { "Content-Type": "multipart/form-data" },
+    }).then((resp) => {
+        toast.success(resp.data.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setshowReportModal(false);
+    }).catch((error) => {
+        console.log(error)
+    });
   };
 
   return (
@@ -139,7 +173,7 @@ export default function Cars({ cars }) {
                       {moment(car.date).fromNow()}
                     </p>
                     <div
-                      onClick={handleReport}
+                      onClick={(e)=>handleReport(e, car)}
                       className="report_btn"
                     >
                       <p
@@ -160,6 +194,7 @@ export default function Cars({ cars }) {
                     <ReportModal
                       show={showReportModal}
                       handleClose={() => setshowReportModal(false)}
+                      handleSubmit={(selectedReasonId) => {submitReportReason(selectedCar, selectedReasonId)}}
                     />
 
                     <ul className="tags">

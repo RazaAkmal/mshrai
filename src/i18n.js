@@ -33,6 +33,10 @@ i18n
           feedbackNote: "هل تقترح تحسين شئ ما؟",
           thanksTitle: "شكرا جزيلا لوقتك!",
           thanksMessage: "يمكنك ملء هذا الاستبيان لمدة 5 دقائق والحصول على اشتراك مجاني فى مشراى",
+          Login: 'تسجيل الدخول',
+          welcomeMessage: 'مرحبا بكم في مشراي',
+          continueWithEmail: 'تواصل مع البريد الإلكتروني',
+          register: 'يسجل',
           search: {
             findMyCar: "ابحث عن سيارتي",
             brand: "الماركة",
@@ -105,6 +109,30 @@ i18n
             Twitter: "تويتر",
             Shobbak: "شوباک",
           },
+          formFields: {
+            createYourAccoutonMsh:"قم بإنشاء حسابك على مشروعي",
+            password: 'كلمة المرور',
+            createaccount: "إصنع حساب",
+            dateofbirth: "تاريخ الولادة",
+            City: "مدينة",
+            Gender: "جنس",
+            Male:"الذكر",
+            Female:"أنثى",
+            phonenumber: "رقم الهاتف",
+            Email:"البريد الإلكتروني",
+            Username:"اسم المستخدم"
+          },
+          logoutSuccessfullyMessage: 'لقد تم تسجيل خروجك بنجاح!',
+          hiText:'أهلاً',
+          profileMenu:{
+            MyProfile:'الملف الشخصي الخاص بي',
+            MyRequest:'طلبي',
+            RelatedPosts:'المنشورات ذات الصلة',
+            CommentedPosts:'المشاركات المعلق عليها',
+            HiddenPosts:'المشاركات المخفية',
+            LogOut:'تسجيل خروج',
+            invalidCredentials:'بيانات الاعتماد غير صالحة'
+          }
         },
       },
 
@@ -124,6 +152,10 @@ i18n
           phoneInputTitle: "Enter your phone number",
           thanksTitle: "Thank you for your time!",
           thanksMessage: "you can take this 5 min survey and have a free subscription in Mshrai",
+          Login: 'Login',
+          welcomeMessage: 'WELCOME TO Mshrai',
+          continueWithEmail: 'Continue with Email',
+          register: 'Register',
           search: {
             findMyCar: "Find my car",
             brand: "Brand",
@@ -197,6 +229,31 @@ i18n
             Twitter: "Twitter",
             Shobbak: "Shobbak",
           },
+          formFields: {
+            createYourAccoutonMsh : "Create your account on Mshrai",
+            password: 'Password',
+            createaccount: "Create Account",
+            dateofbirth:"Date of Birth",
+            City:"City",
+            Gender:'Gender',
+            Male:"Male",
+            Female:"Female",
+            phonenumber:"Phone Number",
+            Email:"Email",
+            Username:"Username"
+          },
+          logoutSuccessfullyMessage: 'You have been successfully logged out!',
+          hiText:'Hi',
+          profileMenu:{
+            MyProfile:'My Profile',
+            MyRequest:'My Request',
+            RelatedPosts:'Related',
+            CommentedPosts:'Commented Posts',
+            HiddenPosts:'Hidden Posts',
+            LogOut:'Log out',
+            invalidCredentials:'Invalid Credentials'
+          }
+
         },
       },
     },
