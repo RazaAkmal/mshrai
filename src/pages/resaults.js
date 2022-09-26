@@ -142,6 +142,10 @@ export default function Resault(props) {
     }));
   }, [cars])
 
+  useEffect(()=>{
+    console.log(searchInputs)
+  },[searchInputs])
+
   const { t } = useTranslation();
   const limit = 8;
 
@@ -383,7 +387,10 @@ export default function Resault(props) {
     });
   }, [dispatch, searchForm]);
 
-  const toggleOpen = () => setState({ isOpen: !state.isOpen });
+  //TO OPEN SORT BY
+  // const toggleOpen = () => setState({ isOpen: !state.isOpen });
+
+  const toggleOpen = () => {};
 
   const fillterBtnClickHandle = () => {
     $(".toggle-container").addClass("move");
@@ -481,7 +488,8 @@ export default function Resault(props) {
                     {searchForm.brand_id && searchForm.brand_id.length > 0
                       ? searchInputs.marksOptions.map((mark, index) => {
                           return searchForm.brand_id.includes(mark.value) &&
-                            modalOfbrandNotSelected(mark.value, index) ? (
+                          modalOfbrandNotSelected(mark.value, index) ? (
+                              <>
                             <li key={"searchMarks" + index}>
                               {isEnglish ? mark.label_en : mark.label}
                               <span
@@ -492,10 +500,11 @@ export default function Resault(props) {
                                   }
                                   _handleStartSearch("brand_id", marks);
                                 }}
-                              >
+                                >
                                 <IoIosClose />
                               </span>
                             </li>
+                                </>
                           ) : (
                             false
                           );
