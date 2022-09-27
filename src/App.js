@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useSelector } from "react";
 import "./App.css";
-import { Switch, Route, useHistory, Router } from "react-router-dom";
+import { Switch, Route, useHistory, Router,useLocation } from "react-router-dom";
 import Resault from "./pages/resaults";
 import Search from "./pages/search";
 import Feedback from "./components/feedback";
@@ -35,6 +35,7 @@ import Loader from "./components/loader";
 import { apiUrl } from "./features/constants";
 import { Col, Row } from "react-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
+import GoogleLog from "./components/GoogleLogin";
 
 const lngs = {
   ar: { nativeName: "Arabic" },
@@ -42,6 +43,7 @@ const lngs = {
 };
 
 const App = () => {
+  let history = useHistory();
   useEffect(() => {
     const getID = Cookies.get("id");
     if (!getID) {
@@ -49,6 +51,38 @@ const App = () => {
       Cookies.set("id", userId);
     }
   }, []);
+
+  // FOR GOOGLE LOGIN
+  const location = useLocation();
+  const googleFn = async(val)=>{
+    
+    const res = await axios(`http://local.meshray-backend.co/api/auth/callback/google${val}`,{
+      headers : {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+      }
+  })
+  if (res.data.data.token) {
+    localStorage.setItem("token", JSON.stringify(res.data.data.token));
+    localStorage.setItem(
+      "userDetails",
+      JSON.stringify(res.data.data.user)
+    );
+     setUserDetails(res.data.data.user);
+    setIsLoggedIn(true);
+    setIsInvalidCredentials(false);
+    resetFormLogin();
+    setValidationErrorLogIn(undefined);
+    history.push("/results");
+    showLogin(false);
+  }
+  } 
+  useEffect(()=>{
+    console.log(location.search)
+    if(location.search){
+      googleFn(location.search);
+    }
+  },[location.search])
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -84,7 +118,7 @@ const App = () => {
 
   const [date, setDate] = useState(new Date());
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  let history = useHistory();
+
 
   const handleCalendarClose = () => console.log("Calendar closed");
   const handleCalendarOpen = () => console.log("Calendar opened");
@@ -324,6 +358,7 @@ const App = () => {
             <img src="./images/logo_color.png" alt="logo" />
           </div>
           <Modal.Title>{t("welcomeMessage")}</Modal.Title>
+          <GoogleLog/>
           <Button
             onClick={() => {
               showLogin(false);
@@ -331,9 +366,10 @@ const App = () => {
             }}
             className="btn btn-solid d-flex align-items-center justify-content-center w-100"
           >
-            <FontAwesomeIcon className="me-1" icon={faEnvelope} />
+            <FontAwesomeIcon className="me-2" icon={faEnvelope} />
             {t("continueWithEmail")}
           </Button>
+    
         </Modal.Body>
       </Modal>
 
