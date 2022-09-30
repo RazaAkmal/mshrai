@@ -16,6 +16,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import FacebookLogin from './components/FacebookLogin';
 import {
   faEnvelope,
   faUser,
@@ -56,7 +57,7 @@ const App = () => {
   const location = useLocation();
   const googleFn = async(val)=>{
     
-    const res = await axios(`http://local.meshray-backend.co/api/auth/callback/google${val}`,{
+    const res = await axios(`${apiUrl}/api/auth/callback/google${val}`,{
       headers : {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
@@ -94,10 +95,6 @@ const App = () => {
     if (user) {
       setUserDetails(JSON.parse(user));
     }
-
-    // if (token) {
-    //   setIsLoggedIn(true);
-    // }
   }, []);
 
   const { t, i18n } = useTranslation();
@@ -139,6 +136,27 @@ const App = () => {
     });
     history.push("/");
   };
+
+  //FOR FACEBOOKLOGIN 
+
+  const fbLogin=(data)=>{
+    const responseData = data.data.data;
+    if (responseData.token.access_token) {
+      localStorage.setItem("token", JSON.stringify(responseData.token.access_token));
+      localStorage.setItem(
+        "userDetails",
+        JSON.stringify(responseData.user)
+      );
+       setUserDetails(responseData.user);
+      setIsLoggedIn(true);
+      setIsInvalidCredentials(false);
+      resetFormLogin();
+      setValidationErrorLogIn(undefined);
+      history.push("/results");
+      showLogin(false);
+    }
+
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -359,6 +377,7 @@ const App = () => {
           </div>
           <Modal.Title>{t("welcomeMessage")}</Modal.Title>
           <GoogleLog/>
+          <FacebookLogin fbLogin={fbLogin}/>
           <Button
             onClick={() => {
               showLogin(false);

@@ -9,7 +9,6 @@ const GoogleLog = () => {
   const { t, i18n } = useTranslation();
 
   useEffect(() => {
-    console.log(process.env.REACT_APP_GOOGLE_CLIENT_ID);
     urlFetch();
   }, []);
 
