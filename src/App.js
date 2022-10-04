@@ -403,6 +403,7 @@ const App = () => {
           <Modal.Title>{t("welcomeMessage")}</Modal.Title>
           <GoogleLog />
           <FacebookLogin fbLogin={fbLogin} />
+          {/* <TwitterLogins/> */}
           {/* <TwitterLogins /> */}
           <Button
             onClick={() => {
