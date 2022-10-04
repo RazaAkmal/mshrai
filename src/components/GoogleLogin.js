@@ -26,7 +26,7 @@ const GoogleLog = () => {
 
   return (
     <>
-      <div>
+      <div onClick={() => localStorage.setItem("loginFrom", "google")}>
         {loginUrl != null && (
           <a
             className="btn btn-solid d-flex align-items-center justify-content-center w-100 btn btn-primary mb-3"

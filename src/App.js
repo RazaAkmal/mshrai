@@ -95,7 +95,7 @@ const App = () => {
     const loginFrom = localStorage.getItem("loginFrom");
     if (loginFrom === "twitter") {
       twitterLogin(location.search);
-    } else {
+    } else if(loginFrom==="google") {
       googleFn(location.search);
     }
   }, [location.search]);
@@ -118,6 +118,7 @@ const App = () => {
 
   // FOR GOOGLE LOGIN
   const googleFn = async (val) => {
+    localStorage.removeItem("loginFrom");
     const res = await axios(
       `${apiUrl}/api/auth/callback/google${val}`,
       {
