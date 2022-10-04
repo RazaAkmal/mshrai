@@ -1,6 +1,12 @@
 import React, { useEffect, useState, useSelector } from "react";
 import "./App.css";
-import { Switch, Route, useHistory, Router,useLocation } from "react-router-dom";
+import {
+  Switch,
+  Route,
+  useHistory,
+  Router,
+  useLocation,
+} from "react-router-dom";
 import Resault from "./pages/resaults";
 import Search from "./pages/search";
 import Feedback from "./components/feedback";
@@ -16,7 +22,8 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import FacebookLogin from './components/FacebookLogin';
+import FacebookLogin from "./components/FacebookLogin";
+import TwitterLogins from "./components/TwitterLogin";
 import {
   faEnvelope,
   faUser,
@@ -44,59 +51,6 @@ const lngs = {
 };
 
 const App = () => {
-  let history = useHistory();
-  useEffect(() => {
-    const getID = Cookies.get("id");
-    if (!getID) {
-      let userId = uniqid("userId-");
-      Cookies.set("id", userId);
-    }
-  }, []);
-
-  // FOR GOOGLE LOGIN
-  const location = useLocation();
-  const googleFn = async(val)=>{
-    
-    const res = await axios(`${apiUrl}/api/auth/callback/google${val}`,{
-      headers : {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-      }
-  })
-  if (res.data.data.token) {
-    localStorage.setItem("token", JSON.stringify(res.data.data.token));
-    localStorage.setItem(
-      "userDetails",
-      JSON.stringify(res.data.data.user)
-    );
-     setUserDetails(res.data.data.user);
-    setIsLoggedIn(true);
-    setIsInvalidCredentials(false);
-    resetFormLogin();
-    setValidationErrorLogIn(undefined);
-    history.push("/results");
-    showLogin(false);
-  }
-  } 
-  useEffect(()=>{
-    console.log(location.search)
-    if(location.search){
-      googleFn(location.search);
-    }
-  },[location.search])
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const user = localStorage.getItem("userDetails");
-
-    if (token) {
-      setIsLoggedIn(true);
-    }
-    if (user) {
-      setUserDetails(JSON.parse(user));
-    }
-  }, []);
-
   const { t, i18n } = useTranslation();
   const [selectedLng, setSelectedLng] = useState(i18n.language);
   const [state, setState] = useState({
@@ -112,14 +66,105 @@ const App = () => {
   const [validationErrorLogIn, setValidationErrorLogIn] = useState();
   const [isInValidCredentials, setIsInvalidCredentials] = useState(false);
   const [userDetails, setUserDetails] = useState();
-
   const [date, setDate] = useState(new Date());
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  let history = useHistory();
+  const location = useLocation();
+  useEffect(() => {
+    const getID = Cookies.get("id");
+    if (!getID) {
+      let userId = uniqid("userId-");
+      Cookies.set("id", userId);
+    }
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("userDetails");
+
+    if (token) {
+      setIsLoggedIn(true);
+    }
+    if (user) {
+      setUserDetails(JSON.parse(user));
+    }
+  }, []);
+
+  useEffect(() => {
+    const loginFrom = localStorage.getItem("loginFrom");
+    if (loginFrom === "twitter") {
+      twitterLogin(location.search);
+    } else {
+      googleFn(location.search);
+    }
+  }, [location.search]);
 
   const handleCalendarClose = () => console.log("Calendar closed");
   const handleCalendarOpen = () => console.log("Calendar opened");
 
+  const loginHelper = (token, userData) => {
+    localStorage.setItem("token", JSON.stringify(token));
+    localStorage.setItem("userDetails", JSON.stringify(userData));
+    setUserDetails(userData);
+    setIsLoggedIn(true);
+    setIsInvalidCredentials(false);
+    resetFormLogin();
+    setValidationErrorLogIn(undefined);
+    history.push("/results");
+    // setSubmitting(false);
+    showLogin(false);
+  };
+
+  // FOR GOOGLE LOGIN
+  const googleFn = async (val) => {
+    const res = await axios(
+      `http://local.meshray-backend.co/api/auth/callback/google${val}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    );
+    if (res.data.data.token) {
+      loginHelper(res.data.data.token, res.data.data.user);
+    }
+  };
+
+  //FOR FACEBOOKLOGIN
+
+  const fbLogin = (data) => {
+    const responseData = data.data.data;
+    if (responseData.token.access_token) {
+      loginHelper(responseData.token.access_token, responseData.user);
+    }
+  };
+  // FOR TWITTER
+  const twitterLogin = async (val) => {
+    localStorage.removeItem("loginFrom");
+    try{
+      const res = await axios(
+        `http://local.meshray-backend.co/api/auth/callback/twitter${val}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      );
+      if (res) {
+        loginHelper(res.data.data.token, res.data.data.user);
+        // window.close();
+      }
+    }catch(err){
+      console.log(err);
+      // window.close();
+    }
+    
+  };
+
+  // TO LOGOUT
   const logoutHandler = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userDetails");
@@ -136,27 +181,6 @@ const App = () => {
     });
     history.push("/");
   };
-
-  //FOR FACEBOOKLOGIN 
-
-  const fbLogin=(data)=>{
-    const responseData = data.data.data;
-    if (responseData.token.access_token) {
-      localStorage.setItem("token", JSON.stringify(responseData.token.access_token));
-      localStorage.setItem(
-        "userDetails",
-        JSON.stringify(responseData.user)
-      );
-       setUserDetails(responseData.user);
-      setIsLoggedIn(true);
-      setIsInvalidCredentials(false);
-      resetFormLogin();
-      setValidationErrorLogIn(undefined);
-      history.push("/results");
-      showLogin(false);
-    }
-
-  }
 
   const formik = useFormik({
     initialValues: {
@@ -204,7 +228,7 @@ const App = () => {
       // let formatedDate = moment(date).format("YYYY-MM-DD");
       // values.dob = formatedDate;
       axios
-        .post(`${apiUrl}/api/login`, values)
+        .post(`http://local.meshray-backend.co/api/login`, values)
         .then((res) => {
           showContinueWithEmailModal(false);
           toast.success(res.data.message, {
@@ -216,21 +240,9 @@ const App = () => {
             draggable: true,
             progress: undefined,
           });
-          console.log(Object.keys(res.data.data));
           if (res.data.data.token) {
-            localStorage.setItem("token", JSON.stringify(res.data.data.token));
-            localStorage.setItem(
-              "userDetails",
-              JSON.stringify(res.data.data.user)
-            );
-             setUserDetails(res.data.data.user);
-            setIsLoggedIn(true);
-            setIsInvalidCredentials(false);
-            resetFormLogin();
-            setValidationErrorLogIn(undefined);
-            history.push("/results");
+            loginHelper(res.data.data.token, res.data.data.user);
             setSubmitting(false);
-            showLogin(false);
           }
           return;
         })
@@ -243,9 +255,14 @@ const App = () => {
             });
           }
           setValidationErrorLogIn(errors);
-          if (typeof err.response.data.errors === "string") {
+          if (
+            err.response.data &&
+            typeof err.response.data.errors === "string"
+          ) {
             console.log("invalid credentials");
             setIsInvalidCredentials(true);
+          } else {
+            console.log("something went wrong");
           }
           // setSubmitting(false);
         });
@@ -260,7 +277,6 @@ const App = () => {
     handleSubmit: handleSubmitLogin,
     errors: errorLogin,
   } = formikLogin;
-  //////////////////////////////////////////////////////////////////////////
   const {
     values,
     resetForm,
@@ -318,11 +334,15 @@ const App = () => {
           </div>
         </div>
         {!isLoggedIn ? (
-          <div className="login-link" onClick={() => {showLogin(true);
-            resetFormLogin();
-            setIsInvalidCredentials(null);
-            setValidationErrorLogIn(null);
-          }}>
+          <div
+            className="login-link"
+            onClick={() => {
+              showLogin(true);
+              resetFormLogin();
+              setIsInvalidCredentials(null);
+              setValidationErrorLogIn(null);
+            }}
+          >
             {t("login")}
           </div>
         ) : (
@@ -334,26 +354,31 @@ const App = () => {
             <Dropdown.Menu>
               <Dropdown.Item href="#/action-1" className="user-name">
                 <FontAwesomeIcon icon={faUser} color="white" />
-                {t('hiText')}, {userDetails && userDetails.name}
+                {t("hiText")}, {userDetails && userDetails.name}
               </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item href="#/action-2">
-                <FontAwesomeIcon icon={faUser} /> {t('profileMenu.MyProfile')}
+                <FontAwesomeIcon icon={faUser} /> {t("profileMenu.MyProfile")}
               </Dropdown.Item>
               <Dropdown.Item href="#/action-3">
-                <FontAwesomeIcon icon={faEye} /> {t('profileMenu.MyRequest')}
+                <FontAwesomeIcon icon={faEye} /> {t("profileMenu.MyRequest")}
               </Dropdown.Item>
               <Dropdown.Item href="#/action-3">
-                <FontAwesomeIcon icon={faStar} /> {t('profileMenu.RelatedPosts')}
+                <FontAwesomeIcon icon={faStar} />{" "}
+                {t("profileMenu.RelatedPosts")}
               </Dropdown.Item>
               <Dropdown.Item href="#/action-3">
-                <FontAwesomeIcon icon={faCommentAlt} /> {t('profileMenu.CommentedPosts')}
+                <FontAwesomeIcon icon={faCommentAlt} />{" "}
+                {t("profileMenu.CommentedPosts")}
               </Dropdown.Item>
               <Dropdown.Item href="#/action-3">
-                <FontAwesomeIcon icon={faEyeSlash} /> {t('profileMenu.HiddenPosts')}
+                <FontAwesomeIcon icon={faEyeSlash} />{" "}
+                {t("profileMenu.HiddenPosts")}
               </Dropdown.Item>
               <Dropdown.Divider />
-              <Dropdown.Item onClick={logoutHandler}>{t('profileMenu.LogOut')}</Dropdown.Item>
+              <Dropdown.Item onClick={logoutHandler}>
+                {t("profileMenu.LogOut")}
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
 
@@ -376,8 +401,9 @@ const App = () => {
             <img src="./images/logo_color.png" alt="logo" />
           </div>
           <Modal.Title>{t("welcomeMessage")}</Modal.Title>
-          <GoogleLog/>
-          <FacebookLogin fbLogin={fbLogin}/>
+          <GoogleLog />
+          <FacebookLogin fbLogin={fbLogin} />
+          {/* <TwitterLogins /> */}
           <Button
             onClick={() => {
               showLogin(false);
@@ -388,7 +414,6 @@ const App = () => {
             <FontAwesomeIcon className="me-2" icon={faEnvelope} />
             {t("continueWithEmail")}
           </Button>
-    
         </Modal.Body>
       </Modal>
 
@@ -437,7 +462,10 @@ const App = () => {
                 </span>
               )}
               {!validationErrorLogIn?.password && isInValidCredentials && (
-                <span style={{ color: "red" }}> {t('profileMenu.invalidCredentials')}</span>
+                <span style={{ color: "red" }}>
+                  {" "}
+                  {t("profileMenu.invalidCredentials")}
+                </span>
               )}
             </Form.Group>
             <Button
