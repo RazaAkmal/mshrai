@@ -4,7 +4,7 @@ import axios from "axios";
 import Loader from "./loader";
 import "./../i18n";
 import { useTranslation } from "react-i18next";
-import {apiUrl} from '../features/constants'
+import {apiUrl,FACEBOOK_APP_ID} from '../features/constants'
 
 const FacebookLogin = ({fbLogin}) => {
   const [loading, setLoading] = useState();
@@ -30,7 +30,7 @@ const FacebookLogin = ({fbLogin}) => {
         isOnlyGetToken
         state={"truestate"}
         response_type={"code"}
-        appId={process.env.REACT_APP_FACEBOOK_APP_ID}
+        appId={FACEBOOK_APP_ID}
         onLoginStart={() => {
           setLoading(true)
           console.log("login start");
