@@ -1,4 +1,5 @@
 import { LoginSocialTwitter } from "reactjs-social-login";
+import { apiUrl } from "../features/constants";
 
 const TwitterLogins = ({ setProvider }) => {
   // TWITTER CLIENT ID = iA0r6DXAfYjFBeEdWyVURSM0Q
@@ -11,7 +12,7 @@ const TwitterLogins = ({ setProvider }) => {
           process.env.REACT_APP_TWITTER_V2_APP_KEY ||
           "Y0I5UktyV1hMRzFDQTNlcHlkbEM6MTpjaQ"
         }
-        redirect_uri={"http://local.meshray-backend.co/api/auth/twitter/callback"}
+        redirect_uri={`${apiUrl}/api/auth/twitter/callback`}
         onLoginStart={() => console.log("twitter login start")}
         onLogoutSuccess={() => null}
         state={"twitter"}

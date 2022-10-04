@@ -119,7 +119,7 @@ const App = () => {
   // FOR GOOGLE LOGIN
   const googleFn = async (val) => {
     const res = await axios(
-      `http://local.meshray-backend.co/api/auth/callback/google${val}`,
+      `${apiUrl}/api/auth/callback/google${val}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -145,7 +145,7 @@ const App = () => {
     localStorage.removeItem("loginFrom");
     try{
       const res = await axios(
-        `http://local.meshray-backend.co/api/auth/callback/twitter${val}`,
+        `${apiUrl}/api/auth/callback/twitter${val}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -228,7 +228,7 @@ const App = () => {
       // let formatedDate = moment(date).format("YYYY-MM-DD");
       // values.dob = formatedDate;
       axios
-        .post(`http://local.meshray-backend.co/api/login`, values)
+        .post(`${apiUrl}/api/login`, values)
         .then((res) => {
           showContinueWithEmailModal(false);
           toast.success(res.data.message, {
