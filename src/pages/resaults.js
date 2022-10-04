@@ -387,10 +387,10 @@ export default function Resault(props) {
     });
   }, [dispatch, searchForm]);
 
-  //TO OPEN SORT BY
-  // const toggleOpen = () => setState({ isOpen: !state.isOpen });
-
-  const toggleOpen = () => {};
+  const toggleOpen = () => setState((prevState) => ({
+    ...prevState,
+    isOpen: !state.isOpen
+  }));
 
   const fillterBtnClickHandle = () => {
     $(".toggle-container").addClass("move");

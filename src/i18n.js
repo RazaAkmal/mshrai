@@ -36,6 +36,8 @@ i18n
           Login: 'تسجيل الدخول',
           welcomeMessage: 'مرحبا بكم في مشراي',
           continueWithEmail: 'تواصل مع البريد الإلكتروني',
+          continueWithGoogle: 'تواصل مع جوجل',
+          continueWithFacebook: 'تواصل مع الفيسبوك',
           register: 'يسجل',
           search: {
             findMyCar: "ابحث عن سيارتي",
@@ -159,6 +161,8 @@ i18n
           Login: 'Login',
           welcomeMessage: 'WELCOME TO Mshrai',
           continueWithEmail: 'Continue with Email',
+          continueWithGoogle: 'Continue with Google',
+          continueWithFacebook: 'Continue with Facebook',
           register: 'Register',
           search: {
             findMyCar: "Find my car",
