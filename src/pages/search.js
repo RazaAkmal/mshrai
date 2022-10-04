@@ -20,7 +20,6 @@ import { useTranslation, Trans } from "react-i18next";
 const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range);
 
-
 export default function Search() {
   const isEnglish = localStorage.getItem("lang") === "en";
   const showError = (msg) => {
@@ -40,6 +39,8 @@ export default function Search() {
   const resultsNumber = useSelector((state) => state.search.numFound);
 
   const [modelOptions, setModelOptions] = useState([]);
+  const [selectedModels, setSelectedModels] = useState([]);
+  const [selectedBrand, setSelectedBrand] = useState([]);
   const [brandOptions, setBrandOptions] = useState([]);
 
   const dispatch = useDispatch();
@@ -73,22 +74,30 @@ export default function Search() {
   }, [searchInputs]);
 
   useEffect(() => {
+    const modelOptionsStored = searchInputs.modelOptions.map((i) =>
+      state.brand_type_id.indexOf(i.value) !== -1 ? i : false
+    );
+    setSelectedModels(modelOptionsStored);
+  }, [searchInputs]);
+  useEffect(() => {
     if (state.brand_id.length) {
-        if (state.brand_type_id.length > 3) {
-            state.model_brand_id = state.model_brand_id.slice(0,3);
-            state.brand_type_id = state.brand_type_id.slice(0,3);
-            showError(t("search.filterLimitError"));
-            return;
-        }
-        if (
-              state.brand_id.length > 3 &&
-              state.model_brand_id && state.model_brand_id.length >= 3 &&
-              state.brand_type_id && state.brand_type_id.length >= 3
-          ) {
-              state.brand_id = state.brand_id.slice(0,3);
-              showError(t("search.filterLimitError"));
-              return;
-        }
+      if (state.brand_type_id.length > 3) {
+        state.model_brand_id = state.model_brand_id.slice(0, 3);
+        state.brand_type_id = state.brand_type_id.slice(0, 3);
+        showError(t("search.filterLimitError"));
+        return;
+      }
+      if (
+        state.brand_id.length > 3 &&
+        state.model_brand_id &&
+        state.model_brand_id.length >= 3 &&
+        state.brand_type_id &&
+        state.brand_type_id.length >= 3
+      ) {
+        state.brand_id = state.brand_id.slice(0, 3);
+        showError(t("search.filterLimitError"));
+        return;
+      }
     }
 
     var query = `model_year:[${state.model_year_start} TO ${state.model_year_end}]`;
@@ -181,6 +190,7 @@ export default function Search() {
       brand_id: [...brands],
     });
     setBrandOptions(values);
+    setSelectedBrand(values);
   };
 
   useEffect(() => {
@@ -200,6 +210,7 @@ export default function Search() {
   }, [state.brand_id, searchInputs.modelOptions]);
 
   useEffect(() => {
+    console.log(state);
     const selectedBrands = [];
     let prevId;
     let newId = "";
@@ -214,8 +225,10 @@ export default function Search() {
           }
         });
       });
+      console.log("selected brands", selectedBrands);
       setBrandOptions(selectedBrands);
     }
+    let selectedModel = [];
   }, [state.model_brand_id]);
 
   const setBrandType = (values) => {
@@ -227,6 +240,7 @@ export default function Search() {
       brand_type_id: [...brands_types],
       model_brand_id: [...brands_type_id],
     });
+    setSelectedModels(values);
   };
 
   const setYearRange = (values) => {
@@ -238,7 +252,7 @@ export default function Search() {
   };
 
   function navigateToResult() {
-    console.log()
+    console.log();
     dispatch(setSearchForm(state));
     localStorage.setItem("savedSearch", JSON.stringify(state));
     console.log(state);
@@ -308,6 +322,7 @@ export default function Search() {
                             formatOptionLabel={formatOptionLabel}
                           />
                         </div> */}
+                        {/* FOR BRANDS ////////////////////////////////////////////////////////////////*/}
                         <div className="col-md-6 col-6  mb-3 d-none d-sm-block">
                           <label className="text-end d-block">
                             {t("search.brand")}
@@ -321,12 +336,26 @@ export default function Search() {
                             className="basic-multi-select"
                             placeholder=""
                             styles={colourStyles}
-                            onChange={(value) => setBrand(value)}
+                            onChange={(value) => {
+                              if (value.length <= 3) {
+                                setBrand(value);
+                              } else {
+                                toast.error(t("search.brandLimitError"), {
+                                  position: "top-right",
+                                  autoClose: 5000,
+                                  hideProgressBar: false,
+                                  pauseOnHover: true,
+                                  draggable: true,
+                                  progress: undefined,
+                                });
+                              }
+                            }}
                             formatOptionLabel={formatOptionLabel}
 
                             // classNamePrefix="select"
                           />
                         </div>
+                        {/* FOR MODELS /////////////////////////////////////////////////////////////*/}
                         <div className="col-md-6 col-6  mb-3">
                           <label className="text-end d-block">
                             {t("search.model")}
@@ -337,6 +366,7 @@ export default function Search() {
                                 ? i
                                 : false
                             )}
+                            value={selectedModels}
                             isMulti
                             ref={textareaRef}
                             // onBlur={() =>
@@ -353,7 +383,21 @@ export default function Search() {
                             className="basic-multi-select"
                             placeholder=""
                             styles={colourStyles}
-                            onChange={(value) => setBrandType(value)}
+                            onChange={(value) => {
+                              if (value.length <= 3) {
+                                setBrandType(value);
+                              } else {
+                                toast.error(t("search.modelLimitError"), {
+                                  position: "top-right",
+                                  autoClose: 5000,
+                                  hideProgressBar: false,
+                                  pauseOnHover: true,
+                                  draggable: true,
+                                  progress: undefined,
+                                });
+                              }
+                            }}
+
                             // classNamePrefix="select"
                           />
                         </div>
