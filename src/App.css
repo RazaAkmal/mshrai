@@ -8,7 +8,7 @@
 *:focus {
   outline: none !important;
   box-sizing: border-box;
-  direction: rtl;
+  /* direction: rtl; */
 }
 :root {
   --main_color: #000000;
@@ -39,6 +39,7 @@ body {
   background-color: #fff;
   font-weight: 300;
   word-spacing: 2px;
+  scrollbar-width: none !important;
 }
 
 /* Lists  
@@ -532,6 +533,77 @@ header form .link i {
 .filter_btn i {
   margin-left: 5px;
 }
+body .login-drop {
+  position: absolute;
+  left: 125px;
+  top: 14px;
+  z-index: 9;
+}
+.login-drop .btn {
+  background-color: #fff;
+  border: none;
+  padding: 0;
+  color: #3e0292;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.login-drop.show>.btn-success.dropdown-toggle,
+.login-drop .btn-success:focus,
+.login-drop .btn-success:hover{
+  color: #3e0292;
+  background-color: #fff;
+  border: none;
+  box-shadow: none;
+}
+
+.login-drop .dropdown-toggle::after {
+  display: none;
+}
+.login-drop .dropdown-menu svg {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+}
+.login-drop .dropdown-item {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #ececec;
+  padding: 0.40rem 1rem;
+}
+.login-drop hr + .dropdown-item{
+border: none;
+}
+.login-drop .dropdown-item:focus, .login-drop .dropdown-item:hover {
+  color: #3e0292;
+  background-color: transparent;
+}
+.login-drop .dropdown-item:last-child:hover {
+  background-color: #3e0292;
+  color: #fff;
+}
+.login-drop .dropdown-item:last-child {
+  margin-top: -.5rem;
+}
+.login-drop .dropdown-menu {
+  padding-bottom: 0;
+}
+.login-drop .dropdown-item:first-child {
+  border-top: 0;
+}
+.login-drop .user-name svg {
+  width: 30px;
+  height: 30px;
+  background-color: #767676;
+  padding: 7px;
+  border-radius: 50%;
+}
+.login-drop .dropdown-item.user-name:hover svg {
+  background-color: #3e0292;
+}
+
 
 @media all and (max-width: 991.98px) {
   .subscribe_btn {
@@ -724,13 +796,12 @@ header form .link i {
   background-color: var(--main_color);
 }
 .subscribe{
-    max-width: 360px;
-    margin: 0 auto 25px 0;
+    text-align: left;
 }
 .subscribe label{
     margin: 10px 0 0;
 }
-.subscribe input{
+/* .subscribe input{
   text-align: right;
   width: 70%;
   color: var(--main_color);
@@ -746,22 +817,18 @@ header form .link i {
   font-weight: 700;
   border-radius: 0 5px 5px 0 !important;
   -webkit-border-radius: 5px;
-}
+} */
 .subscribe button{
-    width: 30%;
-    bottom: 0;
-    left: 0;
-    height: 50px;
+    height: 40px;
     border: 0;
     background-color: var(--primary_color);
     padding: 0 15px;
     color: #fff;
-    border-radius: 5px 0 0 5px !important;
-
+    border-radius: 5px !important;
 }
 .subscribe button:focus,
 .subscribe button:hover{
-  background-color: var(--main_color);
+  background-color: var(--main_color) !important;
 }
 .car_item {
   display: block;
@@ -807,7 +874,7 @@ header form .link i {
   color: var(--main_color);
   font-weight: 600;
   font-size: 15px;
-  margin: 10px 15px 0px 15px;
+  margin: 10px 15px 0px 10px;
 }
 .car_item .car_cont p {
   color: var(--third_color);
@@ -853,6 +920,11 @@ header form .link i {
 }
 .car_item .car_cont .bottom img {
   width: 32px;
+}
+.report_btn {
+  float: left;
+  margin-left: 10px;
+  z-index: 9999;
 }
 .copyrights {
   padding: 25px;
@@ -926,9 +998,6 @@ header form .link i {
   }
 }
 @media all and (max-width: 991.98px) {
-  .subscribe {
-    display: none;
-  }
   .toggle-container {
     position: fixed;
     margin: auto;
@@ -1090,6 +1159,24 @@ header form .link i {
   margin: 0 auto;
 }
 
+
+.subscribe-modal .modal-title{
+  margin-left: auto;
+}
+.subscribe-modal .tabs-menu .nav-tabs {
+  justify-content: end;
+}
+.subscribe-modal .Tab-inner {
+  display: flex;
+}
+.subscribe-modal label {
+  text-align: right;
+  width: 100%;
+}
+.subscribe-modal input {
+  text-align: right;
+}
+
 .disable-button {
   background-color: var(--gray_color) !important;
 }
@@ -1202,3 +1289,228 @@ header form .link i {
   left: 15px;
   z-index: 1;
 }
+.login-link {
+  position: absolute;
+  left: 127px;
+  top: 19px;
+  color: #fff;
+  z-index: 1;
+  cursor: pointer;
+}
+.custom-modal{}
+.custom-modal .form-label {
+  color: #6c757d;
+  font-size: 14px;
+  margin-bottom: 2px;
+  text-align: left;
+}
+.custom-modal .form-control {
+  margin: 0;
+  text-align: left;
+}
+.custom-modal .modal-title {
+  text-align: center;
+  color: #6c757d;
+  margin-bottom: 20px;
+  font-weight: 400;
+  font-size: 1.3rem;
+}
+.custom-modal .modal-header {
+  padding: 0;
+  border: none;
+  position: absolute;
+  left: 10px;
+  top: 15px;
+  z-index: 9;
+}
+.custom-modal .modal-header .btn-close,
+.custom-modal .modal-header .btn-close:hover {
+  padding: 0 !important;
+}
+.custom-modal .modal-body {
+  padding: 40px;
+}
+.custom-modal .btn {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: 700;
+  padding: 0.5rem 1.3rem;
+}
+.custom-modal .modal-dialog {
+  max-width: 380px;
+}
+.custom-modal .form-link {
+  cursor: pointer;
+}
+.custom-modal .btn-close:focus{
+  box-shadow: none;
+}
+.custom-modal .modal-logo img {
+  max-width: 150px;
+  margin-bottom: 20px;
+}
+.custom-modal .btn-solid {
+  background-color: transparent !important;
+  border: 1px solid var(--primary_color);
+  color: var(--primary_color) !important;
+  font-weight: 400;
+  font-family: "Almarai", sans-serif;
+  font-size: 18px;
+}
+.custom-modal .modal-content {
+  background-color: #f7f9fa;
+}
+.custom-modal .form-select {
+  font-size: 1rem;
+  font-weight: 400;
+  min-height: 50px;
+}
+.modal-register .modal-dialog {
+  max-width: 550px;
+}
+
+.react-datepicker-wrapper input {
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  appearance: none;
+  border-radius: 0.375rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  min-height: 50px;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; 
+}
+
+.tabs-menu .nav-tabs {
+  border-bottom: none !important;
+}
+.tabs-menu .nav-link {
+  color: #495057 !important;
+  border: none !important;
+}
+.tabs-menu .nav-link.active {
+  color: #3e0292 !important;
+  border-bottom: 1px solid #3e0292 !important;
+}
+.btn-primary {
+  background-color: var(--primary_color) !important;
+  color: #fff !important;
+}
+.App-en .main_screen label {
+  text-align: left !important;
+}
+.App-en .section-gray .filter-title {
+  text-align: left !important;
+}
+.App-en .section-gray input {
+  text-align: left !important;
+}
+.App-en .section-gray 
+input[type=checkbox]+label:before, input[type=radio]+label:before {
+  left: unset !important;
+  right: 0 !important;
+}
+.App-en .section-gray input[type=checkbox]+label, input[type=radio]+label {
+  padding-right: 25px !important;
+  padding-left: 0 !important;
+  text-align: left !important;
+}
+.App-en header img {
+  margin-left: auto !important;
+}
+.App-en header .logo-row {
+  flex-direction: row-reverse !important;
+}
+.App-en .section-gray .subscribe {
+  text-align: end;
+}
+.App-en .section-gray .search_hint {
+  text-align: start;
+}
+.App-en .section-gray .search_tags li span {
+  float: revert;
+}
+.App-en .section-gray .search_hint .dropdown .dropdown-item {
+  text-align: start;
+}
+.App-en .section-gray .search_hint .dropdown .dropdown-item {
+  text-align: start;
+}
+.App-en .car_item .car_cont .bottom .price {
+  text-align: start;
+}
+.App-en .car_item .car_details {
+  text-align: start;
+}
+.App-en .car_item .report_btn {
+  float: right;
+  margin-right: 10px;
+}
+.App-en .car_item .tags {
+  padding-left: 0 !important;
+}
+.subscribe-modal-en .modal-title {
+  margin-left: unset !important;
+}
+.subscribe-modal-en .tabs-menu .nav-tabs {
+  flex-direction: row-reverse;
+}
+.subscribe-modal-en .Tab-inner {
+  display: flex;
+  flex-direction: row-reverse;
+}
+.subscribe-modal-en .tabs-menu .nav-tabs {
+  justify-content: start;
+}
+.subscribe-modal-en  label {
+  text-align: left !important;
+}
+.subscribe-modal-en  input {
+  text-align: left !important;
+}
+
+.float-en {
+	position:absolute !important;
+	bottom:40px;
+	right:40px;
+	color:#FFF;
+	text-align:center;
+	box-shadow: 2px 2px 3px #999;
+}
+.float-ar {
+	position:absolute !important;
+	bottom:40px;
+	left:40px;
+	color:#FFF;
+	text-align:center;
+	box-shadow: 2px 2px 3px #999;
+}
+
+.paper-en {
+  width: 500px;
+  margin-right: 50px;
+  margin-bottom: 10px;
+}
+.paper-ar {
+  width: 500px;
+  margin-left: 50px;
+  margin-bottom: 10px;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+

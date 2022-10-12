@@ -43,13 +43,14 @@ export async function fetchSearchInputs() {
         options.sources.push({
           value: source.id,
           label: source.title,
+          label_en: source.title_en,
           image: source.image,
         });
       });
     }
     if (result.cities && result.cities.length > 0) {
       result.cities.forEach((city) => {
-        options.cityOptions.push({ value: city.id, label: city.city });
+        options.cityOptions.push({ value: city.id, label: city.city, label_en: city.city_en });
       });
     }
     if (result.shapes && result.shapes.length > 0) {
@@ -83,13 +84,38 @@ export async function saveResults(payload) {
     const { data } = await axios.post(`${apiUrl}/api/subscribe`, payload);
     return data;
   } catch (err) {
-    console.log(err);
+    return err
+  }
+}
+export async function saveFeedback(payload) {
+  try {
+    const { data } = await axios.post(`${apiUrl}/api/feedback`, payload);
+    return data;
+  } catch (err) {
+    return err
+  }
+}
+export async function searchResult(payload) {
+  try {
+    const { data } = await axios.post(`${apiUrl}/api/search`, payload);
+    return data;
+  } catch (err) {
+    return err
   }
 }
 
 export async function userActivity(payload) {
   try {
     const { data } = await axios.post(`${apiUrl}/api/activity`, payload);
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function reportReasons() {
+  try {
+    const { data } = await axios.get(`${apiUrl}/api/report_reasons`);
     return data;
   } catch (err) {
     console.log(err);

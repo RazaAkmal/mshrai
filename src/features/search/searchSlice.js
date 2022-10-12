@@ -17,9 +17,11 @@ const initialState = {
   searchForm: {
     numFound: 0,
     price: [],
+    price_obj: [],
     model_year_start: 1990,
     model_year_end: Number(new Date().getFullYear()),
     kilometer:[],
+    kilometer_obj:[],
     brand_id: [],
     brand_type_id: [],
     source_id: [],
@@ -28,7 +30,8 @@ const initialState = {
     keyword: "",
     sort:"sort=date+desc",
     index: 0,
-  }
+  },
+  allReportReasons: [],
 };
 
 export const searchSlice = createSlice({
@@ -52,10 +55,13 @@ export const searchSlice = createSlice({
     },
     setResultsNumebr: (state, action) => {
       state.numFound = action.payload
-    }
+    },
+    setReportReasons: (state, action) => {
+      state.allReportReasons = action.payload;
+    },
   },
 });
 
-export const { getSearchInputs, setCars , setSearchForm,setSearchFormToInital, setQuery, setResultsNumebr } = searchSlice.actions;
+export const { getSearchInputs, setCars , setSearchForm,setSearchFormToInital, setQuery, setResultsNumebr, setReportReasons } = searchSlice.actions;
 
 export default searchSlice.reducer;

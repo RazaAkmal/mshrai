@@ -7,8 +7,9 @@ import Cars from "../components/cars";
 import Loader from "../components/loader";
 import {
   fetchCars,
-  saveResults,
+  searchResult,
   userActivity,
+  reportReasons,
 } from "../features/search/searchApi";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -17,8 +18,9 @@ import {
   setResultsNumebr,
   setSearchForm,
   setSearchFormToInital,
+  setReportReasons
 } from "../features/search/searchSlice";
-import SaveResults from "../components/saveResultModal";
+import SubscribeModal from "../components/subscribeModal";
 import { Link } from "react-router-dom";
 import { IoIosClose } from "react-icons/io";
 import { ToastContainer, toast } from "react-toastify";
@@ -31,12 +33,90 @@ export default function Resault(props) {
   useEffect(() => {
     $(".alert").hide();
     const params = new URLSearchParams(window.location.search);
-    if (params.has("k")) {
-      let query = params.get("k");
-      let newSearchForm = JSON.parse(query);
-      console.log(JSON.parse(newSearchForm));
-      dispatch(setSearchForm(JSON.parse(newSearchForm)));
+
+    const brand_id = []
+    const brand_type_id = []
+    const source_id = []
+    const city_id = []
+    const kilometer = []
+    let model_year_start = ''
+    let model_year_end = ''
+    for (const [key, value] of params.entries()) {
+      if(key.includes('brand_id')) {
+        brand_id.push(Number(value))
+      }
+      if(key.includes('brand_type_id')) {
+        brand_type_id.push(Number(value))
+      }
+      if(key.includes('source_id')) {
+        source_id.push(Number(value))
+      }
+      if(key.includes('city_id')) {
+        city_id.push(Number(value))
+      }
+      if(key.includes('model_year[0][max]')) {
+        model_year_end = value
+      }
+      if(key.includes('model_year[0][min]')) {
+        model_year_start = value
+      }
+      if(key.includes('kilometer')) {
+        kilometer.push(Number(value))
+      }
     }
+    // let model_year = {
+    //   model_year_start: model_year_start,
+    //   model_year_end: model_year_end
+    // }
+
+    let query = {
+      brand_id: brand_id,
+      model_year: [{ min: model_year_start, max: model_year_end}],
+  }
+
+
+    if (brand_type_id.length > 0) {
+      query["brand_type_id"] = brand_type_id
+    }
+    if (source_id.length > 0) {
+      query["source_id"] = source_id
+    }
+    if (city_id.length > 0) {
+      query["city_id"] = city_id
+    }
+    let data = {
+      query: query
+    }
+    if (brand_id.length > 0) {
+      dispatch(setSearchForm({
+        ...searchForm,
+        model_year_start: model_year_start,
+        model_year_end: model_year_end,
+        brand_id: brand_id,
+        brand_type_id: brand_type_id,
+        source_id: source_id,
+        city_id: city_id,
+        index: 0
+      }));
+    }
+
+
+    // searchResult(data).then((res) => {
+    //   if (res.message === "Request failed with status code 422") {
+    //     showError("يجب أن يكون البريد الإلكتروني عنوان بريد إلكتروني صالحًا");
+    //   }
+    //   else {
+    //       setLoading(false);
+    //       setIinitialCars(res.data.response.docs);
+    //       let carsArray =
+    //         searchForm.index > 0
+    //           ? [...cars, ...res.data.response.docs]
+    //           : res.data.response.docs;
+    //       dispatch(setCars(carsArray));
+    //       dispatch(setResultsNumebr(res.data.response.numFound));
+    //   }
+    // });
+
   }, []);
   const [state, setState] = useState({
     searchKeyWord: "",
@@ -45,44 +125,35 @@ export default function Resault(props) {
     cars: [],
   });
   const [loading, setLoading] = useState(false);
-  const [isBusy, seIisBusy] = useState(false);
+  const [nextPage, setNextPage] = useState(false);
   const [initialCars, setIinitialCars] = useState([]);
   const cars = useSelector((state) => state.search.cars);
   const searchForm = useSelector((state) => state.search.searchForm);
   const searchInputs = useSelector((state) => state.search.searchInputs);
   const resultsNumber = useSelector((state) => state.search.numFound);
   const query = useSelector((state) => state.search.query);
+  const isEnglish = localStorage.getItem("lang") === "en";
+  const allReportReasons = useSelector((state) => state.search.allReportReasons);
+
+  useEffect(() => {
+    setState((prevState) => ({
+      ...prevState,
+      cars: cars
+    }));
+  }, [cars])
+
+  useEffect(()=>{
+    console.log(searchInputs)
+  },[searchInputs])
+
   const { t } = useTranslation();
   const limit = 8;
 
   const dispatch = useDispatch();
 
-  const showSubscribeDiv = () => {
-    if ($("#display-search").hasClass("visible")) {
-      $("#display-search").removeClass("visible");
-    } else {
-      $("#display-search").addClass("visible");
-    }
-  };
 
-  const _handleSubscripeToNewsletter = () => {
-    if (state.email === "") return;
-    let data = { email: state.email, type: "newsletter" };
-
-    saveResults(data).then((res) => {
-      if (res && res.code == 0) {
-        $(".alert-success").show();
-        setState({ ...state, email: "" });
-      } else {
-        $(".alert-danger").show();
-      }
-      setTimeout(() => {
-        $(".alert").hide();
-      }, 3000);
-    });
-  };
-
-  const _handleStartSearch = (type, value) => {
+  const _handleStartSearch = (type, value, value_obj) => {
+    setNextPage(false)
     switch (type) {
       case "clearall":
         dispatch(setSearchFormToInital());
@@ -97,15 +168,23 @@ export default function Resault(props) {
         );
         break;
       case "price":
-        dispatch(setSearchForm({ ...searchForm, price: value, index: 0 }));
+        dispatch(setSearchForm({ ...searchForm, price: value, price_obj: value_obj, index: 0 }));
         break;
       case "brand_type_id":
-        dispatch(
-          setSearchForm({ ...searchForm, brand_type_id: value, index: 0 })
-        );
+        if (value.length > 3) {
+          showError(t("results.filterLimitError"))
+        } else {
+          dispatch(
+            setSearchForm({ ...searchForm, brand_type_id: value, index: 0 })
+          );
+        }
         break;
       case "brand_id":
-        dispatch(setSearchForm({ ...searchForm, brand_id: value, index: 0 }));
+        if (value.length > 3) {
+          showError(t("results.filterLimitError"))
+        } else {
+          dispatch(setSearchForm({ ...searchForm, brand_id: value, index: 0 }));
+        }
         break;
       case "source_id":
         dispatch(setSearchForm({ ...searchForm, source_id: value, index: 0 }));
@@ -126,12 +205,13 @@ export default function Resault(props) {
         dispatch(setSearchForm({ ...searchForm, shape_id: value, index: 0 }));
         break;
       case "kilometer":
-        dispatch(setSearchForm({ ...searchForm, kilometer: value, index: 0 }));
+        dispatch(setSearchForm({ ...searchForm, kilometer: value, kilometer_obj: value_obj, index: 0 }));
         break;
       case "sort":
         dispatch(setSearchForm({ ...searchForm, sort: value, index: 0 }));
         break;
       case "paginate":
+        setNextPage(true)
         dispatch(setSearchForm({ ...searchForm, index: value }));
         break;
       default:
@@ -151,38 +231,38 @@ export default function Resault(props) {
     });
   };
 
-  const _handleSaveResults = () => {
-    if (state.email === "") {
-      showError(t("results.pleaseEnterEmail"));
-      return;
-    } else if (searchForm.brand_id.length === 0) {
-      showError("الرجاء تحديد علامة تجارية واحدة على الأقل");
-      return;
-    }
-    seIisBusy(true);
+  // const _handleSaveResults = () => {
+  //   if (state.email === "") {
+  //     showError(t("results.pleaseEnterEmail"));
+  //     return;
+  //   } else if (searchForm.brand_id.length === 0) {
+  //     showError("الرجاء تحديد علامة تجارية واحدة على الأقل");
+  //     return;
+  //   }
+  //   seIisBusy(true);
 
-    const queryParams = parseParams(query);
+  //   const queryParams = parseParams(query);
 
-    const data = {
-      email: state.email,
-      brand_id: searchForm.brand_id,
-      keys: queryParams,
-    };
+  //   const data = {
+  //     email: state.email,
+  //     brand_id: searchForm.brand_id,
+  //     keys: queryParams,
+  //   };
 
-    saveResults(data).then((res) => {
-      seIisBusy(false);
+  //   saveResults(data).then((res) => {
+  //     seIisBusy(false);
 
-      toast.success(res.message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    });
-  };
+  //     toast.success(res.message, {
+  //       position: "top-right",
+  //       autoClose: 5000,
+  //       hideProgressBar: false,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //     });
+  //   });
+  // };
 
   const carsContain = (source) => {
     if (initialCars.length > 0) {
@@ -194,8 +274,6 @@ export default function Resault(props) {
   useEffect(() => {
     setLoading(true);
     var query = `model_year:[${searchForm.model_year_start} TO ${searchForm.model_year_end}]`;
-
-    
 
     if (searchForm.keyword && searchForm.keyword !== "") {
       query += ` AND (brand:"${searchForm.keyword}" OR brand_type:"${searchForm.keyword}")`;
@@ -272,11 +350,11 @@ export default function Resault(props) {
     if (searchForm.sort && searchForm.sort !== "") {
       query += `&${searchForm.sort}`;
     }
-    if (carsContain("Syarah") || carsContain("haraj")) {
-      query += "&sort=query($haraj_sort, 0) asc, query($sayarah_sort, 0) asc";
-      query += "&haraj_sort={!field f=source v=haraj}";
-      query += "&sayarah_sort={!field f=source v=Syarah}";
-    }
+    // if (carsContain("Syarah") || carsContain("haraj")) {
+    //   query += "&sort=query($haraj_sort, 0) asc, query($sayarah_sort, 0) asc";
+    //   query += "&haraj_sort={!field f=source v=haraj}";
+    //   query += "&sayarah_sort={!field f=source v=Syarah}";
+    // }
     query += `&rows=${limit}&start=${searchForm.index}&fl=date,city,kilometer,price,source,gear_id,gear,_version_,sid,city_id,id,source_id,brand,brand_type,brand_type_id,shape,model_year,published,image2,url,brand_id,source_image,shape_id`;
     dispatch(setQuery(query));
 
@@ -294,16 +372,25 @@ export default function Resault(props) {
         setLoading(false);
         setIinitialCars(res.response.docs);
         let carsArray =
-          searchForm.index > 0
-            ? [...cars, ...res.response.docs]
+          nextPage
+            ? [...state.cars, ...res.response.docs]
             : res.response.docs;
         dispatch(setCars(carsArray));
         dispatch(setResultsNumebr(res.response.numFound));
       }
     });
+
+    reportReasons().then((res) => {
+      dispatch(setReportReasons(res.data));
+    }).catch((err) => {
+        console.log(err);
+    });
   }, [dispatch, searchForm]);
 
-  const toggleOpen = () => setState({ isOpen: !state.isOpen });
+  const toggleOpen = () => setState((prevState) => ({
+    ...prevState,
+    isOpen: !state.isOpen
+  }));
 
   const fillterBtnClickHandle = () => {
     $(".toggle-container").addClass("move");
@@ -317,7 +404,7 @@ export default function Resault(props) {
     );
     return (
       <li key={"searchMarks" + index}>
-        {model.label} {filteredBrand[0] ? " - " + filteredBrand[0].label : ""}
+        {isEnglish ? model.label_en : model.label} {filteredBrand[0] ? `- ${isEnglish ? filteredBrand[0].label_en : filteredBrand[0].label}` : ""}
         <span
           onClick={() => {
             let brandModel = [...searchForm.brand_type_id];
@@ -348,10 +435,9 @@ export default function Resault(props) {
   const menuClass = `dropdown-menu${state.isOpen ? " show" : ""}`;
   return (
     <>
-      <SaveResults />
       <header>
         <div className="container">
-          <div className="row">
+          <div className="row logo-row">
             <div className="col-6">
               <Link to="/">
                 <img src="./images/logo.png" alt="logo" />
@@ -402,9 +488,10 @@ export default function Resault(props) {
                     {searchForm.brand_id && searchForm.brand_id.length > 0
                       ? searchInputs.marksOptions.map((mark, index) => {
                           return searchForm.brand_id.includes(mark.value) &&
-                            modalOfbrandNotSelected(mark.value, index) ? (
+                          modalOfbrandNotSelected(mark.value, index) ? (
+                              <>
                             <li key={"searchMarks" + index}>
-                              {mark.label}
+                              {isEnglish ? mark.label_en : mark.label}
                               <span
                                 onClick={() => {
                                   let marks = [...searchForm.brand_id];
@@ -413,10 +500,11 @@ export default function Resault(props) {
                                   }
                                   _handleStartSearch("brand_id", marks);
                                 }}
-                              >
+                                >
                                 <IoIosClose />
                               </span>
                             </li>
+                                </>
                           ) : (
                             false
                           );
@@ -436,7 +524,7 @@ export default function Resault(props) {
                       ? searchInputs.shapes.map((shape, index) => {
                           return searchForm.shape_id.includes(shape.id) ? (
                             <li key={"searchShapes" + index}>
-                              {shape.title}
+                              {isEnglish ? shape.title_en : shape.title}
                               <span
                                 onClick={() => {
                                   let shapes = [...searchForm.shape_id];
@@ -463,7 +551,7 @@ export default function Resault(props) {
                             <li key={"searchcities" + index}>
                               {source.label === "Snap"
                                 ? "Social Media"
-                                : source.label}
+                                : isEnglish ? source.label_en : source.label}
                               <span
                                 onClick={() => {
                                   let sources = [...searchForm.source_id];
@@ -533,7 +621,7 @@ export default function Resault(props) {
                       ? searchInputs.cityOptions.map((city, index) => {
                           return searchForm.city_id.includes(city.value) ? (
                             <li key={"searchcities" + index}>
-                              {city.label}
+                               {isEnglish ? city.label_en : city.label}
                               <span
                                 onClick={() => {
                                   let cities = [...searchForm.city_id];
@@ -576,7 +664,7 @@ export default function Resault(props) {
                       ""
                     )}
                     {(searchForm.city_id.length > 0 ||
-                      searchForm.shape_id.length > 0 ||
+                      searchForm.source_id.length > 0 ||
                       searchForm.brand_type_id.length > 0 ||
                       searchForm.model_year_end < new Date().getFullYear() ||
                       searchForm.model_year_start > 1990 ||
@@ -586,7 +674,7 @@ export default function Resault(props) {
                         key={"searchcitiesclear"}
                         onClick={() => _handleStartSearch("clearall")}
                       >
-                        امسح الكل
+                        {isEnglish ? "Clear All" : "امسح الكل"}
                       </li>
                     )}
                   </ul>
@@ -618,7 +706,8 @@ export default function Resault(props) {
                   ></button>
                 </div>
                 <div className="subscribe">
-                  <label> {t("results.enterYourEmail")}</label>
+                  <SubscribeModal />
+                  {/* <label> {t("results.enterYourEmail")}</label>
                   <input
                     type="email"
                     placeholder={t("results.email")}
@@ -643,7 +732,7 @@ export default function Resault(props) {
                         {t("results.saveSearchResult")}
                       </span>
                     )}
-                  </button>
+                  </button> */}
                   {/* <button className="fa fa-search" type="button" onClick={(e) => {e.preventDefault(); _handleSubscripeToNewsletter();}}></button> */}
                 </div>
               </div>
@@ -652,8 +741,8 @@ export default function Resault(props) {
               <div className="col-lg-2">
                 <Filters
                   closeFilterMenuHandle={closeFilterMenuHandle}
-                  handleStartSearch={(type, value) =>
-                    _handleStartSearch(type, value)
+                  handleStartSearch={(type, value, value_obj) =>
+                    _handleStartSearch(type, value, value_obj)
                   }
                   searchState={searchForm}
                 />
@@ -750,39 +839,7 @@ export default function Resault(props) {
                     </div> */}
                     </div>
                   </div>
-                  <button
-                    className="subscribe_btn link"
-                    onClick={showSubscribeDiv}
-                  >
-                    حفظ نتائج البحث
-                  </button>
-                  <div id="display-search">
-                    <div
-                      style={{ display: "block" }}
-                      className="subscribe_mobile"
-                    >
-                      <input
-                        type="email"
-                        placeholder=" البريد الألكترونى "
-                        value={state.email}
-                        onChange={(e) =>
-                          setState({ ...state, email: e.target.value })
-                        }
-                      />
-                      <button
-                        type="button"
-                        className="btn btn-success"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          _handleSaveResults();
-                        }}
-                      >
-                        حفظ نتائج البحث
-                      </button>
-                    </div>
-                  </div>
                 </div>
-
                 <InfiniteScroll
                   dataLength={searchForm.index + 12} //This is important field to render the next data
                   next={() =>
@@ -798,7 +855,7 @@ export default function Resault(props) {
                     </p>
                   }
                 >
-                  <Cars cars={cars} />
+                  <Cars cars={state.cars} />
                 </InfiniteScroll>
               </div>
               <div className="w-100 text-left">

@@ -8,6 +8,8 @@ import "rc-slider/assets/index.css";
 import { Tabs, Tab } from "react-bootstrap";
 import { fetchSearchInputs, fetchCars } from "../features/search/searchApi";
 import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+
 import {
   getSearchInputs,
   setSearchForm,
@@ -20,7 +22,16 @@ const Range = createSliderWithTooltip(Slider.Range);
 
 export default function Search() {
   const isEnglish = localStorage.getItem("lang") === "en";
-
+  const showError = (msg) => {
+    toast.error(msg, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
   let history = useHistory();
   const searchInputs = useSelector((state) => state.search.searchInputs);
 
@@ -28,6 +39,8 @@ export default function Search() {
   const resultsNumber = useSelector((state) => state.search.numFound);
 
   const [modelOptions, setModelOptions] = useState([]);
+  const [selectedModels, setSelectedModels] = useState([]);
+  const [selectedBrand, setSelectedBrand] = useState([]);
   const [brandOptions, setBrandOptions] = useState([]);
 
   const dispatch = useDispatch();
@@ -61,6 +74,32 @@ export default function Search() {
   }, [searchInputs]);
 
   useEffect(() => {
+    const modelOptionsStored = searchInputs.modelOptions.map((i) =>
+      state.brand_type_id.indexOf(i.value) !== -1 ? i : false
+    );
+    setSelectedModels(modelOptionsStored);
+  }, [searchInputs]);
+  useEffect(() => {
+    if (state.brand_id.length) {
+      if (state.brand_type_id.length > 3) {
+        state.model_brand_id = state.model_brand_id.slice(0, 3);
+        state.brand_type_id = state.brand_type_id.slice(0, 3);
+        showError(t("search.filterLimitError"));
+        return;
+      }
+      if (
+        state.brand_id.length > 3 &&
+        state.model_brand_id &&
+        state.model_brand_id.length >= 3 &&
+        state.brand_type_id &&
+        state.brand_type_id.length >= 3
+      ) {
+        state.brand_id = state.brand_id.slice(0, 3);
+        showError(t("search.filterLimitError"));
+        return;
+      }
+    }
+
     var query = `model_year:[${state.model_year_start} TO ${state.model_year_end}]`;
     if (state.keyword && state.keyword !== "") {
       query += ` AND (brand:"${state.keyword}" OR brand_type:"${state.keyword}")`;
@@ -114,6 +153,7 @@ export default function Search() {
     if (state.sort && state.sort !== "") {
       query += `&${state.sort}`;
     }
+
     query += `&rows=12&start=${searchForm.index}&fl=date,city,source,gear_id,gear,_version_,sid,city_id,id,source_id,brand,brand_type,brand_type_id,shape,model_year,published,image2,url,brand_id,source_image,shape_id`;
     fetchCars(query).then((res) => {
       if (res && res.response && res.response.docs) {
@@ -150,6 +190,7 @@ export default function Search() {
       brand_id: [...brands],
     });
     setBrandOptions(values);
+    setSelectedBrand(values);
   };
 
   useEffect(() => {
@@ -169,6 +210,7 @@ export default function Search() {
   }, [state.brand_id, searchInputs.modelOptions]);
 
   useEffect(() => {
+    console.log(state);
     const selectedBrands = [];
     let prevId;
     let newId = "";
@@ -183,18 +225,22 @@ export default function Search() {
           }
         });
       });
+      console.log("selected brands", selectedBrands);
       setBrandOptions(selectedBrands);
     }
+    let selectedModel = [];
   }, [state.model_brand_id]);
 
   const setBrandType = (values) => {
     let brands_types = values.map((value) => value.value);
     let brands_type_id = values.map((value) => value.brandId);
+
     setState({
       ...state,
       brand_type_id: [...brands_types],
       model_brand_id: [...brands_type_id],
     });
+    setSelectedModels(values);
   };
 
   const setYearRange = (values) => {
@@ -206,6 +252,7 @@ export default function Search() {
   };
 
   function navigateToResult() {
+    console.log();
     dispatch(setSearchForm(state));
     localStorage.setItem("savedSearch", JSON.stringify(state));
     console.log(state);
@@ -258,7 +305,7 @@ export default function Search() {
                         onChange={(e)=> setState({...state, keyword:e.target.value})}
                       />
                     </div> */}
-                        <div className="col-md-12 mb-3 d-block d-sm-none">
+                        {/* <div className="col-md-12 mb-3 d-block d-sm-none">
                           <label className="text-end d-block">
                             {t("search.brand")}
                           </label>
@@ -274,7 +321,8 @@ export default function Search() {
                             onChange={(value) => setBrand(value)}
                             formatOptionLabel={formatOptionLabel}
                           />
-                        </div>
+                        </div> */}
+                        {/* FOR BRANDS ////////////////////////////////////////////////////////////////*/}
                         <div className="col-md-6 col-6  mb-3 d-none d-sm-block">
                           <label className="text-end d-block">
                             {t("search.brand")}
@@ -288,12 +336,26 @@ export default function Search() {
                             className="basic-multi-select"
                             placeholder=""
                             styles={colourStyles}
-                            onChange={(value) => setBrand(value)}
+                            onChange={(value) => {
+                              if (value.length <= 3) {
+                                setBrand(value);
+                              } else {
+                                toast.error(t("search.brandLimitError"), {
+                                  position: "top-right",
+                                  autoClose: 5000,
+                                  hideProgressBar: false,
+                                  pauseOnHover: true,
+                                  draggable: true,
+                                  progress: undefined,
+                                });
+                              }
+                            }}
                             formatOptionLabel={formatOptionLabel}
 
                             // classNamePrefix="select"
                           />
                         </div>
+                        {/* FOR MODELS /////////////////////////////////////////////////////////////*/}
                         <div className="col-md-6 col-6  mb-3">
                           <label className="text-end d-block">
                             {t("search.model")}
@@ -304,6 +366,7 @@ export default function Search() {
                                 ? i
                                 : false
                             )}
+                            value={selectedModels}
                             isMulti
                             ref={textareaRef}
                             // onBlur={() =>
@@ -312,7 +375,7 @@ export default function Search() {
                             //     cursorPosition
                             //   )
                             // }
-                            name="brand"
+                            name="modal"
                             options={modelOptions.map((i) => ({
                               ...i,
                               label: isEnglish ? i.label_en : i.label,
@@ -320,7 +383,21 @@ export default function Search() {
                             className="basic-multi-select"
                             placeholder=""
                             styles={colourStyles}
-                            onChange={(value) => setBrandType(value)}
+                            onChange={(value) => {
+                              if (value.length <= 3) {
+                                setBrandType(value);
+                              } else {
+                                toast.error(t("search.modelLimitError"), {
+                                  position: "top-right",
+                                  autoClose: 5000,
+                                  hideProgressBar: false,
+                                  pauseOnHover: true,
+                                  draggable: true,
+                                  progress: undefined,
+                                });
+                              }
+                            }}
+
                             // classNamePrefix="select"
                           />
                         </div>
@@ -335,7 +412,7 @@ export default function Search() {
                                 { label: state.model_year_end },
                               ]
                             }
-                            name="brand"
+                            name="modal_year"
                             options={yearList}
                             className="basic-multi-select"
                             placeholder=""
@@ -353,10 +430,10 @@ export default function Search() {
                           <div className="mt-3">
                             <Range
                               onChange={(value) => setYearRange(value)}
-                              marks={{
-                                1990: `1990`,
-                                2021: `2021`,
-                              }}
+                              // marks={{
+                              //   1990: `1990`,
+                              //   2022: `2022`,
+                              // }}
                               min={1990}
                               max={new Date().getFullYear()}
                               value={[
@@ -365,7 +442,7 @@ export default function Search() {
                               ]}
                               tipFormatter={(value) => `${value}`}
                               tipProps={{
-                                placement: "top",
+                                placement: "bottom",
                                 visible: true,
                               }}
                               railStyle={{
@@ -418,8 +495,11 @@ export default function Search() {
                               state.city_id.indexOf(i.value) != -1 ? i : false
                             )}
                             isMulti
-                            name="brand"
-                            options={searchInputs.cityOptions}
+                            name="city"
+                            options={searchInputs.cityOptions.map((i) => ({
+                              ...i,
+                              label: isEnglish ? i.label_en : i.label,
+                            }))}
                             className="basic-multi-select"
                             placeholder={t("search.anyCity")}
                             styles={colourStyles}
@@ -476,6 +556,7 @@ export default function Search() {
           <img src="./images/loading.gif" alt="loading" />
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 }

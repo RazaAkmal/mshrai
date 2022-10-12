@@ -17,15 +17,16 @@ export default function Filters(props) {
   const [filterModal, setFilterModal] = useState("");
   const [filterCity, setFilterCity] = useState("");
   const [filterSource, setFilterSource] = useState("");
+  const isEnglish = localStorage.getItem("lang") === "en";
+
   const dispatch = useDispatch();
   const { t } = useTranslation();
-
   const sortedSearchSources = searchInputs.sources
     .reduce((acc, element) => {
       if (
-        element.label !== "Snapchat" &&
-        element.label !== "Instagram" &&
-        element.label !== "Twitter"
+        element.label_en !== "Snapchat" &&
+        element.label_en !== "Instagram" &&
+        element.label_en !== "Twitter"
       ) {
         return [element, ...acc];
       }
@@ -33,9 +34,9 @@ export default function Filters(props) {
     }, [])
     .filter(
       (element) =>
-        element.label !== "Snapchat" &&
-        element.label !== "Instagram" &&
-        element.label !== "Twitter"
+        element.label_en !== "Snapchat" &&
+        element.label_en !== "Instagram" &&
+        element.label_en !== "Twitter"
     );
 
   useEffect(() => {
@@ -54,25 +55,39 @@ export default function Filters(props) {
     setModelOptions(models);
   }, [props.searchState.brand_id, searchInputs.modelOptions]);
 
-  const addValue = (type, value) => {
+  const addValue = (type, value, min, max) => {
     switch (type) {
       case "price":
         let prices = [...props.searchState.price];
+        let prices_obj = [...props.searchState.price_obj];
         if (prices.includes(value)) {
           prices.splice(prices.indexOf(value), 1);
+          prices_obj.splice(prices_obj.indexOf(value), 1);
         } else {
+          let priceData = {
+            min,
+            max
+          }
+          prices_obj.push(priceData);
           prices.push(value);
         }
-        props.handleStartSearch("price", prices);
+        props.handleStartSearch("price", prices, prices_obj);
         break;
       case "kilometer":
         let kiloes = [...props.searchState.kilometer];
+        let kiloes_obj = [...props.searchState.kilometer_obj];
         if (kiloes.includes(value)) {
           kiloes.splice(kiloes.indexOf(value), 1);
+          kiloes_obj.splice(kiloes_obj.indexOf(value), 1);
         } else {
+          let killometerData = {
+            min,
+            max
+          }
+          kiloes_obj.push(killometerData);
           kiloes.push(value);
         }
-        props.handleStartSearch("kilometer", kiloes);
+        props.handleStartSearch("kilometer", kiloes, kiloes_obj);
         break;
       case "shape_id":
         let shapes = [...props.searchState.shape_id];
@@ -153,7 +168,11 @@ export default function Filters(props) {
   };
 
   const filterValue = (val, filter) => {
-    return val.label && val.label.toLowerCase().includes(filter.toLowerCase());
+    if (isEnglish) {
+      return val.label_en && val.label_en.toLowerCase().includes(filter.toLowerCase()); 
+    } else {
+      return val.label && val.label.toLowerCase().includes(filter.toLowerCase());
+    }
   };
 
   return (
@@ -261,10 +280,10 @@ export default function Filters(props) {
                   <div style={{ marginTop: "20px", padding: "5px" }}>
                     <Range
                       onChange={(value) => addValue("years", value)}
-                      marks={{
-                        1990: `1990`,
-                        2021: `2021`,
-                      }}
+                      // marks={{
+                      //   1990: `1990`,
+                      //   2022: `2022`,
+                      // }}
                       min={1990}
                       max={new Date().getFullYear()}
                       value={[
@@ -331,7 +350,7 @@ export default function Filters(props) {
                       type="checkbox"
                       name="price"
                       checked={props.searchState.price.includes("[0 TO 70000]")}
-                      onChange={() => addValue("price", "[0 TO 70000]")}
+                      onChange={() => addValue("price", "[0 TO 70000]", 0, 70000)}
                     />
                     <label className="d-block" htmlFor="price1">
                       {" "}
@@ -346,7 +365,7 @@ export default function Filters(props) {
                       checked={props.searchState.price.includes(
                         "[70000 TO 120000]"
                       )}
-                      onChange={() => addValue("price", "[70000 TO 120000]")}
+                      onChange={() => addValue("price", "[70000 TO 120000]", 70000, 120000)}
                     />
                     <label className="d-block" htmlFor="price2">
                       {" "}
@@ -361,7 +380,7 @@ export default function Filters(props) {
                       checked={props.searchState.price.includes(
                         "[120000 TO 170000]"
                       )}
-                      onChange={() => addValue("price", "[120000 TO 170000]")}
+                      onChange={() => addValue("price", "[120000 TO 170000]", 120000, 170000)}
                     />
                     <label className="d-block" htmlFor="price3">
                       {" "}
@@ -376,7 +395,7 @@ export default function Filters(props) {
                       checked={props.searchState.price.includes(
                         "[170000 TO 200000]"
                       )}
-                      onChange={() => addValue("price", "[170000 TO 200000]")}
+                      onChange={() => addValue("price", "[170000 TO 200000]", 170000, 200000)}
                     />
                     <label className="d-block" htmlFor="price4">
                       {" "}
@@ -392,7 +411,7 @@ export default function Filters(props) {
                         "[200000 TO 999999999]"
                       )}
                       onChange={() =>
-                        addValue("price", "[200000 TO 999999999]")
+                        addValue("price", "[200000 TO 999999999]", 200000,  999999999)
                       }
                     />
                     <label className="d-block" htmlFor="price5">
@@ -429,8 +448,9 @@ export default function Filters(props) {
                             onChange={(v) => addValue("city_id", city.value)}
                           />
                           <label className="d-block" htmlFor={"city" + index}>
-                            {" "}
-                            {city.label}{" "}
+                            {localStorage.getItem("lang") === "en"
+                              ? city.label_en
+                              : city.label}{" "}
                           </label>
                         </div>
                       );
@@ -450,7 +470,7 @@ export default function Filters(props) {
                       checked={props.searchState.kilometer.includes(
                         "[0 TO 9999]"
                       )}
-                      onChange={() => addValue("kilometer", "[0 TO 9999]")}
+                      onChange={() => addValue("kilometer", "[0 TO 9999]", 0, 9999)}
                     />
                     <label className="d-block" htmlFor="ep1">
                       {" "}
@@ -465,7 +485,7 @@ export default function Filters(props) {
                       checked={props.searchState.kilometer.includes(
                         "[10000 TO 50000]"
                       )}
-                      onChange={() => addValue("kilometer", "[10000 TO 50000]")}
+                      onChange={() => addValue("kilometer", "[10000 TO 50000]", 10000, 50000)}
                     />
                     <label className="d-block" htmlFor="ep2">
                       {" "}
@@ -480,7 +500,7 @@ export default function Filters(props) {
                       checked={props.searchState.kilometer.includes(
                         "[50000 TO 75000]"
                       )}
-                      onChange={() => addValue("kilometer", "[50000 TO 75000]")}
+                      onChange={() => addValue("kilometer", "[50000 TO 75000]", 50000, 75000)}
                     />
                     <label className="d-block" htmlFor="ep3">
                       {" "}
@@ -496,7 +516,7 @@ export default function Filters(props) {
                         "[75000 TO 100000]"
                       )}
                       onChange={() =>
-                        addValue("kilometer", "[75000 TO 100000]")
+                        addValue("kilometer", "[75000 TO 100000]",75000,  100000)
                       }
                     />
                     <label className="d-block" htmlFor="ep4">
@@ -513,7 +533,7 @@ export default function Filters(props) {
                         "[100000 TO 150000]"
                       )}
                       onChange={() =>
-                        addValue("kilometer", "[100000 TO 150000]")
+                        addValue("kilometer", "[100000 TO 150000]", 100000,  150000)
                       }
                     />
                     <label className="d-block" htmlFor="ep5">
@@ -530,7 +550,7 @@ export default function Filters(props) {
                         "[150000 TO 200000]"
                       )}
                       onChange={() =>
-                        addValue("kilometer", "[150000 TO 200000]")
+                        addValue("kilometer", "[150000 TO 200000]", 150000, 200000)
                       }
                     />
                     <label className="d-block" htmlFor="ep6">
@@ -547,7 +567,7 @@ export default function Filters(props) {
                         "[200001 TO 999999999]"
                       )}
                       onChange={() =>
-                        addValue("kilometer", "[200001 TO 999999999]")
+                        addValue("kilometer", "[200001 TO 999999999]", 200001, 999999999)
                       }
                     />
                     <label className="d-block" htmlFor="ep7">
@@ -591,7 +611,9 @@ export default function Filters(props) {
                             <span>
                               <img src={`${source.image}`} alt="" />
                             </span>{" "}
-                            {t(`sources.${source.label}`)}
+                            {localStorage.getItem("lang") === "en"
+                              ? source.label_en
+                              : source.label}{" "}
                           </label>
                         </div>
                       );

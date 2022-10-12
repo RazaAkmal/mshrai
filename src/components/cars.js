@@ -9,12 +9,14 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { ReportModal } from "./reportModal";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 export default function Cars({ cars }) {
   const searchInputs = useSelector((state) => state.search.searchInputs);
 
   const { t } = useTranslation();
   const [showReportModal, setshowReportModal] = useState(false);
+  const [selectedCar, setSelectedCar] = useState();
 
   const addUserActivity = (car) => {
     let userId = Cookies.get("id");
@@ -75,10 +77,11 @@ export default function Cars({ cars }) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
-  const handleReport = (ev) => {
+  const handleReport = (ev,car) => {
     ev.stopPropagation();
     ev.preventDefault();
     setshowReportModal(true);
+    setSelectedCar(car);
   };
 
   const isEnglish = localStorage.getItem("lang") === "en";
@@ -95,6 +98,43 @@ export default function Cars({ cars }) {
     );
     return isEnglish ? brandDetails?.label_en : brandDetails?.label;
   };
+  const getCitylName = (car) => {
+    const cityDetails = searchInputs.cityOptions.find(
+      (i) => i.value === Number(car.city_id)
+    );
+    return isEnglish ? cityDetails?.label_en : cityDetails?.label;
+  };
+
+  const submitReportReason = (selectedCar, selectedReasonId) => {
+    const brandName = getBrandName(selectedCar);
+    const modelName = getModelName(selectedCar);
+
+    const payload = {
+        'post_title': brandName ? `${brandName} - ${modelName}` : "",
+        'post_link': selectedCar.url,
+        'report_reason_id': selectedReasonId
+    }
+
+    axios({
+        method: "post",
+        url: "https://admin.mshrai.com/api/report_reasons",
+        data: payload,
+        headers: { "Content-Type": "multipart/form-data" },
+    }).then((resp) => {
+        toast.success(resp.data.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setshowReportModal(false);
+    }).catch((error) => {
+        console.log(error)
+    });
+  };
 
   return (
     <div className="row">
@@ -102,6 +142,7 @@ export default function Cars({ cars }) {
         cars.map((car) => {
           const brandName = getBrandName(car);
           const modelName = getModelName(car);
+          const cityName = getCitylName(car);
           return (
             <div className="col-lg-3 col-md-6 col-sm-6" key={car.id}>
               <Link
@@ -115,10 +156,10 @@ export default function Cars({ cars }) {
                   <img
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = `${apiUrl}/upload/default.jpg`;
+                      e.target.src = `${apiUrl}/img/default.jpg`;
                     }}
                     src={
-                      car.image2 ? car.image2 : `${apiUrl}/upload/default.jpg`
+                      car.image2 ? car.image2 : `${apiUrl}/img/default.jpg`
                     }
                     alt=""
                     id={car.id}
@@ -132,9 +173,8 @@ export default function Cars({ cars }) {
                       {moment(car.date).fromNow()}
                     </p>
                     <div
-                      onClick={handleReport}
+                      onClick={(e)=>handleReport(e, car)}
                       className="report_btn"
-                      style={{ float: "left", marginLeft: 10, zIndex: 9999 }}
                     >
                       <p
                         style={{
@@ -154,6 +194,7 @@ export default function Cars({ cars }) {
                     <ReportModal
                       show={showReportModal}
                       handleClose={() => setshowReportModal(false)}
+                      handleSubmit={(selectedReasonId) => {submitReportReason(selectedCar, selectedReasonId)}}
                     />
 
                     <ul className="tags">
@@ -167,7 +208,7 @@ export default function Cars({ cars }) {
                       )}
                     </ul>
                     <p>
-                      <MdOutlineLocationOn /> {car.city}
+                      <MdOutlineLocationOn /> {cityName}
                     </p>
                   </div>
                   <div className="bottom">
