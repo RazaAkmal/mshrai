@@ -78,6 +78,17 @@ export async function fetchCars(query) {
   // .then(response => {return response.json()})
   // .catch(error => console.log('error', error));
 }
+export async function searchCars(payload, filterSelected) {
+  try {
+    const { data } = await axios.post(`${apiUrl}/api/search`, {
+      query: payload,
+      filter: filterSelected
+    });
+    return data.data;
+  } catch (err) {
+    return err
+  }
+}
 
 export async function saveResults(payload) {
   try {
