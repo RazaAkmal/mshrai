@@ -6,9 +6,8 @@ import Filters from "../components/filters";
 import Cars from "../components/cars";
 import Loader from "../components/loader";
 import {
-  fetchCars,
   searchResult,
-  userActivity,
+  searchCars,
   reportReasons,
 } from "../features/search/searchApi";
 import { useDispatch, useSelector } from "react-redux";
@@ -88,6 +87,7 @@ export default function Resault(props) {
       query: query
     }
     if (brand_id.length > 0) {
+      setFilterSelected(true)
       dispatch(setSearchForm({
         ...searchForm,
         model_year_start: model_year_start,
@@ -134,6 +134,7 @@ export default function Resault(props) {
   const query = useSelector((state) => state.search.query);
   const isEnglish = localStorage.getItem("lang") === "en";
   const allReportReasons = useSelector((state) => state.search.allReportReasons);
+  const [filterSelected, setFilterSelected] = useState(false);
 
   useEffect(() => {
     setState((prevState) => ({
@@ -154,8 +155,10 @@ export default function Resault(props) {
 
   const _handleStartSearch = (type, value, value_obj) => {
     setNextPage(false)
+    setFilterSelected(true)
     switch (type) {
       case "clearall":
+        setFilterSelected(false)
         dispatch(setSearchFormToInital());
         break;
       case "keyword":
@@ -273,97 +276,89 @@ export default function Resault(props) {
 
   useEffect(() => {
     setLoading(true);
-    var query = `model_year:[${searchForm.model_year_start} TO ${searchForm.model_year_end}]`;
-
-    if (searchForm.keyword && searchForm.keyword !== "") {
-      query += ` AND (brand:"${searchForm.keyword}" OR brand_type:"${searchForm.keyword}")`;
+    const query = {
     }
+    let modelYear=[{
+      min: searchForm.model_year_start,
+      max: searchForm.model_year_end
+    }]
+    query['model_year']= modelYear
     if (
       searchForm.brand_id &&
       searchForm.brand_id != null &&
       searchForm.brand_id.length > 0
     ) {
-      query += ` AND brand_id:(`;
+      let brandId = []
       searchForm.brand_id.forEach((id, index) => {
-        query += index === 0 ? id : ` OR ${id}`;
+        brandId.push(id)
       });
-      query += ")";
+      query['brand_id'] = brandId
     }
     if (
       searchForm.brand_type_id &&
       searchForm.brand_type_id != null &&
       searchForm.brand_type_id.length > 0
     ) {
-      query += ` AND brand_type_id:(`;
+      let brandType=[]
       searchForm.brand_type_id.forEach((id, index) => {
-        query += index === 0 ? id : ` OR ${id}`;
+        brandType.push(id)
       });
-      query += ")";
+      query['brand_type_id']=brandType
     }
-    if (
-      searchForm.shape_id &&
-      searchForm.shape_id != null &&
-      searchForm.shape_id.length > 0
-    ) {
-      query += ` AND shape_id:(`;
-      searchForm.shape_id.forEach((id, index) => {
-        query += index === 0 ? id : ` OR ${id}`;
-      });
-      query += ")";
-    }
+    // if (
+    //   searchForm.shape_id &&
+    //   searchForm.shape_id != null &&
+    //   searchForm.shape_id.length > 0
+    // ) {
+    //   query += ` AND shape_id:(`;
+    //   searchForm.shape_id.forEach((id, index) => {
+    //     query += index === 0 ? id : ` OR ${id}`;
+    //   });
+    //   query += ")";
+    // }
     if (
       searchForm.city_id &&
       searchForm.city_id != null &&
       searchForm.city_id.length > 0
     ) {
-      query += ` AND city_id:(`;
+      let city=[]
       searchForm.city_id.forEach((id, index) => {
-        query += index === 0 ? id : ` OR ${id}`;
+          city.push(id)
       });
-      query += ")";
+      query['city_id']=city
     }
     if (
       searchForm.source_id &&
       searchForm.source_id != null &&
       searchForm.source_id.length > 0
     ) {
-      query += ` AND source_id:(`;
+      let source=[]
       searchForm.source_id.forEach((id, index) => {
-        query += index === 0 ? id : ` OR ${id}`;
+          source.push(id)
       });
-      query += ")";
+      query['source_id']=source
     }
     if (searchForm.kilometer && searchForm.kilometer.length > 0) {
-      query += ` AND kilometer:(`;
-      searchForm.kilometer.forEach((id, index) => {
-        query += index === 0 ? id : ` OR ${id}`;
-      });
-      query += ")";
+      query['kilometer'] = searchForm.kilometer_obj
     }
     if (searchForm.price && searchForm.price.length > 0) {
-      query += ` AND price:(`;
-      searchForm.price.forEach((id, index) => {
-        query += index === 0 ? id : ` OR ${id}`;
-      });
-      query += ")";
+      query['price']=searchForm.price_obj
     }
     if (searchForm.sort && searchForm.sort !== "") {
-      query += `&${searchForm.sort}`;
+      let type = searchForm.sort.includes('price') ? 'price' : 'date'
+      let order = searchForm.sort.includes('asc') ? 'asc' : 'desc'
+      query['sort']= {
+        order: order,
+        type: type
+      }
     }
     // if (carsContain("Syarah") || carsContain("haraj")) {
     //   query += "&sort=query($haraj_sort, 0) asc, query($sayarah_sort, 0) asc";
     //   query += "&haraj_sort={!field f=source v=haraj}";
     //   query += "&sayarah_sort={!field f=source v=Syarah}";
     // }
-    query += `&rows=${limit}&start=${searchForm.index}&fl=date,city,kilometer,price,source,gear_id,gear,_version_,sid,city_id,id,source_id,brand,brand_type,brand_type_id,shape,model_year,published,image2,url,brand_id,source_image,shape_id`;
-    dispatch(setQuery(query));
 
-    userActivity({
-      data: { q: query, sort: searchForm.sort },
-      type: "search_query",
-    });
-
-    fetchCars(query).then((res) => {
+    searchCars(query, filterSelected).then((res) => {
       $(".load_cont").fadeOut(function () {
         $(this).parent().fadeOut();
         $("body").css({ "overflow-y": "visible" });

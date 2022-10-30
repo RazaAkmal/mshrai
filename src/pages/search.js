@@ -6,7 +6,7 @@ import { colourStyles } from "../constants";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { Tabs, Tab } from "react-bootstrap";
-import { fetchSearchInputs, fetchCars } from "../features/search/searchApi";
+import { fetchSearchInputs, searchCars } from "../features/search/searchApi";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -58,6 +58,8 @@ export default function Search() {
 
   const [yearList, setYearList] = useState([]);
 
+  const [filterSelected, setFilterSelected] = useState(false);
+
   useEffect(() => {
     const yearOption = [];
     for (let index = 1990; index < new Date().getFullYear(); index++) {
@@ -79,6 +81,7 @@ export default function Search() {
     );
     setSelectedModels(modelOptionsStored);
   }, [searchInputs]);
+  
   useEffect(() => {
     if (state.brand_id.length) {
       if (state.brand_type_id.length > 3) {
@@ -99,64 +102,42 @@ export default function Search() {
         return;
       }
     }
-
-    var query = `model_year:[${state.model_year_start} TO ${state.model_year_end}]`;
-    if (state.keyword && state.keyword !== "") {
-      query += ` AND (brand:"${state.keyword}" OR brand_type:"${state.keyword}")`;
+    const query = {
     }
+    let modelYear=[{
+      min: state.model_year_start,
+      max: state.model_year_end
+    }]
+    query['model_year']=modelYear
+
     if (state.brand_id && state.brand_id != null && state.brand_id.length > 0) {
-      query += ` AND brand_id:(`;
+      let brandId = []
       state.brand_id.forEach((id, index) => {
-        query += index === 0 ? id : ` OR ${id}`;
+        brandId.push(id)
       });
-      query += ")";
+      query['brand_id'] = brandId
     }
     if (
       state.brand_type_id &&
       state.brand_type_id != null &&
       state.brand_type_id.length > 0
     ) {
-      query += ` AND brand_type_id:(`;
+      let brandType=[]
       state.brand_type_id.forEach((id, index) => {
-        query += index === 0 ? id : ` OR ${id}`;
+        brandType.push(id)
       });
-      query += ")";
-    }
-    if (state.shape_id && state.shape_id != null && state.shape_id.length > 0) {
-      query += ` AND shape_id:(`;
-      state.shape_id.forEach((id, index) => {
-        query += index === 0 ? id : ` OR ${id}`;
-      });
-      query += ")";
-    }
-    if (state.city_id && state.city_id != null && state.city_id.length > 0) {
-      query += ` AND city_id:(`;
-      state.city_id.forEach((id, index) => {
-        query += index === 0 ? id : ` OR ${id}`;
-      });
-      query += ")";
-    }
-    if (state.kilometer && state.kilometer.length > 0) {
-      query += ` AND kilometer:(`;
-      state.kilometer.forEach((id, index) => {
-        query += index === 0 ? id : ` OR ${id}`;
-      });
-      query += ")";
-    }
-    if (state.price && state.price.length > 0) {
-      query += ` AND price:(`;
-      state.price.forEach((id, index) => {
-        query += index === 0 ? id : ` OR ${id}`;
-      });
-      query += ")";
-    }
-    if (state.sort && state.sort !== "") {
-      query += `&${state.sort}`;
+      query['brand_type_id']=brandType
     }
 
-    query += `&rows=12&start=${searchForm.index}&fl=date,city,source,gear_id,gear,_version_,sid,city_id,id,source_id,brand,brand_type,brand_type_id,shape,model_year,published,image2,url,brand_id,source_image,shape_id`;
-    fetchCars(query).then((res) => {
-      if (res && res.response && res.response.docs) {
+    if (state.city_id && state.city_id != null && state.city_id.length > 0) {
+      let city=[]
+      state.city_id.forEach((id, index) => {
+          city.push(id)
+      });
+      query['city_id']=city
+    }
+    searchCars(query, filterSelected).then((res) => {
+      if (res && res.response ) {
         dispatch(setResultsNumebr(res.response.numFound));
       }
     });
@@ -176,6 +157,7 @@ export default function Search() {
     });
   };
   const addCity = (values) => {
+    setFilterSelected(true)
     let cities = values.map((value) => value.value);
     setState({
       ...state,
@@ -184,6 +166,7 @@ export default function Search() {
   };
 
   const setBrand = (values) => {
+    setFilterSelected(true)
     let brands = values.map((value) => value.value);
     setState({
       ...state,
@@ -210,7 +193,6 @@ export default function Search() {
   }, [state.brand_id, searchInputs.modelOptions]);
 
   useEffect(() => {
-    console.log(state);
     const selectedBrands = [];
     let prevId;
     let newId = "";
@@ -241,6 +223,7 @@ export default function Search() {
       model_brand_id: [...brands_type_id],
     });
     setSelectedModels(values);
+    setFilterSelected(true)
   };
 
   const setYearRange = (values) => {
@@ -249,10 +232,10 @@ export default function Search() {
       model_year_start: values[0],
       model_year_end: values[1],
     });
+    setFilterSelected(true)
   };
 
   function navigateToResult() {
-    console.log();
     dispatch(setSearchForm(state));
     localStorage.setItem("savedSearch", JSON.stringify(state));
     console.log(state);
