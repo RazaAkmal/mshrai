@@ -162,7 +162,7 @@ const App = () => {
       console.log(err);
       // window.close();
     }
-    
+
   };
 
   // TO LOGOUT
@@ -205,6 +205,9 @@ const App = () => {
           });
           setSubmitting(false);
           setShowRegister(false);
+          if (res) {
+              loginHelper(res.data.data.token, res.data.data.user);
+          }
         })
         .catch((err) => {
           const errors = {};
