@@ -476,7 +476,7 @@ export default function Resault(props) {
               <div className="col-lg-7 col-md-8">
                 <div className="search_hint">
                   <p>
-                    {t("results.exist")} <span>{resultsNumber}</span>{" "}
+                    <span>{resultsNumber}</span>{" "}
                     {t("results.searchResultForCar")}
                   </p>
                   <ul className="search_tags">
