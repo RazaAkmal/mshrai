@@ -135,7 +135,7 @@ export default function Resault(props) {
   const isEnglish = localStorage.getItem("lang") === "en";
   const allReportReasons = useSelector((state) => state.search.allReportReasons);
   const [filterSelected, setFilterSelected] = useState(false);
-
+  const [page, setPage] = useState(1);
   useEffect(() => {
     setState((prevState) => ({
       ...prevState,
@@ -171,12 +171,14 @@ export default function Resault(props) {
         );
         break;
       case "price":
+        setPage(1)
         dispatch(setSearchForm({ ...searchForm, price: value, price_obj: value_obj, index: 0 }));
         break;
       case "brand_type_id":
         if (value.length > 3) {
           showError(t("results.filterLimitError"))
         } else {
+          setPage(1)
           dispatch(
             setSearchForm({ ...searchForm, brand_type_id: value, index: 0 })
           );
@@ -186,6 +188,7 @@ export default function Resault(props) {
         if (value.length > 3) {
           showError(t("results.filterLimitError"))
         } else {
+          setPage(1)
           dispatch(setSearchForm({ ...searchForm, brand_id: value, index: 0 }));
         }
         break;
@@ -193,9 +196,11 @@ export default function Resault(props) {
         dispatch(setSearchForm({ ...searchForm, source_id: value, index: 0 }));
         break;
       case "city_id":
+        setPage(1)
         dispatch(setSearchForm({ ...searchForm, city_id: value, index: 0 }));
         break;
       case "model_year":
+        setPage(1)
         dispatch(
           setSearchForm({
             ...searchForm,
@@ -205,16 +210,20 @@ export default function Resault(props) {
         );
         break;
       case "shape_id":
+        setPage(1)
         dispatch(setSearchForm({ ...searchForm, shape_id: value, index: 0 }));
         break;
       case "kilometer":
+        setPage(1)
         dispatch(setSearchForm({ ...searchForm, kilometer: value, kilometer_obj: value_obj, index: 0 }));
         break;
       case "sort":
+        setPage(1)
         dispatch(setSearchForm({ ...searchForm, sort: value, index: 0 }));
         break;
       case "paginate":
         setNextPage(true)
+        setPage(page + 1)
         dispatch(setSearchForm({ ...searchForm, index: value }));
         break;
       default:
@@ -277,6 +286,7 @@ export default function Resault(props) {
   useEffect(() => {
     setLoading(true);
     const query = {
+      page: page,
     }
     let modelYear=[{
       min: searchForm.model_year_start,
@@ -380,7 +390,7 @@ export default function Resault(props) {
     }).catch((err) => {
         console.log(err);
     });
-  }, [dispatch, searchForm]);
+  }, [dispatch, searchForm, page]);
 
   const toggleOpen = () => setState((prevState) => ({
     ...prevState,
