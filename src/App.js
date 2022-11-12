@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useSelector } from "react";
 import "./App.css";
+import ReactGA from 'react-ga';
 import {
   Switch,
   Route,
@@ -77,6 +78,8 @@ const App = () => {
       let userId = uniqid("userId-");
       Cookies.set("id", userId);
     }
+    ReactGA.initialize('G-1XYWQ5WX94');
+    ReactGA.pageview(window.location.pathname + window.location.search);
   }, []);
 
   useEffect(() => {
