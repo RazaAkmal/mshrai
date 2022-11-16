@@ -114,7 +114,7 @@ const Feedback = ({selectedLng}) => {
                       <div style={{ padding: '20px', textAlign: 'center', fontWeight: '500' }}>
                         <div>{t("thanksTitle")}</div>
                         <div style={{fontWeight: '400'}}>{t("thanksMessage")}</div>
-                        <a style={{fontWeight: '400'}} href="https://docs.google.com/forms/d/e/1FAIpQLSeeQpZ3ZTBTit9s_ZAfftdTb8Dk4o-zJjd3I1Ut2uGfB6Sv-w/viewform?usp=sf_link"> Please Click Here</a>
+                        <a style={{fontWeight: '400'}} href="https://forms.gle/aSH7T9E2UKkNR9U6A"> Please Click Here</a>
                       </div>
                     }
                   </Paper>
