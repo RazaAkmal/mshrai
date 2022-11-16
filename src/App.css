@@ -1637,3 +1637,7 @@ input[type=checkbox]+label:before, input[type=radio]+label:before {
   display: none;
 }
 
+.basic-multi-select img {
+  width: 30px !important;
+  height: 30px !important;
+}
