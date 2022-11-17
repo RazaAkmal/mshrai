@@ -155,6 +155,19 @@ export default function Cars({ cars }) {
     });
   };
 
+  const [isHovering, setIsHovering] = useState(false);
+  const [hoveredCar, setHoveredCar] = useState(null);
+
+  const handleMouseOver = (car) => {
+    setIsHovering(true);
+    setHoveredCar(car)
+  };
+
+  const handleMouseOut = () => {
+    setIsHovering(false);
+    setHoveredCar(null)
+  };
+
   return (
     <div className="row">
       {cars.length > 0 ? (
@@ -197,7 +210,9 @@ export default function Cars({ cars }) {
                       <div
                         onClick={(e)=>handleReport(e, car)}
                         className="report_btn"
+                        onMouseOver={()=>handleMouseOver(car)} onMouseOut={()=>handleMouseOut(car)}
                       >
+                      {isHovering && car.id === hoveredCar.id &&
                         <p
                           style={{
                             color: "grey",
@@ -205,11 +220,9 @@ export default function Cars({ cars }) {
                         >
                           {t("car.report")}
                         </p>
+                      }
                         <i
-                          className="fa fa-flag"
-                          style={{
-                            color: "red",
-                          }}
+                          className="fa fa-flag report-flag"
                         ></i>
                       </div>
 

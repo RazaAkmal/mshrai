@@ -606,6 +606,14 @@ border: none;
 
 
 @media all and (max-width: 991.98px) {
+  .paper-en {
+    width: auto !important;
+    padding: 20px;
+  }
+  .paper-ar {
+    width: auto !important;
+    padding: 20px;
+  }
   .subscribe_btn {
     display: inline-block;
     float: left;
@@ -649,7 +657,6 @@ border: none;
 .search_hint p {
   margin: 0;
   font-size: 18px;
-  line-height: 45px;
   display: block;
 }
 .search_hint p span {
@@ -712,6 +719,7 @@ border: none;
 }
 .search_tags {
   margin-bottom: 25px;
+  text-align: start;
 }
 
 .search_tags li {
@@ -1100,6 +1108,14 @@ border: none;
 }
 
 @media all and (max-width: 575.98px) {
+  .paper-en {
+    width: auto !important;
+    padding: 20px;
+  }
+  .paper-ar {
+    width: auto !important;
+    padding: 20px;
+  }
   .car_item {
     max-width: 100%;
     margin: 0 auto 25px;
@@ -1189,6 +1205,14 @@ border: none;
   }
 }
 @media all and (max-width: 420px) {
+  .paper-en {
+    width: auto !important;
+    padding: 20px;
+  }
+  .paper-ar {
+    width: auto !important;
+    padding: 20px;
+  }
   .car_item .car_cont .bottom {
     display: none;
   }
@@ -1385,6 +1409,14 @@ border: none;
 
 @media (max-width:600px)
 {
+  .paper-en {
+    width: auto !important;
+    padding: 20px;
+  }
+  .paper-ar {
+    width: auto !important;
+    padding: 20px;
+  }
   .search_form button {
     max-width: 100%;
     width: 98%;
@@ -1640,4 +1672,11 @@ input[type=checkbox]+label:before, input[type=radio]+label:before {
 .basic-multi-select img {
   width: 30px !important;
   height: 30px !important;
+}
+.report-flag {
+  color: grey;
+}
+   
+.report-flag:hover {
+  color: red;
 }

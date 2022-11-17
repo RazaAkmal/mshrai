@@ -473,13 +473,46 @@ export default function Resault(props) {
             }}
           >
             <div className="row">
-              <div className="col-lg-7 col-md-8">
+              <div className="col">
                 <div className="search_hint">
                   <p>
                     <span>{resultsNumber}</span>{" "}
                     {t("results.searchResultForCar")}
                   </p>
-                  <ul className="search_tags">
+                </div>
+              </div>
+              <div className="col text-left">
+                <div
+                  className="alert alert-success alert-dismissible fade show"
+                  role="alert"
+                >
+                  تم الإشتراك فى النشرة الإخبارية بنجاح.
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div
+                  className="alert alert-danger alert-dismissible fade show"
+                  role="alert"
+                >
+                  حدث خطأ ما تأكد من البيانات وأعد الإرسال.
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div className="subscribe">
+                  <SubscribeModal />
+                </div>
+              </div>
+            </div>
+            <div className="row">
+            <ul className="search_tags">
                     {searchForm.brand_id && searchForm.brand_id.length > 0
                       ? searchInputs.marksOptions.map((mark, index) => {
                           return searchForm.brand_id.includes(mark.value) &&
@@ -514,7 +547,9 @@ export default function Resault(props) {
                         })
                       : ""}
                   </ul>
-                  <ul className="search_tags">
+            </div>
+            <div className="row">
+            <ul className="search_tags">
                     {searchForm.shape_id && searchForm.shape_id.length > 0
                       ? searchInputs.shapes.map((shape, index) => {
                           return searchForm.shape_id.includes(shape.id) ? (
@@ -699,64 +734,6 @@ export default function Resault(props) {
                       </li>
                     )}
                   </ul>
-                </div>
-              </div>
-              <div className="col-lg-5 col-md-4 text-left">
-                <div
-                  className="alert alert-success alert-dismissible fade show"
-                  role="alert"
-                >
-                  تم الإشتراك فى النشرة الإخبارية بنجاح.
-                  <button
-                    type="button"
-                    className="btn-close"
-                    data-bs-dismiss="alert"
-                    aria-label="Close"
-                  ></button>
-                </div>
-                <div
-                  className="alert alert-danger alert-dismissible fade show"
-                  role="alert"
-                >
-                  حدث خطأ ما تأكد من البيانات وأعد الإرسال.
-                  <button
-                    type="button"
-                    className="btn-close"
-                    data-bs-dismiss="alert"
-                    aria-label="Close"
-                  ></button>
-                </div>
-                <div className="subscribe">
-                  <SubscribeModal />
-                  {/* <label> {t("results.enterYourEmail")}</label>
-                  <input
-                    type="email"
-                    placeholder={t("results.email")}
-                    value={state.email}
-                    onChange={(e) =>
-                      setState({ ...state, email: e.target.value })
-                    }
-                  />
-                  <button
-                    disabled={isBusy}
-                    type="button"
-                    className="btn btn-success"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      _handleSaveResults();
-                    }}
-                  >
-                    {isBusy ? (
-                      <Spinner size="sm" animation="grow" />
-                    ) : (
-                      <span style={{ fontSize: 12 }}>
-                        {t("results.saveSearchResult")}
-                      </span>
-                    )}
-                  </button> */}
-                  {/* <button className="fa fa-search" type="button" onClick={(e) => {e.preventDefault(); _handleSubscripeToNewsletter();}}></button> */}
-                </div>
-              </div>
             </div>
             <div className="row">
               <div className="col-lg-2">
