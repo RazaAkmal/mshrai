@@ -340,7 +340,7 @@ export default function Filters(props) {
             </Accordion.Item>
             <Accordion.Item eventKey="3">
               <Accordion.Header>
-                {t("search.price")} [{t("search.saudiRiyal")}]
+                {t("search.price")}
               </Accordion.Header>
               <Accordion.Body>
                 <div className="panel-content">
