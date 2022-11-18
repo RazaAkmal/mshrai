@@ -78,7 +78,7 @@ const App = () => {
       let userId = uniqid("userId-");
       Cookies.set("id", userId);
     }
-    ReactGA.initialize('G-1XYWQ5WX94');
+    ReactGA.initialize('UA-248573380-1');
     ReactGA.pageview(window.location.pathname + window.location.search);
   }, []);
 
