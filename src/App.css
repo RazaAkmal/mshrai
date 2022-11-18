@@ -1048,6 +1048,9 @@ border: none;
   }
 }
 @media all and (max-width: 767.9px) {
+  .main_screen .cont {
+    margin-top: 35px;
+  }
   .main_screen .cont h1 {
     font-size: 18px;
   }
@@ -1108,6 +1111,9 @@ border: none;
 }
 
 @media all and (max-width: 575.98px) {
+  .main_screen .cont {
+    margin-top: 35px;
+  }
   .paper-en {
     width: auto !important;
     padding: 20px;
@@ -1205,6 +1211,9 @@ border: none;
   }
 }
 @media all and (max-width: 420px) {
+  .main_screen .cont {
+    margin-top: 35px;
+  }
   .paper-en {
     width: auto !important;
     padding: 20px;
@@ -1409,6 +1418,9 @@ border: none;
 
 @media (max-width:600px)
 {
+  .main_screen .cont {
+    margin-top: 35px;
+  }
   .paper-en {
     width: auto !important;
     padding: 20px;
