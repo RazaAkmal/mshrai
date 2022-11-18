@@ -359,7 +359,7 @@ export default function Resault(props) {
       let order = searchForm.sort.includes('asc') ? 'asc' : 'desc'
       query['sort']= {
         order: order,
-        type: type
+        column: type
       }
     }
     // if (carsContain("Syarah") || carsContain("haraj")) {
