@@ -63,7 +63,7 @@ i18n
             filterLimitError: "لا يمكنك تحديد أكثر من ثلاث خدمات",
             brandLimitError:"لا يمكنك تحديد أكثر من ثلاث ماركات",
             modelLimitError:"لا يمكنك تحديد أكثر من ثلاثة طرازات",
-            searchConditionError: "الرجاء تحديد مشروط"
+            searchConditionError: "الرجاء تحديد ماركة واحدة"
           },
           results: {
             searchResultForCar: "نتيجة بحث عن سيارة معروضة للبيع",

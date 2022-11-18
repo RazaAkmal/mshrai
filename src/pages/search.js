@@ -82,6 +82,7 @@ export default function Search() {
   }, [searchInputs]);
   
   useEffect(() => {
+    let callApi = false
     if (state.brand_id.length) {
       if (state.brand_type_id.length > 3) {
         state.model_brand_id = state.model_brand_id.slice(0, 3);
@@ -115,6 +116,7 @@ export default function Search() {
       query['model_year']=yearSelected
     }
     if (state.brand_id && state.brand_id != null && state.brand_id.length > 0) {
+      callApi = true
       let brandId = []
       state.brand_id.forEach((id, index) => {
         brandId.push(id)
@@ -126,6 +128,7 @@ export default function Search() {
       state.brand_type_id != null &&
       state.brand_type_id.length > 0
     ) {
+      callApi = true
       let brandType=[]
       state.brand_type_id.forEach((id, index) => {
         brandType.push(id)
@@ -140,11 +143,14 @@ export default function Search() {
       });
       query['city_id']=city
     }
-    searchCars(query, filterSelected).then((res) => {
-      if (res && res.response ) {
-        dispatch(setResultsNumebr(res.response.numFound));
-      }
-    });
+    if (callApi) {
+      searchCars(query, filterSelected).then((res) => {
+        if (res && res.response ) {
+          dispatch(setResultsNumebr(res.response.numFound));
+        }
+      });
+    }
+    
   }, [state]);
 
   const addShape = (i) => {
@@ -250,7 +256,7 @@ export default function Search() {
   // };
 
   function navigateToResult() {
-    if (state.brand_type_id.length > 0 && state.brand_type_id.length > 0) {
+    if (state.brand_id.length > 0 || state.brand_type_id.length > 0) {
       dispatch(setSearchForm(state));
       localStorage.setItem("savedSearch", JSON.stringify(state));
       console.log(state);
@@ -539,7 +545,7 @@ export default function Search() {
                     className="search-button"
                     onClick={navigateToResult}
                   >
-                    {t("search.see")} {resultsNumber} {t("search.car")}
+                    {t("search.see")} {(state.brand_id.length > 0 || state.brand_type_id.length > 0) ? resultsNumber : ''} {t("search.car")}
                   </button>
                 </form>
                 <p>{t("description.Footer")}</p>
