@@ -397,11 +397,16 @@ export default function Resault(props) {
     isOpen: !state.isOpen
   }));
 
-  const fillterBtnClickHandle = () => {
+  const fillterBtnClickHandle = (e) => {
     $(".toggle-container").addClass("move");
+    e.stopPropagation();
   };
-  const closeFilterMenuHandle = () => {
-    $(".toggle-container").removeClass("move");
+  const closeFilterMenuHandle = (e) => {
+    const result = $('.toggle-container').attr('class');
+    if (result.includes('move')) {
+      $(".toggle-container").removeClass("move");
+      e.stopPropagation();
+    }
   };
   const getBrandValueAswell = (model, index) => {
     let filteredBrand = searchInputs.marksOptions.filter(
@@ -472,7 +477,7 @@ export default function Resault(props) {
           </div>
         </div>
       </header>
-      <section className="section-gray">
+      <section className="section-gray" onClick={closeFilterMenuHandle}>
         <div className="container-fluid">
           <div
             id="scrollableDiv"
