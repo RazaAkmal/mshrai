@@ -71,7 +71,7 @@ export default function Cars({ cars }) {
     })
       .then(async (data) => {
         const { posts } = data.data.data;
-        if (!posts.items[0].status) {
+        if (!posts.items[0]?.status) {
           let bodyFormData = new FormData();
           bodyFormData.append("status", posts.items[0].status);
           bodyFormData.append("id", car.id);

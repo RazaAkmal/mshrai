@@ -1032,7 +1032,7 @@ border: none;
   .toggle-container.move {
     right: 0;
   }
-  .toggle-container.move::before {
+  /* .toggle-container.move::before {
     content: " ";
     position: fixed;
     width: calc(100% - 270px);
@@ -1042,7 +1042,7 @@ border: none;
     z-index: 99;
     -webkit-transition: 0.4s all ease-out;
     transition: 0.4s all ease-out;
-  }
+  } */
   .toggle-container .close_btn {
     display: inline-block;
   }
@@ -1068,7 +1068,7 @@ border: none;
   }
   .main_screen {
     display: block;
-    background: url(./images/bc.jpg) center repeat;
+    /* background: url(./images/bc.jpg) center repeat; */
     height: auto;
   }
   .main_screen .cont h1 {
