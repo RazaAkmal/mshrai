@@ -11,6 +11,25 @@ import { ReportModal } from "./reportModal";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
+// moment.updateLocale('en', {
+//   relativeTime : {
+//       future: "in %s",
+//       past:   "%s+",
+//       s  : 'a few seconds',
+//       ss : '%d seconds',
+//       m:  "a minute",
+//       mm: "%d minutes",
+//       h:  "an hour",
+//       hh: "%dh",
+//       d:  "a day",
+//       dd: "%d days",
+//       M:  "a month",
+//       MM: "%d months",
+//       y:  "a year",
+//       yy: "%d years"
+//   }
+// });
+
 export default function Cars({ cars }) {
   const searchInputs = useSelector((state) => state.search.searchInputs);
 
@@ -52,7 +71,7 @@ export default function Cars({ cars }) {
     })
       .then(async (data) => {
         const { posts } = data.data.data;
-        if (!posts.items[0].status) {
+        if (!posts.items[0]?.status) {
           let bodyFormData = new FormData();
           bodyFormData.append("status", posts.items[0].status);
           bodyFormData.append("id", car.id);
@@ -136,6 +155,19 @@ export default function Cars({ cars }) {
     });
   };
 
+  const [isHovering, setIsHovering] = useState(false);
+  const [hoveredCar, setHoveredCar] = useState(null);
+
+  const handleMouseOver = (car) => {
+    setIsHovering(true);
+    setHoveredCar(car)
+  };
+
+  const handleMouseOut = () => {
+    setIsHovering(false);
+    setHoveredCar(null)
+  };
+
   return (
     <div className="row">
       {cars.length > 0 ? (
@@ -144,101 +176,115 @@ export default function Cars({ cars }) {
           const modelName = getModelName(car);
           const cityName = getCitylName(car);
           return (
-            <div className="col-lg-3 col-md-6 col-sm-6" key={car.id}>
-              <Link
-                onClick={() => checkAddAvialble(car)}
-                to={{ pathname: car.url }}
-                className="car_item"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <div className="car_img">
-                  <img
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = `${apiUrl}/img/default.jpg`;
-                    }}
-                    src={
-                      car.image2 ? car.image2 : `${apiUrl}/img/default.jpg`
-                    }
-                    alt=""
-                    id={car.id}
-                  />
-                </div>
-                <div className="car_cont">
-                  <div className="car_details">
-                    {brandName ? <h3>{brandName + " - " + modelName}</h3> : ""}
-                    <p>
-                      <i className="far fa-clock"></i>
-                      {moment(car.date).fromNow()}
-                    </p>
-                    <div
-                      onClick={(e)=>handleReport(e, car)}
-                      className="report_btn"
-                    >
-                      <p
-                        style={{
-                          color: "grey",
-                        }}
-                      >
-                        {t("car.report")}
-                      </p>
-                      <i
-                        className="fa fa-flag"
-                        style={{
-                          color: "red",
-                        }}
-                      ></i>
-                    </div>
-
-                    <ReportModal
-                      show={showReportModal}
-                      handleClose={() => setshowReportModal(false)}
-                      handleSubmit={(selectedReasonId) => {submitReportReason(selectedCar, selectedReasonId)}}
+            <div className="col-lg-3 col-md-6 col-sm-6 card_space" key={car.id}>
+                <Link
+                  onClick={() => checkAddAvialble(car)}
+                  to={{ pathname: car.url }}
+                  className="car_item"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <div className="car_img">
+                    <img
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = `${apiUrl}/img/default.jpg`;
+                      }}
+                      src={
+                        car.image2 ? car.image2 : `${apiUrl}/img/default.jpg`
+                      }
+                      alt=""
+                      id={car.id}
                     />
-
-                    <ul className="tags">
-                      <li>{car.model_year}</li>
-                      {car.kilometer ? (
-                        <li>
-                          {car.kilometer} {t("car.km")}
-                        </li>
-                      ) : (
-                        ""
-                      )}
-                    </ul>
-                    <p>
-                      <MdOutlineLocationOn /> {cityName}
-                    </p>
-                  </div>
-                  <div className="bottom">
-                    <div className="price">
-                      <span> {t("search.price")} </span>{" "}
-                      {!car.price
-                        ? car.price2
-                          ? numberWithCommas(car.price2)
-                          : t("results.noPrice")
-                        : car.price === -1
-                        ? t("car.onHaggle")
-                        : numberWithCommas(car.price) +
-                          ` ${t("results.riyal")}`}
-                    </div>
+                    <div className="source_logo_mobile">
                     <img src={apiUrl + "/upload/" + car.source_image} alt="" />
+                    </div>
                   </div>
-                </div>
-              </Link>
-              {/* <!--End Car ITem--> */}
-            </div>
-          );
-        })
-      ) : (
-        <div
-          className="col-12 text-center d-flex justify-content-center align-items-center"
-          style={{ minHeight: "50vh" }}
-        >
-          {t("results.noResults")}
-        </div>
-      )}
+                  <div className="car_cont">
+                    <div className="car_details">
+                      {brandName ? <h3>{brandName + " - " + modelName}</h3> : ""}
+                      <p>
+                        <i className="far fa-clock"></i>
+                        {moment(car.date).fromNow(false)}
+                      </p>
+                      <div
+                        onClick={(e)=>handleReport(e, car)}
+                        className="report_btn"
+                        onMouseOver={()=>handleMouseOver(car)} onMouseOut={()=>handleMouseOut(car)}
+                      >
+                      {isHovering && car.id === hoveredCar.id &&
+                        <p
+                          style={{
+                            color: "grey",
+                          }}
+                        >
+                          {t("car.report")}
+                        </p>
+                      }
+                        <i
+                          className="fa fa-flag report-flag"
+                        ></i>
+                      </div>
+
+                      <ReportModal
+                        show={showReportModal}
+                        handleClose={() => setshowReportModal(false)}
+                        handleSubmit={(selectedReasonId) => {submitReportReason(selectedCar, selectedReasonId)}}
+                      />
+
+                      <ul className="tags">
+                        <li>{car.model_year}</li>
+                        {car.kilometer ? (
+                          <li>
+                            {car.kilometer} {t("car.km")}
+                          </li>
+                        ) : (
+                          ""
+                        )}
+                      </ul>
+                      <div className="price_mobile">
+                        {/* <span> {t("search.price")} </span>{" "} */}
+                        {!car.price
+                          ? car.price2
+                            ? numberWithCommas(car.price2)
+                            : t("results.noPrice")
+                          : car.price === -1
+                          ? t("car.onHaggle")
+                          : numberWithCommas(car.price) +
+                            ` ${t("results.riyal")}`}
+                      </div>
+                      <p>
+                        <MdOutlineLocationOn /> {cityName}
+                      </p>
+                    </div>
+                    <div className="bottom">
+                      <div className="price">
+                        {/* <span> {t("search.price")} </span>{" "} */}
+                        {!car.price
+                          ? car.price2
+                            ? numberWithCommas(car.price2)
+                            : t("results.noPrice")
+                          : car.price === -1
+                          ? t("car.onHaggle")
+                          : numberWithCommas(car.price) +
+                            ` ${t("results.riyal")}`}
+                      </div>
+                      <img src={apiUrl + "/upload/" + car.source_image} alt="" />
+                    </div>
+                  </div>
+                </Link>
+                {/* <!--End Car ITem--> */}
+              </div>
+            );
+          })
+        ) : (
+          <div
+            className="col-12 text-center d-flex justify-content-center align-items-center"
+            style={{ minHeight: "50vh" }}
+          >
+            {t("results.noResults")}
+          </div>
+        )}
     </div>
   );
-}
+} 

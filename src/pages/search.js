@@ -42,6 +42,7 @@ export default function Search() {
   const [selectedModels, setSelectedModels] = useState([]);
   const [selectedBrand, setSelectedBrand] = useState([]);
   const [brandOptions, setBrandOptions] = useState([]);
+  const [selectedYears, setSelectedYears] = useState([]);
 
   const dispatch = useDispatch();
   const [state, setState] = useState({ ...searchForm });
@@ -56,23 +57,21 @@ export default function Search() {
     });
   }, [dispatch]);
 
-  const [yearList, setYearList] = useState([]);
-
   const [filterSelected, setFilterSelected] = useState(false);
 
-  useEffect(() => {
-    const yearOption = [];
-    for (let index = 1990; index < new Date().getFullYear(); index++) {
-      yearOption.push({ id: index, label: index });
-    }
-    setYearList(yearOption);
-  }, []);
 
   useEffect(() => {
     const brandOptionsStored = searchInputs.marksOptions.map((i) =>
       state.brand_id.indexOf(i.value) !== -1 ? i : false
     );
     setBrandOptions(brandOptionsStored);
+  }, [searchInputs]);
+
+  useEffect(() => {
+    const yearOptionSelected = searchInputs.yearOptions.map((i) =>
+      state.manufacturing_year.indexOf(i.value) !== -1 ? i : false
+    );
+    setSelectedYears(yearOptionSelected);
   }, [searchInputs]);
 
   useEffect(() => {
@@ -83,6 +82,7 @@ export default function Search() {
   }, [searchInputs]);
   
   useEffect(() => {
+    let callApi = false
     if (state.brand_id.length) {
       if (state.brand_type_id.length > 3) {
         state.model_brand_id = state.model_brand_id.slice(0, 3);
@@ -104,13 +104,19 @@ export default function Search() {
     }
     const query = {
     }
-    let modelYear=[{
-      min: state.model_year_start,
-      max: state.model_year_end
-    }]
-    query['model_year']=modelYear
-
+    query['page'] = 1
+    if (state.manufacturing_year && state.manufacturing_year != null && state.manufacturing_year.length > 0) {
+      let yearSelected = []
+      state.manufacturing_year.forEach((id, index) => {
+        yearSelected.push({
+          min: id,
+          max: id
+        })
+      });
+      query['model_year']=yearSelected
+    }
     if (state.brand_id && state.brand_id != null && state.brand_id.length > 0) {
+      callApi = true
       let brandId = []
       state.brand_id.forEach((id, index) => {
         brandId.push(id)
@@ -122,6 +128,7 @@ export default function Search() {
       state.brand_type_id != null &&
       state.brand_type_id.length > 0
     ) {
+      callApi = true
       let brandType=[]
       state.brand_type_id.forEach((id, index) => {
         brandType.push(id)
@@ -136,11 +143,14 @@ export default function Search() {
       });
       query['city_id']=city
     }
-    searchCars(query, filterSelected).then((res) => {
-      if (res && res.response ) {
-        dispatch(setResultsNumebr(res.response.numFound));
-      }
-    });
+    if (callApi) {
+      searchCars(query, filterSelected).then((res) => {
+        if (res && res.response ) {
+          dispatch(setResultsNumebr(res.response.numFound));
+        }
+      });
+    }
+    
   }, [state]);
 
   const addShape = (i) => {
@@ -227,19 +237,34 @@ export default function Search() {
   };
 
   const setYearRange = (values) => {
+    let year_range_values = values.map((value) => value.label);
     setState({
       ...state,
-      model_year_start: values[0],
-      model_year_end: values[1],
+      manufacturing_year: [...year_range_values],
     });
+    setSelectedYears(values);
     setFilterSelected(true)
   };
 
+  // const setYearRange = (values) => {
+  //   setState({
+  //     ...state,
+  //     model_year_start: values[0],
+  //     model_year_end: values[1],
+  //   });
+  //   setFilterSelected(true)
+  // };
+
   function navigateToResult() {
-    dispatch(setSearchForm(state));
-    localStorage.setItem("savedSearch", JSON.stringify(state));
-    console.log(state);
-    history.push("/results");
+    if (state.brand_id.length > 0 || state.brand_type_id.length > 0) {
+      dispatch(setSearchForm(state));
+      localStorage.setItem("savedSearch", JSON.stringify(state));
+      console.log(state);
+      history.push("/results");
+    } else {
+      showError(t("search.searchConditionError"))
+    }
+    
   }
   const [key, setKey] = useState("findCar");
 
@@ -306,7 +331,7 @@ export default function Search() {
                           />
                         </div> */}
                         {/* FOR BRANDS ////////////////////////////////////////////////////////////////*/}
-                        <div className="col-md-6 col-6  mb-3 d-none d-sm-block">
+                        <div className="col-md-6 col-6  mb-3 d-sm-block">
                           <label className="text-end d-block">
                             {t("search.brand")}
                           </label>
@@ -389,24 +414,20 @@ export default function Search() {
                             {t("search.specificYearOfManufacture")}
                           </label>
                           <Select
-                            value={
-                              state.model_year_end ===
-                                state.model_year_start && [
-                                { label: state.model_year_end },
-                              ]
-                            }
+                            value={selectedYears}
+                            isMulti
                             name="modal_year"
-                            options={yearList}
+                            options={searchInputs.yearOptions}
                             className="basic-multi-select"
                             placeholder=""
                             styles={colourStyles}
                             onChange={(value) =>
-                              setYearRange([value.label, value.label])
+                              setYearRange(value)
                             }
                             // classNamePrefix="select"
                           />
                         </div>
-                        <div className="col-md-6 col-6  mb-3">
+                        {/* <div className="col-md-6 col-6  mb-3">
                           <label className="text-end d-block">
                             {t("search.manufacturingYear")}
                           </label>
@@ -467,8 +488,7 @@ export default function Search() {
                               ]}
                             />
                           </div>
-                          {/* <div className="year_slider" name="slider"></div> */}
-                        </div>
+                        </div> */}
                         <div className="col-md-6 col-6  mb-3">
                           <label className="text-end d-block">
                             {t("search.city")}
@@ -525,7 +545,7 @@ export default function Search() {
                     className="search-button"
                     onClick={navigateToResult}
                   >
-                    {t("search.see")} {resultsNumber} {t("search.car")}
+                    {t("search.see")} {(state.brand_id.length > 0 || state.brand_type_id.length > 0) ? resultsNumber : ''} {t("search.car")}
                   </button>
                 </form>
                 <p>{t("description.Footer")}</p>

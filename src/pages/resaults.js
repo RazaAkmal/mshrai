@@ -116,8 +116,13 @@ export default function Resault(props) {
     //       dispatch(setResultsNumebr(res.data.response.numFound));
     //   }
     // });
-
+    reportReasons().then((res) => {
+      dispatch(setReportReasons(res.data));
+    }).catch((err) => {
+        console.log(err);
+    });
   }, []);
+
   const [state, setState] = useState({
     searchKeyWord: "",
     email: "",
@@ -135,7 +140,7 @@ export default function Resault(props) {
   const isEnglish = localStorage.getItem("lang") === "en";
   const allReportReasons = useSelector((state) => state.search.allReportReasons);
   const [filterSelected, setFilterSelected] = useState(false);
-
+  const [page, setPage] = useState(1);
   useEffect(() => {
     setState((prevState) => ({
       ...prevState,
@@ -171,12 +176,14 @@ export default function Resault(props) {
         );
         break;
       case "price":
+        setPage(1)
         dispatch(setSearchForm({ ...searchForm, price: value, price_obj: value_obj, index: 0 }));
         break;
       case "brand_type_id":
         if (value.length > 3) {
           showError(t("results.filterLimitError"))
         } else {
+          setPage(1)
           dispatch(
             setSearchForm({ ...searchForm, brand_type_id: value, index: 0 })
           );
@@ -186,6 +193,7 @@ export default function Resault(props) {
         if (value.length > 3) {
           showError(t("results.filterLimitError"))
         } else {
+          setPage(1)
           dispatch(setSearchForm({ ...searchForm, brand_id: value, index: 0 }));
         }
         break;
@@ -193,9 +201,11 @@ export default function Resault(props) {
         dispatch(setSearchForm({ ...searchForm, source_id: value, index: 0 }));
         break;
       case "city_id":
+        setPage(1)
         dispatch(setSearchForm({ ...searchForm, city_id: value, index: 0 }));
         break;
       case "model_year":
+        setPage(1)
         dispatch(
           setSearchForm({
             ...searchForm,
@@ -205,16 +215,20 @@ export default function Resault(props) {
         );
         break;
       case "shape_id":
+        setPage(1)
         dispatch(setSearchForm({ ...searchForm, shape_id: value, index: 0 }));
         break;
       case "kilometer":
+        setPage(1)
         dispatch(setSearchForm({ ...searchForm, kilometer: value, kilometer_obj: value_obj, index: 0 }));
         break;
       case "sort":
+        setPage(1)
         dispatch(setSearchForm({ ...searchForm, sort: value, index: 0 }));
         break;
       case "paginate":
         setNextPage(true)
+        setPage(page + 1)
         dispatch(setSearchForm({ ...searchForm, index: value }));
         break;
       default:
@@ -277,6 +291,7 @@ export default function Resault(props) {
   useEffect(() => {
     setLoading(true);
     const query = {
+      page: page,
     }
     let modelYear=[{
       min: searchForm.model_year_start,
@@ -349,7 +364,7 @@ export default function Resault(props) {
       let order = searchForm.sort.includes('asc') ? 'asc' : 'desc'
       query['sort']= {
         order: order,
-        type: type
+        column: type
       }
     }
     // if (carsContain("Syarah") || carsContain("haraj")) {
@@ -375,11 +390,6 @@ export default function Resault(props) {
       }
     });
 
-    reportReasons().then((res) => {
-      dispatch(setReportReasons(res.data));
-    }).catch((err) => {
-        console.log(err);
-    });
   }, [dispatch, searchForm]);
 
   const toggleOpen = () => setState((prevState) => ({
@@ -387,11 +397,16 @@ export default function Resault(props) {
     isOpen: !state.isOpen
   }));
 
-  const fillterBtnClickHandle = () => {
+  const fillterBtnClickHandle = (e) => {
     $(".toggle-container").addClass("move");
+    e.stopPropagation();
   };
-  const closeFilterMenuHandle = () => {
-    $(".toggle-container").removeClass("move");
+  const closeFilterMenuHandle = (e) => {
+    const result = $('.toggle-container').attr('class');
+    if (result.includes('move')) {
+      $(".toggle-container").removeClass("move");
+      e.stopPropagation();
+    }
   };
   const getBrandValueAswell = (model, index) => {
     let filteredBrand = searchInputs.marksOptions.filter(
@@ -462,7 +477,7 @@ export default function Resault(props) {
           </div>
         </div>
       </header>
-      <section className="section-gray">
+      <section className="section-gray" onClick={closeFilterMenuHandle}>
         <div className="container-fluid">
           <div
             id="scrollableDiv"
@@ -473,13 +488,46 @@ export default function Resault(props) {
             }}
           >
             <div className="row">
-              <div className="col-lg-7 col-md-8">
+              <div className="col">
                 <div className="search_hint">
                   <p>
-                    {t("results.exist")} <span>{resultsNumber}</span>{" "}
+                    <span>{resultsNumber}</span>{" "}
                     {t("results.searchResultForCar")}
                   </p>
-                  <ul className="search_tags">
+                </div>
+              </div>
+              <div className="col text-left">
+                <div
+                  className="alert alert-success alert-dismissible fade show"
+                  role="alert"
+                >
+                  تم الإشتراك فى النشرة الإخبارية بنجاح.
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div
+                  className="alert alert-danger alert-dismissible fade show"
+                  role="alert"
+                >
+                  حدث خطأ ما تأكد من البيانات وأعد الإرسال.
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div className="subscribe">
+                  <SubscribeModal />
+                </div>
+              </div>
+            </div>
+            <div className="row">
+            <ul className="search_tags">
                     {searchForm.brand_id && searchForm.brand_id.length > 0
                       ? searchInputs.marksOptions.map((mark, index) => {
                           return searchForm.brand_id.includes(mark.value) &&
@@ -514,7 +562,9 @@ export default function Resault(props) {
                         })
                       : ""}
                   </ul>
-                  <ul className="search_tags">
+            </div>
+            <div className="row">
+            <ul className="search_tags">
                     {searchForm.shape_id && searchForm.shape_id.length > 0
                       ? searchInputs.shapes.map((shape, index) => {
                           return searchForm.shape_id.includes(shape.id) ? (
@@ -658,6 +708,32 @@ export default function Resault(props) {
                     ) : (
                       ""
                     )}
+
+                      
+                    {/*  this will require when we remove reange manufacturing_year filter  
+                    {searchForm.manufacturing_year && searchForm.manufacturing_year.length > 0
+                      ? searchForm.manufacturing_year.map((year, index) => {
+                        return (
+                          <li
+                            style={{ direction: "ltr" }}
+                            key={"searchcities" + index}
+                          >
+                            {year}
+                            <span
+                              onClick={() => {
+                                _handleStartSearch("model_year", {
+                                  model_year_start: 1990,
+                                  model_year_end: new Date().getFullYear(),
+                                });
+                              }}
+                            >
+                              <IoIosClose />
+                            </span>
+                          </li>
+                        );
+                      })
+                      : ""} */}
+                    
                     {(searchForm.city_id.length > 0 ||
                       searchForm.source_id.length > 0 ||
                       searchForm.brand_type_id.length > 0 ||
@@ -673,64 +749,6 @@ export default function Resault(props) {
                       </li>
                     )}
                   </ul>
-                </div>
-              </div>
-              <div className="col-lg-5 col-md-4 text-left">
-                <div
-                  className="alert alert-success alert-dismissible fade show"
-                  role="alert"
-                >
-                  تم الإشتراك فى النشرة الإخبارية بنجاح.
-                  <button
-                    type="button"
-                    className="btn-close"
-                    data-bs-dismiss="alert"
-                    aria-label="Close"
-                  ></button>
-                </div>
-                <div
-                  className="alert alert-danger alert-dismissible fade show"
-                  role="alert"
-                >
-                  حدث خطأ ما تأكد من البيانات وأعد الإرسال.
-                  <button
-                    type="button"
-                    className="btn-close"
-                    data-bs-dismiss="alert"
-                    aria-label="Close"
-                  ></button>
-                </div>
-                <div className="subscribe">
-                  <SubscribeModal />
-                  {/* <label> {t("results.enterYourEmail")}</label>
-                  <input
-                    type="email"
-                    placeholder={t("results.email")}
-                    value={state.email}
-                    onChange={(e) =>
-                      setState({ ...state, email: e.target.value })
-                    }
-                  />
-                  <button
-                    disabled={isBusy}
-                    type="button"
-                    className="btn btn-success"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      _handleSaveResults();
-                    }}
-                  >
-                    {isBusy ? (
-                      <Spinner size="sm" animation="grow" />
-                    ) : (
-                      <span style={{ fontSize: 12 }}>
-                        {t("results.saveSearchResult")}
-                      </span>
-                    )}
-                  </button> */}
-                  {/* <button className="fa fa-search" type="button" onClick={(e) => {e.preventDefault(); _handleSubscripeToNewsletter();}}></button> */}
-                </div>
-              </div>
             </div>
             <div className="row">
               <div className="col-lg-2">
@@ -836,11 +854,11 @@ export default function Resault(props) {
                   </div>
                 </div>
                 <InfiniteScroll
-                  dataLength={searchForm.index + 12} //This is important field to render the next data
+                  dataLength={state.cars.length} //This is important field to render the next data
                   next={() =>
                     _handleStartSearch("paginate", searchForm.index + 12)
                   }
-                  hasMore={searchForm.index + 12 < resultsNumber}
+                  hasMore={state.cars.length < resultsNumber}
                   loader={<img src="./images/loading.gif" alt="loading" />}
                   scrollWindow={false}
                   scrollableTarget="scrollableDiv"
@@ -852,17 +870,6 @@ export default function Resault(props) {
                 >
                   <Cars cars={state.cars} />
                 </InfiniteScroll>
-              </div>
-              <div className="w-100 text-left">
-                {/* <button className="link green_bc" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">حفظ نتائج البحث</button> */}
-                {/* {resultsNumber > cars.length &&<button
-                  className="link"
-                  onClick={() =>
-                    _handleStartSearch("paginate", searchForm.index + 12)
-                  }
-                >
-                  تحميل المزيد
-                </button>} */}
               </div>
             </div>
           </div>

@@ -44,10 +44,10 @@ i18n
             brand: "الماركة",
             anyBrand: "أي علامة تجارية",
             searchBrand: "البحث عن العلامة التجارية",
-            model: "المودل",
+            model: "النوع",
             searchModal: "مشروط البحث",
-            specificYearOfManufacture: "سنة تصنيع محددة",
-            manufacturingYear: "سنة الصنع",
+            specificYearOfManufacture: "الموديل",
+            manufacturingYear: "الموديل",
             city: "المدينة",
             anyCity: "أي مدينة",
             searchForCity: "ابحث عن المدينة",
@@ -55,15 +55,15 @@ i18n
             car: "سيارة",
             price: "السعر",
             saudiRiyal: "ريال سعودى",
-            kilosUsed: "عدد الكيلوهات المستعملة",
+            kilosUsed: "الممشى",
             lessThan: "أقل من",
             moreThan: "أكثر من",
             source: "مصدر",
             searchSource: "مصدر البحث",
             filterLimitError: "لا يمكنك تحديد أكثر من ثلاث خدمات",
             brandLimitError:"لا يمكنك تحديد أكثر من ثلاث ماركات",
-            modelLimitError:"لا يمكنك تحديد أكثر من ثلاثة طرازات"
-
+            modelLimitError:"لا يمكنك تحديد أكثر من ثلاثة طرازات",
+            searchConditionError: "الرجاء تحديد ماركة واحدة"
           },
           results: {
             searchResultForCar: "نتيجة بحث عن سيارة معروضة للبيع",
@@ -187,7 +187,8 @@ i18n
             searchSource: "Serch source",
             filterLimitError: "you can’t select more than three services",
             brandLimitError:"You can't select more than three",
-            modelLimitError:"you cannot select more than three models"
+            modelLimitError:"you cannot select more than three models",
+            searchConditionError: "Please select a modal"
           },
           results: {
             searchResultForCar: "Search result for a car for sale",

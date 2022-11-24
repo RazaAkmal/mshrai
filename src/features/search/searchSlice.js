@@ -9,7 +9,7 @@ const initialState = {
     sources: [],
     kilometer:[],
     price: [],
-
+    yearOptions: []
   },
   cars: [],
   numFound: 0,
@@ -27,6 +27,7 @@ const initialState = {
     source_id: [],
     shape_id: [],
     city_id: [],
+    manufacturing_year: [],
     keyword: "",
     sort:"sort=date+desc",
     index: 0,

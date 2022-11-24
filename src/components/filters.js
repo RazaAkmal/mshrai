@@ -180,7 +180,7 @@ export default function Filters(props) {
       <div className="filter-title">
         <Trans i18nKey="description.Filter" />
       </div>
-      <form className="toggle-container" id="accordion1">
+      <form className="toggle-container" onClick={(event) => event.stopPropagation()} id="accordion1">
         <button
           className="icon_link close_btn"
           type="button"
@@ -340,7 +340,7 @@ export default function Filters(props) {
             </Accordion.Item>
             <Accordion.Item eventKey="3">
               <Accordion.Header>
-                {t("search.price")} [{t("search.saudiRiyal")}]
+                {t("search.price")}
               </Accordion.Header>
               <Accordion.Body>
                 <div className="panel-content">

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useSelector } from "react";
 import "./App.css";
+import ReactGA from 'react-ga';
 import {
   Switch,
   Route,
@@ -77,6 +78,8 @@ const App = () => {
       let userId = uniqid("userId-");
       Cookies.set("id", userId);
     }
+    ReactGA.initialize('UA-248573380-1');
+    ReactGA.pageview(window.location.pathname + window.location.search);
   }, []);
 
   useEffect(() => {
@@ -162,7 +165,7 @@ const App = () => {
       console.log(err);
       // window.close();
     }
-    
+
   };
 
   // TO LOGOUT
@@ -205,6 +208,9 @@ const App = () => {
           });
           setSubmitting(false);
           setShowRegister(false);
+          if (res) {
+              loginHelper(res.data.data.token, res.data.data.user);
+          }
         })
         .catch((err) => {
           const errors = {};

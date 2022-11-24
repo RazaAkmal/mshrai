@@ -16,6 +16,7 @@ export async function fetchSearchInputs() {
     cityOptions: [],
     shapes: [],
     sources: [],
+    yearOptions: []
   };
   if (result.code === "0") {
     if (result.marks && result.marks.length > 0) {
@@ -55,6 +56,9 @@ export async function fetchSearchInputs() {
     }
     if (result.shapes && result.shapes.length > 0) {
       options.shapes = result.shapes;
+    }
+    for (let index = 1990; index <= new Date().getFullYear(); index++) {
+      options.yearOptions.push({ value: index, label: index,});
     }
   }
   return options;
