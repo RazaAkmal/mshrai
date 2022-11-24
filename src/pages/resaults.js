@@ -116,8 +116,13 @@ export default function Resault(props) {
     //       dispatch(setResultsNumebr(res.data.response.numFound));
     //   }
     // });
-
+    reportReasons().then((res) => {
+      dispatch(setReportReasons(res.data));
+    }).catch((err) => {
+        console.log(err);
+    });
   }, []);
+
   const [state, setState] = useState({
     searchKeyWord: "",
     email: "",
@@ -385,12 +390,7 @@ export default function Resault(props) {
       }
     });
 
-    reportReasons().then((res) => {
-      dispatch(setReportReasons(res.data));
-    }).catch((err) => {
-        console.log(err);
-    });
-  }, [dispatch, searchForm, page]);
+  }, [dispatch, searchForm]);
 
   const toggleOpen = () => setState((prevState) => ({
     ...prevState,
@@ -854,11 +854,11 @@ export default function Resault(props) {
                   </div>
                 </div>
                 <InfiniteScroll
-                  dataLength={searchForm.index + 12} //This is important field to render the next data
+                  dataLength={state.cars.length} //This is important field to render the next data
                   next={() =>
                     _handleStartSearch("paginate", searchForm.index + 12)
                   }
-                  hasMore={searchForm.index + 12 < resultsNumber}
+                  hasMore={state.cars.length < resultsNumber}
                   loader={<img src="./images/loading.gif" alt="loading" />}
                   scrollWindow={false}
                   scrollableTarget="scrollableDiv"
@@ -870,17 +870,6 @@ export default function Resault(props) {
                 >
                   <Cars cars={state.cars} />
                 </InfiniteScroll>
-              </div>
-              <div className="w-100 text-left">
-                {/* <button className="link green_bc" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">حفظ نتائج البحث</button> */}
-                {/* {resultsNumber > cars.length &&<button
-                  className="link"
-                  onClick={() =>
-                    _handleStartSearch("paginate", searchForm.index + 12)
-                  }
-                >
-                  تحميل المزيد
-                </button>} */}
               </div>
             </div>
           </div>
