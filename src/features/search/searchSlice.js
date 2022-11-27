@@ -19,7 +19,7 @@ const initialState = {
     price: [],
     price_obj: [],
     model_year_start: 1990,
-    model_year_end: Number(new Date().getFullYear()),
+    model_year_end: 2023,
     kilometer:[],
     kilometer_obj:[],
     brand_id: [],
