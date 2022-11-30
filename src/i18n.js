@@ -131,11 +131,11 @@ i18n
           logoutSuccessfullyMessage: 'لقد تم تسجيل خروجك بنجاح!',
           hiText:'أهلاً',
           profileMenu:{
-            MyProfile:'(هكذا)الملف الشخصي الخاص بي',
-            MyRequest:'(هكذا)طلبي',
-            RelatedPosts:'(هكذا)المنشورات ذات الصلة',
-            CommentedPosts:'(هكذا)المشاركات المعلق عليها',
-            HiddenPosts:'المشاركات المخفية(هكذا)',
+            MyProfile:'(قريبا)الملف الشخصي الخاص بي',
+            MyRequest:'(قريبا)طلبي',
+            RelatedPosts:'(قريبا)المنشورات ذات الصلة',
+            CommentedPosts:'(قريبا)المشاركات المعلق عليها',
+            HiddenPosts:'المشاركات المخفية(قريبا)',
             LogOut:'تسجيل خروج',
             invalidCredentials:'بيانات الاعتماد غير صالحة'
           }
