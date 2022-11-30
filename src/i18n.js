@@ -131,11 +131,12 @@ i18n
           logoutSuccessfullyMessage: 'لقد تم تسجيل خروجك بنجاح!',
           hiText:'أهلاً',
           profileMenu:{
-            MyProfile:'(قريبا)الملف الشخصي الخاص بي',
-            MyRequest:'(قريبا)طلبي',
-            RelatedPosts:'(قريبا)المنشورات ذات الصلة',
-            CommentedPosts:'(قريبا)المشاركات المعلق عليها',
-            HiddenPosts:'المشاركات المخفية(قريبا)',
+            MyProfile:'الملف الشخصي الخاص بي',
+            commingSoon: '(قريبا) ',
+            MyRequest:'طلبي',
+            RelatedPosts:'المنشورات ذات الصلة',
+            CommentedPosts:'المشاركات المعلق عليها',
+            HiddenPosts:'المشاركات المخفية',
             LogOut:'تسجيل خروج',
             invalidCredentials:'بيانات الاعتماد غير صالحة'
           }
@@ -256,11 +257,12 @@ i18n
           logoutSuccessfullyMessage: 'You have been successfully logged out!',
           hiText:'Hi',
           profileMenu:{
-            MyProfile:'My Profile (soon)',
-            MyRequest:'My Request (soon)',
-            RelatedPosts:'Related (soon)',
-            CommentedPosts:'Commented Posts (soon)',
-            HiddenPosts:'Hidden Posts (soon)',
+            MyProfile:'My Profile ',
+            commingSoon: '(Soon)',
+            MyRequest:'My Request',
+            RelatedPosts:'Related',
+            CommentedPosts:'Commented Posts',
+            HiddenPosts:'Hidden Posts',
             LogOut:'Log out',
             invalidCredentials:'Invalid Credentials'
           }
