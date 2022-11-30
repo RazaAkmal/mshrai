@@ -1720,3 +1720,14 @@ padding-left: 10px;
 left: 0;
 right: 92%;
 }
+.scroll-btn {
+  position: fixed; 
+   width: 100%;
+   left: 50%;
+   bottom: 120px;
+   height: 20px;
+   font-size: 3rem;
+   z-index: 1;
+   cursor: pointer;
+   color: #00CEBD;
+}

@@ -5,6 +5,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import Filters from "../components/filters";
 import Cars from "../components/cars";
 import Loader from "../components/loader";
+import ScrollButton from "../components/ScrollTop";
 import {
   searchResult,
   searchCars,
@@ -446,6 +447,8 @@ export default function Resault(props) {
   return (
     <>
       <header>
+      <ScrollButton />
+
         <div className="container">
           <div className="row logo-row">
             <div className="col-6">
