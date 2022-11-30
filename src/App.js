@@ -365,22 +365,39 @@ const App = () => {
               </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item href="#/action-2">
-                <FontAwesomeIcon icon={faUser} /> {t("profileMenu.MyProfile")}
+                <FontAwesomeIcon icon={faUser} />
+                  {selectedLng === "en" ?
+                    <>{t("profileMenu.MyProfile")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
+                    <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.MyProfile")}   </>
+                  }
               </Dropdown.Item>
               <Dropdown.Item href="#/action-3">
-                <FontAwesomeIcon icon={faEye} /> {t("profileMenu.MyRequest")}
+                <FontAwesomeIcon icon={faEye} />
+                {selectedLng === "en" ?
+                    <>{t("profileMenu.MyRequest")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
+                    <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.MyRequest")}   </>
+                  }
               </Dropdown.Item>
               <Dropdown.Item href="#/action-3">
                 <FontAwesomeIcon icon={faStar} />{" "}
-                {t("profileMenu.RelatedPosts")}
+                {selectedLng === "en" ?
+                    <>{t("profileMenu.RelatedPosts")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
+                    <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.RelatedPosts")}   </>
+                  }
               </Dropdown.Item>
               <Dropdown.Item href="#/action-3">
                 <FontAwesomeIcon icon={faCommentAlt} />{" "}
-                {t("profileMenu.CommentedPosts")}
+                {selectedLng === "en" ?
+                    <>{t("profileMenu.CommentedPosts")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
+                    <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.CommentedPosts")}   </>
+                  }
               </Dropdown.Item>
               <Dropdown.Item href="#/action-3">
                 <FontAwesomeIcon icon={faEyeSlash} />{" "}
-                {t("profileMenu.HiddenPosts")}
+                {selectedLng === "en" ?
+                    <>{t("profileMenu.HiddenPosts")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
+                    <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.HiddenPosts")}   </>
+                  }
               </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item onClick={logoutHandler}>

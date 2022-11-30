@@ -936,9 +936,10 @@ border: none;
   width: 32px;
 }
 .report_btn {
-  float: left;
-  margin-left: 10px;
+  /* float: left;
+  margin-right: 10px; */
   z-index: 9999;
+  padding: 5px 10px 5px 5px;
 }
 .copyrights {
   padding: 25px;
@@ -1691,4 +1692,31 @@ input[type=checkbox]+label:before, input[type=radio]+label:before {
    
 .report-flag:hover {
   color: red;
+}
+
+
+.dropdown_icon_en{
+  position: relative;
+  float: right;
+  margin-top: 30px;
+  left: -79px
+}
+.dropdown_itam_flag{
+  padding: 0px !important;
+  min-width: 0px !important;
+}
+.dropdown_icon_ar{
+  position: relative;
+  float: left;
+  right: -79px;
+  margin-top: 30px;
+}
+.three_dot_icon{
+position: relative;
+font-size: 20px;
+width: 30px;
+float: right;
+padding-left: 10px;
+left: 0;
+right: 92%;
 }

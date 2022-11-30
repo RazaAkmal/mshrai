@@ -132,6 +132,7 @@ i18n
           hiText:'أهلاً',
           profileMenu:{
             MyProfile:'الملف الشخصي الخاص بي',
+            commingSoon: '(قريبا) ',
             MyRequest:'طلبي',
             RelatedPosts:'المنشورات ذات الصلة',
             CommentedPosts:'المشاركات المعلق عليها',
@@ -256,7 +257,8 @@ i18n
           logoutSuccessfullyMessage: 'You have been successfully logged out!',
           hiText:'Hi',
           profileMenu:{
-            MyProfile:'My Profile',
+            MyProfile:'My Profile ',
+            commingSoon: '(Soon)',
             MyRequest:'My Request',
             RelatedPosts:'Related',
             CommentedPosts:'Commented Posts',

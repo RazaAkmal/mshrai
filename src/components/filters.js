@@ -285,7 +285,7 @@ export default function Filters(props) {
                       //   2022: `2022`,
                       // }}
                       min={1990}
-                      max={new Date().getFullYear()}
+                      max={2023}
                       value={[
                         props.searchState.model_year_start,
                         props.searchState.model_year_end,
