@@ -1720,7 +1720,8 @@ padding-left: 10px;
 left: 0;
 right: 92%;
 }
-.scroll-btn {
+
+.scroll-btn-en {
   position: fixed; 
    width: 100%;
    left: 50%;
@@ -1730,6 +1731,17 @@ right: 92%;
    z-index: 1;
    cursor: pointer;
    color: #00CEBD;
+}
+.scroll-btn-ar {
+  position: fixed; 
+  width: 100%;
+  right: 50%;
+  bottom: 120px;
+  height: 20px;
+  font-size: 3rem;
+  z-index: 1;
+  cursor: pointer;
+  color: #00CEBD;
 }
 
 .sources_img_main{
