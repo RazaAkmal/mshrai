@@ -17,6 +17,10 @@ const ScrollButton = () =>{
   };
   
   const scrollToTop = () =>{
+    window.scrollTo({
+      top: 0, 
+      behavior: 'smooth'
+    });
     var myDiv = document.getElementById('scrollableDiv');
     myDiv.scrollTop = 0;
   };
@@ -24,9 +28,9 @@ const ScrollButton = () =>{
   window.addEventListener('scroll', toggleVisible);
   
   return (
-    <div className="scroll-btn">
+    <div className="scroll-btn" style={{bottom: visible ? '120px' : '60px'}}>
      <FaArrowCircleUp onClick={scrollToTop} 
-     style={{display: visible ? 'inline' : 'none'}} />
+     style={{display: 'inline'}} />
     </div>
   );
 }

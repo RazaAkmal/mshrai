@@ -283,6 +283,24 @@ export default function Search() {
     );
   };
 
+  const sortedSearchSources = searchInputs.sources
+    .reduce((acc, element) => {
+      if (
+        element.label_en !== "Snapchat" &&
+        element.label_en !== "Instagram" &&
+        element.label_en !== "Twitter"
+      ) {
+        return [element, ...acc];
+      }
+      return [...acc, element];
+    }, [])
+    .filter(
+      (element) =>
+        element.label_en !== "Snapchat" &&
+        element.label_en !== "Instagram" &&
+        element.label_en !== "Twitter"
+    );
+
   return (
     <>
       <div className="main_screen img_bc">
@@ -294,6 +312,12 @@ export default function Search() {
                 <h1>
                   <Trans i18nKey="description.Header" />
                 </h1>
+                <div className="sources_img_main" >
+                {sortedSearchSources.map( ({image}) => {
+                  return <img src={image} alt="img" className="source_img"></img>
+                })
+                }
+                </div>
                 <form className="search_form">
                   <Tabs
                     id="controlled-tab-example"
