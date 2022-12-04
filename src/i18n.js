@@ -72,7 +72,7 @@ i18n
             enterYourEmail:
               "أدخل بريدك الألكترونى وسيتم إبلاغك عند توافر نتائج جديدة",
             email: "البريد الألكترونى",
-            saveSearchResult: "حفظ نتائج البحث",
+            saveSearchResult: "حفظ نتائج البحث 🔔",
             sortBy: "ترتيب حسب",
             pleaseEnterEmail: "الرجاء إدخال البريد الإلكتروني",
             pleaseEnterPhone: "الرجاء إدخال رقم الهاتف",
@@ -198,7 +198,7 @@ i18n
             enterYourEmail:
               "Enter your email and you will be notified when new results are available",
             email: "E-mail",
-            saveSearchResult: "Save search results",
+            saveSearchResult: "Save search results 🔔",
             sortBy: "Sort by",
             pleaseEnterEmail: "Please enter email",
             pleaseEnterPhone: "Please enter Phone Number",
