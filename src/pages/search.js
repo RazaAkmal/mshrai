@@ -303,14 +303,17 @@ export default function Search() {
 
   return (
     <>
+    <div className="firstpage_logo">
+        <img src="./images/logo.png" alt="logo" />
+      </div>
       <div className="main_screen img_bc">
         <div className="container">
           <div className="row">
             <div className="col-12 mt-5 pt-5">
               <div className="cont">
-                <img src="../images/logo_color.png" alt="" className="logo" />
+                {/* <img src="../images/logo_color.png" alt="" className="logo" /> */}
                 <h1>
-                  <Trans i18nKey="description.Header" />
+                  <Trans i18nKey="description.Footer" />
                 </h1>
                 <div className="sources_img_main" >
                 {sortedSearchSources.map( ({image}) => {
@@ -572,7 +575,7 @@ export default function Search() {
                     {t("search.see")} {(state.brand_id.length > 0 || state.brand_type_id.length > 0) ? resultsNumber : ''} {t("search.car")}
                   </button>
                 </form>
-                <p>{t("description.Footer")}</p>
+                {/* <p>{t("description.Footer")}</p> */}
               </div>
             </div>
           </div>

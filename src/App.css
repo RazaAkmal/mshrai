@@ -1779,3 +1779,11 @@ right: 92%;
   border-radius: 50px;
   padding: 10px;
 }
+
+.firstpage_logo {
+  position: absolute;
+  width: 160px;
+  z-index: 1;
+  top: 16px;
+  right: 20px;
+  }
