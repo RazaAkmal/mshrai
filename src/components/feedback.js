@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import Button from 'react-bootstrap/Button';
 import Fade from '@mui/material/Fade';
 import Paper from '@mui/material/Paper';
@@ -41,6 +41,29 @@ const feedback = [
   },
 ]
 const Feedback = ({selectedLng}) => {
+
+
+  const [visible, setVisible] = useState(false)
+  
+  const toggleVisible = () => {
+    const scrolled = document.getElementById('scrollableDiv').scrollTop;
+    if (scrolled > 100){
+      setVisible(true)
+    } 
+    else if (scrolled <= 300){
+      setVisible(false)
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', toggleVisible);
+  
+    return () => {
+      window.removeEventListener('scroll', toggleVisible)
+    }
+  }, [])
+  
+
   const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
@@ -75,7 +98,7 @@ const Feedback = ({selectedLng}) => {
   };
   return (
     <div>
-      <Button className={ selectedLng === 'en'? "float-en" : 'float-ar'} onClick={handleClick}>
+      <Button style={{bottom: visible ? '80px' : '10px', }} className={ selectedLng === 'en'? "float-en" : 'float-ar'} onClick={handleClick}>
               <img
                 style={{ width: '40px', height: '40px' }}
                 src="../images/happy-active.png"

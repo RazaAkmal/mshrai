@@ -1651,8 +1651,32 @@ input[type=checkbox]+label:before, input[type=radio]+label:before {
 }
 
 .float-en {
+  position: fixed; 
+   /* bottom: 80px; */
+   right:10px;
+   z-index: 1;
+   cursor: pointer;
+   color: #FFF;
+   text-align:center;
+
+   box-shadow: 2px 2px 3px #999;
+
+}
+.float-ar {
+  position: fixed; 
+   left: 10px;
+   /* bottom: 80px; */
+   cursor: pointer;
+   color:#FFF;
+   text-align:center;
+   box-shadow: 2px 2px 3px #999;
+
+}
+
+
+/* .float-en {
 	position:absolute !important;
-	bottom:40px;
+	bottom:-70px;
 	right:40px;
 	color:#FFF;
 	text-align:center;
@@ -1660,12 +1684,12 @@ input[type=checkbox]+label:before, input[type=radio]+label:before {
 }
 .float-ar {
 	position:absolute !important;
-	bottom:40px;
+	bottom:-70px;
 	left:40px;
 	color:#FFF;
 	text-align:center;
 	box-shadow: 2px 2px 3px #999;
-}
+} */
 
 .paper-en {
   width: 500px;
