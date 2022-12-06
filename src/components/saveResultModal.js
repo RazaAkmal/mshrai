@@ -128,7 +128,7 @@ export default function SaveResults() {
                 _handleSaveResults();
               }}
             >
-              حفظ نتائج البحث
+              ارسال اشعارات للنتائج البحث
             </button>
           </div>
         </div>

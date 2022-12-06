@@ -283,17 +283,44 @@ export default function Search() {
     );
   };
 
+  const sortedSearchSources = searchInputs.sources
+    .reduce((acc, element) => {
+      if (
+        element.label_en !== "Snapchat" &&
+        element.label_en !== "Instagram" &&
+        element.label_en !== "Twitter"
+      ) {
+        return [element, ...acc];
+      }
+      return [...acc, element];
+    }, [])
+    .filter(
+      (element) =>
+        element.label_en !== "Snapchat" &&
+        element.label_en !== "Instagram" &&
+        element.label_en !== "Twitter"
+    );
+
   return (
     <>
+    <div className="firstpage_logo">
+        <img className="firstpage_logo_img" src="./images/logo.png" alt="logo" />
+      </div>
       <div className="main_screen img_bc">
         <div className="container">
           <div className="row">
             <div className="col-12 mt-5 pt-5">
               <div className="cont">
-                <img src="../images/logo_color.png" alt="" className="logo" />
+                {/* <img src="../images/logo_color.png" alt="" className="logo" /> */}
                 <h1>
-                  <Trans i18nKey="description.Header" />
+                  <Trans i18nKey="description.Footer" />
                 </h1>
+                <div className="sources_img_main" >
+                {sortedSearchSources.map( ({image}) => {
+                  return <img src={image} alt="img" className="source_img"></img>
+                })
+                }
+                </div>
                 <form className="search_form">
                   <Tabs
                     id="controlled-tab-example"
@@ -548,7 +575,7 @@ export default function Search() {
                     {t("search.see")} {(state.brand_id.length > 0 || state.brand_type_id.length > 0) ? resultsNumber : ''} {t("search.car")}
                   </button>
                 </form>
-                <p>{t("description.Footer")}</p>
+                {/* <p>{t("description.Footer")}</p> */}
               </div>
             </div>
           </div>

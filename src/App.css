@@ -606,6 +606,12 @@ border: none;
 
 
 @media all and (max-width: 991.98px) {
+  .firstpage_logo_img {
+    width: 148px;
+     }
+     .subscribe button {
+      height: 50px !important;
+     }
   .paper-en {
     width: auto !important;
     padding: 20px;
@@ -1651,8 +1657,32 @@ input[type=checkbox]+label:before, input[type=radio]+label:before {
 }
 
 .float-en {
+  position: fixed; 
+   /* bottom: 80px; */
+   right:10px;
+   z-index: 1;
+   cursor: pointer;
+   color: #FFF;
+   text-align:center;
+
+   box-shadow: 2px 2px 3px #999;
+
+}
+.float-ar {
+  position: fixed; 
+   left: 10px;
+   /* bottom: 80px; */
+   cursor: pointer;
+   color:#FFF;
+   text-align:center;
+   box-shadow: 2px 2px 3px #999;
+
+}
+
+
+/* .float-en {
 	position:absolute !important;
-	bottom:40px;
+	bottom:-70px;
 	right:40px;
 	color:#FFF;
 	text-align:center;
@@ -1660,12 +1690,12 @@ input[type=checkbox]+label:before, input[type=radio]+label:before {
 }
 .float-ar {
 	position:absolute !important;
-	bottom:40px;
+	bottom:-70px;
 	left:40px;
 	color:#FFF;
 	text-align:center;
 	box-shadow: 2px 2px 3px #999;
-}
+} */
 
 .paper-en {
   width: 500px;
@@ -1719,4 +1749,46 @@ float: right;
 padding-left: 10px;
 left: 0;
 right: 92%;
+}
+
+.scroll-btn-en {
+  position: fixed; 
+   width: 100%;
+   left: 50%;
+   bottom: 120px;
+   height: 20px;
+   font-size: 3rem;
+   z-index: 1;
+   cursor: pointer;
+   color: #00CEBD;
+}
+.scroll-btn-ar {
+  position: fixed; 
+  width: 100%;
+  right: 50%;
+  bottom: 120px;
+  height: 20px;
+  font-size: 3rem;
+  z-index: 1;
+  cursor: pointer;
+  color: #00CEBD;
+}
+
+.sources_img_main{
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+.source_img{
+  width: 70px;
+  height: 70px;
+  border-radius: 50px;
+  padding: 10px;
+}
+.firstpage_logo {
+  position: absolute;
+  width: 230px;
+  z-index: 1;
+  top: 16px;
+  left: 41%;
 }
