@@ -304,7 +304,7 @@ export default function Search() {
   return (
     <>
     <div className="firstpage_logo">
-        <img src="./images/logo.png" alt="logo" />
+        <img className="firstpage_logo_img" src="./images/logo.png" alt="logo" />
       </div>
       <div className="main_screen img_bc">
         <div className="container">
