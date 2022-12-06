@@ -1792,3 +1792,20 @@ right: 92%;
   top: 16px;
   left: 41%;
 }
+.selct-year{
+  display: flex;
+  flex-wrap: wrap;
+}
+.selct-year .fetching{
+  color: black;
+  margin: 5px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+}
+.selct-year .fetching input[type="checkbox"]{
+display: block;
+margin:0 5px; 
+border-radius: 3px;
+}

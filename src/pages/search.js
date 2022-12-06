@@ -9,7 +9,8 @@ import { Tabs, Tab } from "react-bootstrap";
 import { fetchSearchInputs, searchCars } from "../features/search/searchApi";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
-
+import Menu from '../components/SelectMenu'
+import Option from '../components/SelectOption'
 import {
   getSearchInputs,
   setSearchForm,
@@ -442,16 +443,33 @@ export default function Search() {
                           </label>
                           <Select
                             value={selectedYears}
+                            components={{ Menu }}
                             isMulti
                             name="modal_year"
                             options={searchInputs.yearOptions}
                             className="basic-multi-select"
                             placeholder=""
                             styles={colourStyles}
-                            onChange={(value) =>
-                              setYearRange(value)
+                            onChange={(value) => {
+                              if (value.length >= 0) {
+                                setYearRange(value)
+                              } else {
+                                console.log(typeof document.getElementById(value.label).value, "document.getElementById('isYearSelected')")
+                                if (document.getElementById(value.label).value !== "false") {
+                                  let newValue = [...selectedYears]
+                                  const index = newValue.findIndex((element) => element?.label === value.label)
+                                  newValue.splice(index, 1)
+                                  setYearRange(newValue)
+                                } else {
+                                  let newValue = [...selectedYears]
+                                  newValue.push(value)
+                                  const truthyArray = newValue.filter(Boolean)
+                                  setYearRange(truthyArray)
+                                }
+                              }
                             }
-                            // classNamePrefix="select"
+                            }
+                          classNamePrefix="select"
                           />
                         </div>
                         {/* <div className="col-md-6 col-6  mb-3">
