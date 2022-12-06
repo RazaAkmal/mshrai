@@ -399,13 +399,16 @@ export default function Resault(props) {
   }));
 
   const fillterBtnClickHandle = (e) => {
+    setShowWrapperDiv(true)
     $(".toggle-container").addClass("move");
     e.stopPropagation();
   };
+  const [showWrapperDiv, setShowWrapperDiv] = useState(false)
   const closeFilterMenuHandle = (e) => {
     const result = $('.toggle-container').attr('class');
     if (result.includes('move')) {
       $(".toggle-container").removeClass("move");
+      setShowWrapperDiv(false)
       e.stopPropagation();
     }
   };
@@ -480,7 +483,10 @@ export default function Resault(props) {
           </div>
         </div>
       </header>
-      <section className="section-gray" onClick={closeFilterMenuHandle}>
+      <section className="section-gray" >
+        <div style={{
+              display: showWrapperDiv ? "block" : "none",
+            }} className="gray-section-overlay" onClick={closeFilterMenuHandle}></div>
         <div className="container-fluid">
           <div
             id="scrollableDiv"
