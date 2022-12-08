@@ -358,7 +358,7 @@ export default function Search() {
                           />
                         </div> */}
                         {/* FOR BRANDS ////////////////////////////////////////////////////////////////*/}
-                        <div className="col-md-6 col-6  mb-3 d-sm-block">
+                        <div className="col-md-6 col-sm-6  mb-3 d-sm-block">
                           <label className="text-end d-block">
                             {t("search.brand")}
                           </label>
@@ -391,7 +391,7 @@ export default function Search() {
                           />
                         </div>
                         {/* FOR MODELS /////////////////////////////////////////////////////////////*/}
-                        <div className="col-md-6 col-6  mb-3">
+                        <div className="col-md-6 col-sm-6  mb-3">
                           <label className="text-end d-block">
                             {t("search.model")}
                           </label>
@@ -436,7 +436,7 @@ export default function Search() {
                             // classNamePrefix="select"
                           />
                         </div>
-                        <div className="col-md-6 col-6 mb-3">
+                        <div className="col-md-6 col-sm-6 mb-3">
                           <label className="text-end d-block">
                             {t("search.specificYearOfManufacture")}
                           </label>
@@ -454,7 +454,7 @@ export default function Search() {
                             // classNamePrefix="select"
                           />
                         </div>
-                        {/* <div className="col-md-6 col-6  mb-3">
+                        {/* <div className="col-md-6 col-sm-6  mb-3">
                           <label className="text-end d-block">
                             {t("search.manufacturingYear")}
                           </label>
@@ -516,7 +516,7 @@ export default function Search() {
                             />
                           </div>
                         </div> */}
-                        <div className="col-md-6 col-6  mb-3">
+                        <div className="col-md-6 col-sm-6  mb-3">
                           <label className="text-end d-block">
                             {t("search.city")}
                           </label>
@@ -538,7 +538,7 @@ export default function Search() {
                           />
                         </div>
 
-                        {/* <div className="col-md-6 col-6  mb-3"></div> */}
+                        {/* <div className="col-md-6 col-sm-6  mb-3"></div> */}
                         {/* Commenting this Code is its not required yet
                      <div className="col-12 flex_col  mb-3">
                       {searchInputs.shapes.map((shape, i) => {
