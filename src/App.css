@@ -1463,6 +1463,9 @@ border: none;
   left: 15px;
   z-index: 1;
 }
+.language-button .dropdown-menu {
+  min-width: 4rem !important;
+}
 .login-link {
   position: absolute;
   left: 127px;
