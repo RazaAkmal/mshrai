@@ -303,9 +303,18 @@ export default function Search() {
 
   return (
     <>
-    <div className="firstpage_logo">
+    {/* <div className="firstpage_logo">
         <img className="firstpage_logo_img" src="./images/logo.png" alt="logo" />
-      </div>
+      </div> */}
+      <header >
+          <div className="container">
+          <div className="row logo-row">
+            <div className="col-6">
+                <img src="./images/logo.png" alt="logo" />
+            </div>
+          </div>
+        </div>
+      </header>
       <div className="main_screen img_bc">
         <div className="container">
           <div className="row">
