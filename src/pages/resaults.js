@@ -28,6 +28,8 @@ import { parseParams } from "../helpers/helpers";
 import "react-toastify/dist/ReactToastify.css";
 import { Spinner } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 export default function Resault(props) {
   useEffect(() => {
@@ -149,9 +151,6 @@ export default function Resault(props) {
     }));
   }, [cars])
 
-  useEffect(()=>{
-    console.log(searchInputs)
-  },[searchInputs])
 
   const { t } = useTranslation();
   const limit = 8;
@@ -380,18 +379,19 @@ export default function Resault(props) {
         $("body").css({ "overflow-y": "visible" });
       });
       if (res && res.response && res.response.docs) {
-        setLoading(false);
+        
         setIinitialCars(res.response.docs);
         let carsArray =
           nextPage
-            ? [...state.cars, ...res.response.docs]
+            ? [...res.response.docs]
             : res.response.docs;
         dispatch(setCars(carsArray));
         dispatch(setResultsNumebr(res.response.numFound));
+        setLoading(false);
       }
     });
 
-  }, [dispatch, searchForm]);
+  }, [dispatch, searchForm, page]);
 
   const toggleOpen = () => setState((prevState) => ({
     ...prevState,
@@ -445,6 +445,13 @@ export default function Resault(props) {
     });
     return returnVal;
   };
+
+  let totalpages = Math.floor(resultsNumber/12);
+  const changePage  = (e, value) => {
+    // setPage(page+1)
+    setPage(value);
+  };
+  // const [loading, setLoading] = useState(true)
 
   const menuClass = `dropdown-menu${state.isOpen ? " show" : ""}`;
   return (
@@ -536,190 +543,185 @@ export default function Resault(props) {
               </div>
             </div>
             <div className="row">
-            <ul className="search_tags">
-                    {searchForm.brand_id && searchForm.brand_id.length > 0
-                      ? searchInputs.marksOptions.map((mark, index) => {
-                          return searchForm.brand_id.includes(mark.value) &&
-                          modalOfbrandNotSelected(mark.value, index) ? (
-                              <>
-                            <li key={"searchMarks" + index}>
-                              {isEnglish ? mark.label_en : mark.label}
-                              <span
-                                onClick={() => {
-                                  let marks = [...searchForm.brand_id];
-                                  if (marks.includes(mark.value)) {
-                                    marks.splice(marks.indexOf(mark.value), 1);
-                                  }
-                                  _handleStartSearch("brand_id", marks);
-                                }}
-                                >
-                                <IoIosClose />
-                              </span>
-                            </li>
-                                </>
-                          ) : (
-                            false
-                          );
-                        })
-                      : ""}
-                    {searchForm.brand_type_id &&
-                    searchForm.brand_type_id.length > 0
-                      ? searchInputs.modelOptions.map((model, index) => {
-                          return searchForm.brand_type_id.includes(model.value)
-                            ? getBrandValueAswell(model, index)
-                            : false;
-                        })
-                      : ""}
-                  </ul>
+              <ul className="search_tags">
+                {searchForm.brand_id && searchForm.brand_id.length > 0
+                  ? searchInputs.marksOptions.map((mark, index) => {
+                      return searchForm.brand_id.includes(mark.value) &&
+                        modalOfbrandNotSelected(mark.value, index) ? (
+                        <>
+                          <li key={"searchMarks" + index}>
+                            {isEnglish ? mark.label_en : mark.label}
+                            <span
+                              onClick={() => {
+                                let marks = [...searchForm.brand_id];
+                                if (marks.includes(mark.value)) {
+                                  marks.splice(marks.indexOf(mark.value), 1);
+                                }
+                                _handleStartSearch("brand_id", marks);
+                              }}
+                            >
+                              <IoIosClose />
+                            </span>
+                          </li>
+                        </>
+                      ) : (
+                        false
+                      );
+                    })
+                  : ""}
+                {searchForm.brand_type_id && 
+                searchForm.brand_type_id.length > 0
+                  ? searchInputs.modelOptions.map((model, index) => {
+                      return searchForm.brand_type_id.includes(model.value)
+                        ? getBrandValueAswell(model, index)
+                        : false;
+                    })
+                  : ""}
+              </ul>
             </div>
             <div className="row">
-            <ul className="search_tags">
-                    {searchForm.shape_id && searchForm.shape_id.length > 0
-                      ? searchInputs.shapes.map((shape, index) => {
-                          return searchForm.shape_id.includes(shape.id) ? (
-                            <li key={"searchShapes" + index}>
-                              {isEnglish ? shape.title_en : shape.title}
-                              <span
-                                onClick={() => {
-                                  let shapes = [...searchForm.shape_id];
-                                  if (shapes.includes(shape.value)) {
-                                    shapes.splice(
-                                      shapes.indexOf(shape.value),
-                                      1
-                                    );
-                                  }
-                                  _handleStartSearch("shape_id", shapes);
-                                }}
-                              >
-                                <IoIosClose />
-                              </span>
-                            </li>
-                          ) : (
-                            false
-                          );
-                        })
-                      : ""}
-                    {searchForm.source_id && searchForm.source_id.length > 0
-                      ? searchInputs.sources.map((source, index) => {
-                          return searchForm.source_id.includes(source.value) ? (
-                            <li key={"searchcities" + index}>
-                              {source.label === "Snap"
-                                ? "Social Media"
-                                : isEnglish ? source.label_en : source.label}
-                              <span
-                                onClick={() => {
-                                  let sources = [...searchForm.source_id];
-                                  if (sources.includes(source.value)) {
-                                    sources.splice(
-                                      sources.indexOf(source.value),
-                                      1
-                                    );
-                                  }
-                                  _handleStartSearch("source_id", sources);
-                                }}
-                              >
-                                <IoIosClose />
-                              </span>
-                            </li>
-                          ) : (
-                            false
-                          );
-                        })
-                      : ""}
-                    {searchForm.price && searchForm.price.length > 0
-                      ? searchForm.price.map((price, index) => {
-                          return (
-                            <li
-                              style={{ direction: "ltr" }}
-                              key={"searchcities" + index}
-                            >
-                              {price}
-                              <span
-                                onClick={() => {
-                                  let prices = [...searchForm.price];
-                                  prices.splice(prices.indexOf(price), 1);
-                                  _handleStartSearch("price", prices);
-                                }}
-                              >
-                                <IoIosClose />
-                              </span>
-                            </li>
-                          );
-                        })
-                      : ""}
-                    {searchForm.kilometer && searchForm.kilometer.length > 0
-                      ? searchForm.kilometer.map((kilometer, index) => {
-                          return (
-                            <li
-                              style={{ direction: "ltr" }}
-                              key={"searchcities" + index}
-                            >
-                              {kilometer}
-                              <span
-                                onClick={() => {
-                                  let kilometers = [...searchForm.kilometer];
-                                  kilometers.splice(
-                                    kilometers.indexOf(kilometer),
-                                    1
-                                  );
-                                  _handleStartSearch("kilometer", kilometers);
-                                }}
-                              >
-                                <IoIosClose />
-                              </span>
-                            </li>
-                          );
-                        })
-                      : ""}
-                    {searchForm.city_id && searchForm.city_id.length > 0
-                      ? searchInputs.cityOptions.map((city, index) => {
-                          return searchForm.city_id.includes(city.value) ? (
-                            <li key={"searchcities" + index}>
-                               {isEnglish ? city.label_en : city.label}
-                              <span
-                                onClick={() => {
-                                  let cities = [...searchForm.city_id];
-                                  if (cities.includes(city.value)) {
-                                    cities.splice(
-                                      cities.indexOf(city.value),
-                                      1
-                                    );
-                                  }
-                                  _handleStartSearch("city_id", cities);
-                                }}
-                              >
-                                <IoIosClose />
-                              </span>
-                            </li>
-                          ) : (
-                            false
-                          );
-                        })
-                      : ""}
-                    {searchForm.model_year_end &&
-                    (searchForm.model_year_end < new Date().getFullYear() ||
-                      searchForm.model_year_start > 1990) ? (
-                      <li>
-                        {searchForm.model_year_start +
-                          "-" +
-                          searchForm.model_year_end}
-                        <span
-                          onClick={() => {
-                            _handleStartSearch("model_year", {
-                              model_year_start: 1990,
-                              model_year_end: new Date().getFullYear(),
-                            });
-                          }}
+              <ul className="search_tags">
+                {searchForm.shape_id && searchForm.shape_id.length > 0
+                  ? searchInputs.shapes.map((shape, index) => {
+                      return searchForm.shape_id.includes(shape.id) ? (
+                        <li key={"searchShapes" + index}>
+                          {isEnglish ? shape.title_en : shape.title}
+                          <span
+                            onClick={() => {
+                              let shapes = [...searchForm.shape_id];
+                              if (shapes.includes(shape.value)) {
+                                shapes.splice(shapes.indexOf(shape.value), 1);
+                              }
+                              _handleStartSearch("shape_id", shapes);
+                            }}
+                          >
+                            <IoIosClose />
+                          </span>
+                        </li>
+                      ) : (
+                        false
+                      );
+                    })
+                  : ""}
+                {searchForm.source_id && searchForm.source_id.length > 0
+                  ? searchInputs.sources.map((source, index) => {
+                      return searchForm.source_id.includes(source.value) ? (
+                        <li key={"searchcities" + index}>
+                          {source.label === "Snap"
+                            ? "Social Media"
+                            : isEnglish
+                            ? source.label_en
+                            : source.label}
+                          <span
+                            onClick={() => {
+                              let sources = [...searchForm.source_id];
+                              if (sources.includes(source.value)) {
+                                sources.splice(
+                                  sources.indexOf(source.value),
+                                  1
+                                );
+                              }
+                              _handleStartSearch("source_id", sources);
+                            }}
+                          >
+                            <IoIosClose />
+                          </span>
+                        </li>
+                      ) : (
+                        false
+                      );
+                    })
+                  : ""}
+                {searchForm.price && searchForm.price.length > 0
+                  ? searchForm.price.map((price, index) => {
+                      return (
+                        <li
+                          style={{ direction: "ltr" }}
+                          key={"searchcities" + index}
                         >
-                          <IoIosClose />
-                        </span>
-                      </li>
-                    ) : (
-                      ""
-                    )}
+                          {price}
+                          <span
+                            onClick={() => {
+                              let prices = [...searchForm.price];
+                              prices.splice(prices.indexOf(price), 1);
+                              _handleStartSearch("price", prices);
+                            }}
+                          >
+                            <IoIosClose />
+                          </span>
+                        </li>
+                      );
+                    })
+                  : ""}
+                {searchForm.kilometer && searchForm.kilometer.length > 0
+                  ? searchForm.kilometer.map((kilometer, index) => {
+                      return (
+                        <li
+                          style={{ direction: "ltr" }}
+                          key={"searchcities" + index}
+                        >
+                          {kilometer}
+                          <span
+                            onClick={() => {
+                              let kilometers = [...searchForm.kilometer];
+                              kilometers.splice(
+                                kilometers.indexOf(kilometer),
+                                1
+                              );
+                              _handleStartSearch("kilometer", kilometers);
+                            }}
+                          >
+                            <IoIosClose />
+                          </span>
+                        </li>
+                      );
+                    })
+                  : ""}
+                {searchForm.city_id && searchForm.city_id.length > 0
+                  ? searchInputs.cityOptions.map((city, index) => {
+                      return searchForm.city_id.includes(city.value) ? (
+                        <li key={"searchcities" + index}>
+                          {isEnglish ? city.label_en : city.label}
+                          <span
+                            onClick={() => {
+                              let cities = [...searchForm.city_id];
+                              if (cities.includes(city.value)) {
+                                cities.splice(cities.indexOf(city.value), 1);
+                              }
+                              _handleStartSearch("city_id", cities);
+                            }}
+                          >
+                            <IoIosClose />
+                          </span>
+                        </li>
+                      ) : (
+                        false
+                      );
+                    })
+                  : ""}
+                {searchForm.model_year_end &&
+                (searchForm.model_year_end < new Date().getFullYear() ||
+                  searchForm.model_year_start > 1990) ? (
+                  <li>
+                    {searchForm.model_year_start +
+                      "-" +
+                      searchForm.model_year_end}
+                    <span
+                      onClick={() => {
+                        _handleStartSearch("model_year", {
+                          model_year_start: 1990,
+                          model_year_end: new Date().getFullYear(),
+                        });
+                      }}
+                    >
+                      <IoIosClose />
+                    </span>
+                  </li>
+                ) : (
+                  ""
+                )}
 
-                      
-                    {/*  this will require when we remove reange manufacturing_year filter  
+                {/*  this will require when we remove reange manufacturing_year filter  
                     {searchForm.manufacturing_year && searchForm.manufacturing_year.length > 0
                       ? searchForm.manufacturing_year.map((year, index) => {
                         return (
@@ -742,22 +744,22 @@ export default function Resault(props) {
                         );
                       })
                       : ""} */}
-                    
-                    {(searchForm.city_id.length > 0 ||
-                      searchForm.source_id.length > 0 ||
-                      searchForm.brand_type_id.length > 0 ||
-                      searchForm.model_year_end < new Date().getFullYear() ||
-                      searchForm.model_year_start > 1990 ||
-                      searchForm.brand_id.length > 0) && (
-                      <li
-                        className="search_tags-remove"
-                        key={"searchcitiesclear"}
-                        onClick={() => _handleStartSearch("clearall")}
-                      >
-                        {isEnglish ? "Clear All" : "امسح الكل"}
-                      </li>
-                    )}
-                  </ul>
+
+                {(searchForm.city_id.length > 0 ||
+                  searchForm.source_id.length > 0 ||
+                  searchForm.brand_type_id.length > 0 ||
+                  searchForm.model_year_end < new Date().getFullYear() ||
+                  searchForm.model_year_start > 1990 ||
+                  searchForm.brand_id.length > 0) && (
+                  <li
+                    className="search_tags-remove"
+                    key={"searchcitiesclear"}
+                    onClick={() => _handleStartSearch("clearall")}
+                  >
+                    {isEnglish ? "Clear All" : "امسح الكل"}
+                  </li>
+                )}
+              </ul>
             </div>
             <div className="row">
               <div className="col-lg-2">
@@ -862,7 +864,7 @@ export default function Resault(props) {
                     </div>
                   </div>
                 </div>
-                <InfiniteScroll
+                {/* <InfiniteScroll
                   dataLength={state.cars.length} //This is important field to render the next data
                   next={() =>
                     _handleStartSearch("paginate", searchForm.index + 12)
@@ -878,11 +880,28 @@ export default function Resault(props) {
                   }
                 >
                   <Cars cars={state.cars} />
-                </InfiniteScroll>
+                </InfiniteScroll> */}
+                {loading ? (
+                  <img
+                    src="./images/loading.gif"
+                    alt="loading"
+                    className="loader"
+                  />
+                ) : (
+                  <Cars cars={state.cars} />
+                )}
               </div>
             </div>
           </div>
         </div>
+        <Stack spacing={4} className="loader_stack">
+          <Pagination
+            count={totalpages}
+            page={page}
+            onChange={changePage}
+            className="page_num"
+          />
+        </Stack>
       </section>
       <div className="copyrights">
         {t("description.copyright")} | {t("appName")} {new Date().getFullYear()}

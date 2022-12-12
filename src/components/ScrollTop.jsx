@@ -37,7 +37,7 @@ const ScrollButton = () =>{
 
   
   return (
-    <div className={isEnglish ? "scroll-btn-en" : "scroll-btn-ar"} style={{bottom: visible ? '120px' : '60px', }}>
+    <div className={isEnglish ? "scroll-btn-en" : "scroll-btn-ar"} style={{bottom: visible ? '126px' : '60px', }}>
      <FaArrowCircleUp onClick={scrollToTop} 
      style={{display: 'inline'}} />
     </div>

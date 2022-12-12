@@ -57,7 +57,7 @@ export async function fetchSearchInputs() {
     if (result.shapes && result.shapes.length > 0) {
       options.shapes = result.shapes;
     }
-    for (let index = 1990; index <= 2023; index++) {
+    for (let index = 2023; index >= 1990; index--) {
       options.yearOptions.push({ value: index, label: index,});
     }
   }
