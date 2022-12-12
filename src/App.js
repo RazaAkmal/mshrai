@@ -297,14 +297,15 @@ const App = () => {
       <div className="h-left d-flex">
         <div className="language-button" onClick={toggleOpen}>
           <button
-            className="btn btn-secondary bg-white"
+            style={{background: '#3e0292'}}
+            className="btn btn-secondary"
             type="button"
             id="dropdownMenuButton"
             data-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
           >
-            <span style={{ color: "black" }}>{t("language")}</span>
+            <span style={{ color: "white" }}>{t("language")}</span>
           </button>
 
           <div
@@ -335,7 +336,7 @@ const App = () => {
                   }
                 }}
               >
-                {t(lng)}
+                {lng === 'ar' ?  <img style={{width: '30px', height: '30px'}} src="./images/saudi-icon.svg" alt="saudi" /> :  <img style={{width: '30px', height: '30px'}} src="./images/uk-flag-icon.svg" alt="eng" />}
               </div>
             ))}
           </div>
