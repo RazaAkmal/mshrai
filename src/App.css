@@ -323,7 +323,8 @@ section {
 /* Main Section
 =======================*/
 .main_screen {
-  position: relative;
+  /* position: relative; */
+  position: fixed;
   width: 100%;
   display: flex;
   min-height: 100vh;
@@ -373,7 +374,9 @@ section {
   border-radius: 5px;
   align-items: center;
   /* overflow: hidden; */
-  padding: 0 0px 10px 0px;
+  padding: 45px 0px 10px 0px;
+  /* padding: 0 0px 10px 0px; */
+
 }
 .search_form .row {
   margin: 0;
@@ -1081,6 +1084,7 @@ border: none;
   .main_screen .cont h1 {
     font-size: 22px;
     line-height: 34px;
+    margin-top: 70px;
   }
   .search_tags {
     margin-bottom: 0px;
@@ -1118,6 +1122,10 @@ border: none;
 }
 
 @media all and (max-width: 575.98px) {
+  .main_screen {
+    position: relative;
+  }
+
   .main_screen .cont {
     margin-top: 35px;
   }
@@ -1218,6 +1226,18 @@ border: none;
   }
 }
 @media all and (max-width: 420px) {
+  .float-en{
+    margin-bottom: 40px;
+  }
+  .float-ar{
+    margin-bottom: 40px;
+  }
+  .scroll-btn-en{
+    margin-bottom: 45px;
+  }
+  .scroll-btn-ar{
+    margin-bottom: 45px;
+  }
   .main_screen .cont {
     margin-top: 35px;
   }
@@ -1757,24 +1777,28 @@ right: 92%;
 .scroll-btn-en {
   position: fixed; 
    width: 100%;
-   left: 50%;
+   /* left: 50%; */
+   left: 100%;
    bottom: 120px;
    height: 20px;
    font-size: 3rem;
    z-index: 1;
    cursor: pointer;
    color: #00CEBD;
+   margin-left: -133px;
 }
 .scroll-btn-ar {
   position: fixed; 
   width: 100%;
-  right: 50%;
+  /* right: 50%; */
+  right: 100%;
   bottom: 120px;
   height: 20px;
   font-size: 3rem;
   z-index: 1;
   cursor: pointer;
   color: #00CEBD;
+  margin-right: -133px;
 }
 
 .sources_img_main{
@@ -1804,4 +1828,18 @@ right: 92%;
   height: 100%;
   bottom: 0;
   top: 0;
+}
+.loader{
+  position: relative;
+  /* left: 30%; */
+  top: 40%;
+}
+.loader_stack{
+  align-items: center;
+  padding-top: 10px;
+  direction: initial;
+  
+}
+.MuiPaginationItem-root.Mui-selected {
+  background-color: var(--acent_color) !important;
 }
