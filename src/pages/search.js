@@ -306,7 +306,7 @@ export default function Search() {
     {/* <div className="firstpage_logo">
         <img className="firstpage_logo_img" src="./images/logo.png" alt="logo" />
       </div> */}
-      <header >
+      <header>
           <div className="container">
           <div className="row logo-row">
             <div className="col-6">
@@ -318,7 +318,7 @@ export default function Search() {
       <div className="main_screen img_bc">
         <div className="container">
           <div className="row">
-            <div className="col-12 mt-5 pt-5">
+            <div className="col-12 mb-5">
               <div className="cont">
                 {/* <img src="../images/logo_color.png" alt="" className="logo" /> */}
                 <h1>
@@ -337,7 +337,8 @@ export default function Search() {
                     onSelect={(k) => setKey(k)}
                     className="mb-3"
                   >
-                    <Tab eventKey="findCar" title={t("search.findMyCar")}>
+                    <Tab eventKey="findCar">
+                    {/* <Tab eventKey="findCar" style={{backgroundColor:'white'}} title={t("search.findMyCar")}> */}
                       <div className="row px-2">
                         {/* Commenting this Code is its not required yet
                     <div className="col-12">
