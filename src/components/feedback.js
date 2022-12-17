@@ -9,6 +9,7 @@ import {
   saveFeedback,
 } from "../features/search/searchApi";
 import { useTranslation } from "react-i18next";
+// import { setReportReasons } from '../features/search/searchSlice';
 
 
 const feedback = [
@@ -62,7 +63,10 @@ const Feedback = ({selectedLng}) => {
       window.removeEventListener('scroll', toggleVisible)
     }
   }, [])
-  
+
+  const closeSmileMenuButton = (e) => {
+    setOpen(false)
+  };
 
   const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -70,9 +74,11 @@ const Feedback = ({selectedLng}) => {
   const [rate, setRate] = useState('')
   const [note, setNote] = useState('')
   const [submited, setSubmited] = useState(false)
-  const handleClick = (event) => {
+  const handleClick = (event) => { 
+    setOpen(true)
+    // setOpen((prev) => !prev);
     setAnchorEl(event.currentTarget);
-    setOpen((prev) => !prev);
+    event.stopPropagation();
   };
   const handleSubmit = () => {
     const data={
@@ -105,7 +111,8 @@ const Feedback = ({selectedLng}) => {
                 alt="icon"
               />
             </Button>
-            <Popper open={open} anchorEl={anchorEl} placement="top" transition>
+            <div style={{display: open ? "block" : "none", }} className="gray-section-overlay" onClick={closeSmileMenuButton}></div>
+            <Popper style={{zIndex: 20}} open={open} anchorEl={anchorEl} placement="top" transition>
               {({ TransitionProps }) => (
                 <Fade {...TransitionProps} timeout={350}>
                   <Paper className={ selectedLng === 'en'? "paper-en" : 'paper-ar'}>
