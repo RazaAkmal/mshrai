@@ -393,10 +393,13 @@ export default function Resault(props) {
 
   }, [dispatch, searchForm, page]);
 
-  const toggleOpen = () => setState((prevState) => ({
-    ...prevState,
-    isOpen: !state.isOpen
-  }));
+  const toggleOpen = () =>{
+    setState((prevState) => ({
+      ...prevState,
+      isOpen: !state.isOpen
+    }));
+    setShowWrapperDiv(true)
+  } 
 
   const fillterBtnClickHandle = (e) => {
     setShowWrapperDiv(true)
@@ -410,6 +413,13 @@ export default function Resault(props) {
       $(".toggle-container").removeClass("move");
       setShowWrapperDiv(false)
       e.stopPropagation();
+    }
+    if(state.isOpen) {
+      setState((prevState) => ({
+        ...prevState,
+        isOpen: !state.isOpen
+      }))
+      setShowWrapperDiv(false)
     }
   };
   const getBrandValueAswell = (model, index) => {
@@ -772,13 +782,13 @@ export default function Resault(props) {
                 />
               </div>
               <div className="col-lg-10">
-                <div className="search_hint">
+                <div className="search_hint search_hint_mobile">
                   <button
                     className="filter_btn link"
                     onClick={fillterBtnClickHandle}
                   >
                     <i className="fas fa-sliders-h"></i>
-                    فلتر البحث
+                    {t('results.filterBtn')}
                   </button>
                   <div
                     className="dropdown bg-white border rounded"

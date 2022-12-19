@@ -1122,6 +1122,12 @@ border: none;
 }
 
 @media all and (max-width: 575.98px) {
+  .search_hint_mobile{
+    position: sticky;
+    top: 0px;
+    z-index: 1;
+    padding-bottom: 10px;
+  }
   .main_screen {
     position: relative;
   }
