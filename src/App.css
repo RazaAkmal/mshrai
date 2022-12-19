@@ -1842,8 +1842,7 @@ right: 92%;
 }
 .loader_stack{
   align-items: center;
-  padding-top: 10px;
-  direction: initial;
+    direction: initial;
   
 }
 .MuiPaginationItem-root.Mui-selected {
