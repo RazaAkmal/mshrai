@@ -129,7 +129,7 @@ const RegisterModel = (props) => {
                 style={{ color: "blue", cursor: "pointer" }}
                 onClick={() => {
                   setPhoneLogin(true);
-                  props.setRegister(false);
+                  props.setRegisterModal(false);
                 }}
               >
                 {t("formFields.loginLink")}
@@ -314,7 +314,7 @@ const RegisterModel = (props) => {
       </Modal>
       <PhoneLogin
         phonelogin={phonelogin}
-        showRegister={props.setRegister}
+        setRegisterModal={props.setRegisterModal}
         setPhoneLogin={setPhoneLogin}
         loginHelper={props.loginHelper}
       />

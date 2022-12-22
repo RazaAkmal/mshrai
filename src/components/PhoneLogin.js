@@ -169,7 +169,7 @@ const PhoneLogin = (props) => {
                       props.setPhoneLogin(false);
                       resetForm();
                       setValidationErrorLogIn(null);
-                      props.showRegister(true);
+                      props.setRegisterModal(true);
                     }}
                   >
                     {t("register")}
