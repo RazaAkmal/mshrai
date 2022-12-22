@@ -514,7 +514,7 @@ export default function Resault(props) {
               position: "relative",
             }}
           >
-                    <h2 style={{textAlign:'center'}}><Trans i18nKey="description.testLaunch" /></h2>
+                    {/* <h2 style={{textAlign:'center'}}><Trans i18nKey="description.testLaunch" /></h2> */}
             <div className="row">
               <div className="col">
                 <div className="search_hint">

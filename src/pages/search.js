@@ -323,7 +323,7 @@ export default function Search() {
             <div className="col-12 mb-5">
               <div className="cont">
                 {/* <img src="../images/logo_color.png" alt="" className="logo" /> */}
-                <h2 className="pb-4"><Trans i18nKey="description.testLaunch" /></h2>
+                {/* <h2 className="pb-4"><Trans i18nKey="description.testLaunch" /></h2> */}
                 <h1>
                   <Trans i18nKey="description.Footer" />
                 </h1>
