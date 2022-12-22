@@ -436,8 +436,9 @@ export default function Filters(props) {
                   {searchInputs.cityOptions
                     .filter((v) => filterValue(v, filterCity))
                     .map((city, index) => {
-                      return (
+                      return ( 
                         <div className="form-group" key={"city" + index}>
+                        {(index === 4 ? <hr /> : "")}
                           <input
                             id={"city" + index}
                             type="checkbox"
