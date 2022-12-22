@@ -27,7 +27,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { parseParams } from "../helpers/helpers";
 import "react-toastify/dist/ReactToastify.css";
 import { Spinner } from "react-bootstrap";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 
@@ -466,6 +466,10 @@ export default function Resault(props) {
   const menuClass = `dropdown-menu${state.isOpen ? " show" : ""}`;
   return (
     <>
+      <div style={{
+        display: showWrapperDiv ? "block" : "none"}} 
+        className="gray-section-overlay" onClick={closeFilterMenuHandle}>
+      </div>
       <header>
       {/* <ScrollButton /> */}
 
@@ -501,9 +505,6 @@ export default function Resault(props) {
         </div>
       </header>
       <section className="section-gray" >
-        <div style={{
-              display: showWrapperDiv ? "block" : "none",
-            }} className="gray-section-overlay" onClick={closeFilterMenuHandle}></div>
         <div className="container-fluid">
           <div
             id="scrollableDiv"
@@ -513,6 +514,7 @@ export default function Resault(props) {
               position: "relative",
             }}
           >
+                    <h2 style={{textAlign:'center'}}><Trans i18nKey="description.testLaunch" /></h2>
             <div className="row">
               <div className="col">
                 <div className="search_hint">
