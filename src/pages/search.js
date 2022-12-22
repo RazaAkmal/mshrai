@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import $ from "jquery";
 import { useHistory } from "react-router-dom";
 import Select from "react-select";
-import { colourStyles } from "../constants";
+import { colourStyles,errorStyle } from "../constants";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { Tabs, Tab } from "react-bootstrap";
@@ -43,6 +43,7 @@ export default function Search() {
   const [selectedBrand, setSelectedBrand] = useState([]);
   const [brandOptions, setBrandOptions] = useState([]);
   const [selectedYears, setSelectedYears] = useState([]);
+  const [validationError, setValidationError] = useState(false);
 
   const dispatch = useDispatch();
   const [state, setState] = useState({ ...searchForm });
@@ -262,7 +263,8 @@ export default function Search() {
       console.log(state);
       history.push("/results");
     } else {
-      showError(t("search.searchConditionError"))
+      setValidationError(true);
+      // showError(t("search.searchConditionError"))      
     }
     
   }
@@ -321,6 +323,7 @@ export default function Search() {
             <div className="col-12 mb-5">
               <div className="cont">
                 {/* <img src="../images/logo_color.png" alt="" className="logo" /> */}
+                <h2 className="pb-4"><Trans i18nKey="description.testLaunch" /></h2>
                 <h1>
                   <Trans i18nKey="description.Footer" />
                 </h1>
@@ -380,9 +383,10 @@ export default function Search() {
                             options={searchInputs.marksOptions}
                             className="basic-multi-select"
                             placeholder=""
-                            styles={colourStyles}
+                            styles={ validationError ? errorStyle : colourStyles}
                             onChange={(value) => {
                               if (value.length <= 3) {
+                                setValidationError(false)
                                 setBrand(value);
                               } else {
                                 toast.error(t("search.brandLimitError"), {
@@ -403,7 +407,7 @@ export default function Search() {
                         {/* FOR MODELS /////////////////////////////////////////////////////////////*/}
                         <div className="col-md-6 col-sm-6  mb-3">
                           <label className="text-end d-block">
-                            {t("search.model")}
+                            {t("search.type")}
                           </label>
                           <Select
                             defaultValue={searchInputs.modelOptions.map((i) =>
@@ -426,7 +430,7 @@ export default function Search() {
                               label: isEnglish ? i.label_en : i.label,
                             }))}
                             className="basic-multi-select"
-                            placeholder=""
+                            placeholder= {t("search.anyType")}
                             styles={colourStyles}
                             onChange={(value) => {
                               if (value.length <= 3) {
@@ -448,7 +452,7 @@ export default function Search() {
                         </div>
                         <div className="col-md-6 col-sm-6 mb-3">
                           <label className="text-end d-block">
-                            {t("search.specificYearOfManufacture")}
+                          {t("search.model")}
                           </label>
                           <Select
                             value={selectedYears}
@@ -456,7 +460,7 @@ export default function Search() {
                             name="modal_year"
                             options={searchInputs.yearOptions}
                             className="basic-multi-select"
-                            placeholder=""
+                            placeholder={t("search.anyYear")}
                             styles={colourStyles}
                             onChange={(value) =>
                               setYearRange(value)
