@@ -473,9 +473,10 @@ export default function Resault(props) {
       <header>
       {/* <ScrollButton /> */}
 
-        <div className="container">
+        <div className="container-flued">
           <div className="row logo-row">
-            <div className="col-6">
+          <span className="launch-text"><Trans i18nKey="description.testLaunch" /></span>
+            <div className="col-md-12" style={{position:'absolute',top:'-11px'}}>
               <Link to="/">
                 <img src="./images/logo.png" alt="logo" />
               </Link>
@@ -513,8 +514,7 @@ export default function Resault(props) {
               overflow: "auto",
               position: "relative",
             }}
-          >
-                    <h2 style={{textAlign:'center'}}><Trans i18nKey="description.testLaunch" /></h2>
+          >    
             <div className="row">
               <div className="col">
                 <div className="search_hint">

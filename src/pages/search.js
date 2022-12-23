@@ -309,9 +309,10 @@ export default function Search() {
         <img className="firstpage_logo_img" src="./images/logo.png" alt="logo" />
       </div> */}
       <header>
-          <div className="container">
+          <div className="container-flued">
           <div className="row logo-row">
-            <div className="col-6">
+          <span className="launch-text"><Trans i18nKey="description.testLaunch" /></span>
+            <div className="col-md-12" style={{position:'absolute',top:'-11px'}}>
                 <img src="./images/logo.png" alt="logo" />
             </div>
           </div>
@@ -323,7 +324,6 @@ export default function Search() {
             <div className="col-12 mb-5">
               <div className="cont">
                 {/* <img src="../images/logo_color.png" alt="" className="logo" /> */}
-                <h2 className="pb-4"><Trans i18nKey="description.testLaunch" /></h2>
                 <h1>
                   <Trans i18nKey="description.Footer" />
                 </h1>
