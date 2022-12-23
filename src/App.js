@@ -300,7 +300,7 @@ const App = () => {
       <div className="h-left d-flex">
         <div className="language-button" onClick={toggleOpen}>
           <button
-            style={{background: '#3e0292'}}
+            style={{background: '#3e0292', padding:'4px'}}
             className="btn btn-secondary"
             type="button"
             id="dropdownMenuButton"
@@ -308,7 +308,7 @@ const App = () => {
             aria-haspopup="true"
             aria-expanded="false"
           >
-            <span style={{ color: "white" }}>{t("language")}</span>
+            <span><img src="./images/en-to-ar.png" alt=""  style={{ color: "white", width: "25px", height: "25px" }}/> </span>
           </button>
 
           <div

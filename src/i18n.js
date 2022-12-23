@@ -105,7 +105,7 @@ i18n
             Footer: "ابحث في اكثر من موقع ومصدر لبيع السيارات المستعمله",
             Filter: "فلترة",
             copyright: "جميع الحقوق محفوظة",
-            testLaunch: "غداء خفيف"
+            testLaunch: "(اطلاق تجريبي)"
           },
 
           sources: {
@@ -239,7 +239,7 @@ i18n
             Footer: "Search more than one site and source to sell used cars",
             Filter: "Filter",
             copyright: "All rights reserved",
-            testLaunch: "Soft Launch"
+            testLaunch: "(Soft Launch)"
           },
 
           sources: {
