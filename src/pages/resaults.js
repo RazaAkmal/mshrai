@@ -204,6 +204,11 @@ export default function Resault(props) {
         setPage(1)
         dispatch(setSearchForm({ ...searchForm, city_id: value, index: 0 }));
         break;
+      case "manufacturing_year":
+        let filteredYear = searchForm.manufacturing_year.filter(element => element !== value); // [1,2,4,5,7]
+        setPage(1)
+        dispatch(setSearchForm({ ...searchForm, manufacturing_year: filteredYear, index: 0 }));
+        break;
       case "model_year":
         setPage(1)
         dispatch(
@@ -211,6 +216,7 @@ export default function Resault(props) {
             ...searchForm,
             model_year_start: value.model_year_start,
             model_year_end: value.model_year_end,
+            manufacturing_year: []
           })
         );
         break;
@@ -293,11 +299,23 @@ export default function Resault(props) {
     const query = {
       page: page,
     }
-    let modelYear=[{
-      min: searchForm.model_year_start,
-      max: searchForm.model_year_end
-    }]
-    query['model_year']= modelYear
+    if (searchForm.manufacturing_year && searchForm.manufacturing_year != null && searchForm.manufacturing_year.length > 0) {
+      let yearSelected = []
+      searchForm.manufacturing_year.forEach((id, index) => {
+        yearSelected.push({
+          min: id,
+          max: id
+        })
+      });
+      query['model_year']=yearSelected
+    } else {
+      let modelYear = [{
+        min: searchForm.model_year_start,
+        max: searchForm.model_year_end
+      }]
+      query['model_year'] = modelYear
+    }
+    
     if (
       searchForm.brand_id &&
       searchForm.brand_id != null &&
@@ -473,9 +491,10 @@ export default function Resault(props) {
       <header>
       {/* <ScrollButton /> */}
 
-        <div className="container">
+        <div className="container-flued">
           <div className="row logo-row">
-            <div className="col-6">
+          <span className="launch-text"><Trans i18nKey="description.testLaunch" /></span>
+            <div className="col-md-12" style={{position:'absolute',top:'-11px'}}>
               <Link to="/">
                 <img src="./images/logo.png" alt="logo" />
               </Link>
@@ -513,8 +532,7 @@ export default function Resault(props) {
               overflow: "auto",
               position: "relative",
             }}
-          >
-                    <h2 style={{textAlign:'center'}}><Trans i18nKey="description.testLaunch" /></h2>
+          >    
             <div className="row">
               <div className="col">
                 <div className="search_hint">
@@ -732,6 +750,20 @@ export default function Resault(props) {
                 ) : (
                   ""
                 )}
+                {searchForm.manufacturing_year && searchForm.manufacturing_year.length > 0
+                  ? searchForm.manufacturing_year.map((year, index) => (
+                    <li>
+                    {year}
+                    <span
+                      onClick={() => {
+                        _handleStartSearch("manufacturing_year", year);
+                      }}
+                    >
+                      <IoIosClose />
+                    </span>
+                  </li>
+                  ))
+                  : ""}
 
                 {/*  this will require when we remove reange manufacturing_year filter  
                     {searchForm.manufacturing_year && searchForm.manufacturing_year.length > 0
