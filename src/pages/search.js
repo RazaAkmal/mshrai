@@ -9,6 +9,7 @@ import { Tabs, Tab } from "react-bootstrap";
 import { fetchSearchInputs, searchCars } from "../features/search/searchApi";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
+import OptionCity from '../components/OptionCity'
 
 import {
   getSearchInputs,
@@ -538,6 +539,7 @@ export default function Search() {
                             defaultValue={searchInputs.cityOptions.map((i) =>
                               state.city_id.indexOf(i.value) != -1 ? i : false
                             )}
+                            components={{ Option: OptionCity }}
                             isMulti
                             name="city"
                             options={searchInputs.cityOptions.map((i) => ({
