@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import $ from "jquery";
 import { useHistory } from "react-router-dom";
 import Select from "react-select";
-import { colourStyles } from "../constants";
+import { colourStyles,errorStyle } from "../constants";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { Tabs, Tab } from "react-bootstrap";
@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import Menu from '../components/SelectMenu'
 import Option from '../components/SelectOption'
+import OptionCity from '../components/OptionCity'
+
 import {
   getSearchInputs,
   setSearchForm,
@@ -44,6 +46,7 @@ export default function Search() {
   const [selectedBrand, setSelectedBrand] = useState([]);
   const [brandOptions, setBrandOptions] = useState([]);
   const [selectedYears, setSelectedYears] = useState([]);
+  const [validationError, setValidationError] = useState(false);
 
   const dispatch = useDispatch();
   const [state, setState] = useState({ ...searchForm });
@@ -263,7 +266,8 @@ export default function Search() {
       console.log(state);
       history.push("/results");
     } else {
-      showError(t("search.searchConditionError"))
+      setValidationError(true);
+      // showError(t("search.searchConditionError"))      
     }
     
   }
@@ -304,15 +308,25 @@ export default function Search() {
 
   return (
     <>
-    <div className="firstpage_logo">
+    {/* <div className="firstpage_logo">
         <img className="firstpage_logo_img" src="./images/logo.png" alt="logo" />
-      </div>
+      </div> */}
+      <header>
+          <div className="container">
+          <div className="row logo-row">
+            <div className="col-6">
+                <img src="./images/logo.png" alt="logo" />
+            </div>
+          </div>
+        </div>
+      </header>
       <div className="main_screen img_bc">
         <div className="container">
           <div className="row">
-            <div className="col-12 mt-5 pt-5">
+            <div className="col-12 mb-5">
               <div className="cont">
                 {/* <img src="../images/logo_color.png" alt="" className="logo" /> */}
+                {/* <h2 className="pb-4"><Trans i18nKey="description.testLaunch" /></h2> */}
                 <h1>
                   <Trans i18nKey="description.Footer" />
                 </h1>
@@ -329,7 +343,8 @@ export default function Search() {
                     onSelect={(k) => setKey(k)}
                     className="mb-3"
                   >
-                    <Tab eventKey="findCar" title={t("search.findMyCar")}>
+                    <Tab eventKey="findCar">
+                    {/* <Tab eventKey="findCar" style={{backgroundColor:'white'}} title={t("search.findMyCar")}> */}
                       <div className="row px-2">
                         {/* Commenting this Code is its not required yet
                     <div className="col-12">
@@ -359,7 +374,7 @@ export default function Search() {
                           />
                         </div> */}
                         {/* FOR BRANDS ////////////////////////////////////////////////////////////////*/}
-                        <div className="col-md-6 col-6  mb-3 d-sm-block">
+                        <div className="col-md-6 col-sm-6  mb-3 d-sm-block">
                           <label className="text-end d-block">
                             {t("search.brand")}
                           </label>
@@ -371,9 +386,10 @@ export default function Search() {
                             options={searchInputs.marksOptions}
                             className="basic-multi-select"
                             placeholder=""
-                            styles={colourStyles}
+                            styles={ validationError ? errorStyle : colourStyles}
                             onChange={(value) => {
                               if (value.length <= 3) {
+                                setValidationError(false)
                                 setBrand(value);
                               } else {
                                 toast.error(t("search.brandLimitError"), {
@@ -392,9 +408,9 @@ export default function Search() {
                           />
                         </div>
                         {/* FOR MODELS /////////////////////////////////////////////////////////////*/}
-                        <div className="col-md-6 col-6  mb-3">
+                        <div className="col-md-6 col-sm-6  mb-3">
                           <label className="text-end d-block">
-                            {t("search.model")}
+                            {t("search.type")}
                           </label>
                           <Select
                             defaultValue={searchInputs.modelOptions.map((i) =>
@@ -417,7 +433,7 @@ export default function Search() {
                               label: isEnglish ? i.label_en : i.label,
                             }))}
                             className="basic-multi-select"
-                            placeholder=""
+                            placeholder= {t("search.anyType")}
                             styles={colourStyles}
                             onChange={(value) => {
                               if (value.length <= 3) {
@@ -437,9 +453,9 @@ export default function Search() {
                             // classNamePrefix="select"
                           />
                         </div>
-                        <div className="col-md-6 col-6 mb-3">
+                        <div className="col-md-6 col-sm-6 mb-3">
                           <label className="text-end d-block">
-                            {t("search.specificYearOfManufacture")}
+                          {t("search.model")}
                           </label>
                           <Select
                             value={selectedYears}
@@ -448,7 +464,7 @@ export default function Search() {
                             name="modal_year"
                             options={searchInputs.yearOptions}
                             className="basic-multi-select"
-                            placeholder=""
+                            placeholder={t("search.anyYear")}
                             styles={colourStyles}
                             onChange={(value) => {
                               if (value.length >= 0) {
@@ -472,7 +488,7 @@ export default function Search() {
                           classNamePrefix="select"
                           />
                         </div>
-                        {/* <div className="col-md-6 col-6  mb-3">
+                        {/* <div className="col-md-6 col-sm-6  mb-3">
                           <label className="text-end d-block">
                             {t("search.manufacturingYear")}
                           </label>
@@ -534,7 +550,7 @@ export default function Search() {
                             />
                           </div>
                         </div> */}
-                        <div className="col-md-6 col-6  mb-3">
+                        <div className="col-md-6 col-sm-6  mb-3">
                           <label className="text-end d-block">
                             {t("search.city")}
                           </label>
@@ -542,6 +558,7 @@ export default function Search() {
                             defaultValue={searchInputs.cityOptions.map((i) =>
                               state.city_id.indexOf(i.value) != -1 ? i : false
                             )}
+                            components={{ Option: OptionCity }}
                             isMulti
                             name="city"
                             options={searchInputs.cityOptions.map((i) => ({
@@ -556,7 +573,7 @@ export default function Search() {
                           />
                         </div>
 
-                        {/* <div className="col-md-6 col-6  mb-3"></div> */}
+                        {/* <div className="col-md-6 col-sm-6  mb-3"></div> */}
                         {/* Commenting this Code is its not required yet
                      <div className="col-12 flex_col  mb-3">
                       {searchInputs.shapes.map((shape, i) => {

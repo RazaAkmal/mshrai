@@ -32,6 +32,7 @@ import {
   faStar,
   faCommentAlt,
   faEyeSlash,
+  faPhoneAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
 import DatePicker from "react-datepicker";
@@ -45,6 +46,7 @@ import { apiUrl } from "./features/constants";
 import { Col, Row } from "react-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
 import GoogleLog from "./components/GoogleLogin";
+import RegisterModel from "./components/RegisterModel";
 
 const lngs = {
   ar: { nativeName: "Arabic" },
@@ -61,6 +63,7 @@ const App = () => {
   const toggleOpen = () => setState({ isOpen: !state.isOpen });
 
   const [login, showLogin] = useState(false);
+  const [registerModal,setRegisterModal] = useState(false)
   const [showRegister, setShowRegister] = useState(false);
   const [continueWithEmail, showContinueWithEmailModal] = useState(false);
   const [validationError, setValidationError] = useState();
@@ -112,11 +115,11 @@ const App = () => {
     setUserDetails(userData);
     setIsLoggedIn(true);
     setIsInvalidCredentials(false);
-    resetFormLogin();
+    // resetFormLogin();
     setValidationErrorLogIn(undefined);
     history.push("/results");
     // setSubmitting(false);
-    showLogin(false);
+    showRegister(false);
   };
 
   // FOR GOOGLE LOGIN
@@ -186,125 +189,126 @@ const App = () => {
     history.push("/");
   };
 
-  const formik = useFormik({
-    initialValues: {
-      name: "",
-      email: "",
-    },
-    onSubmit: (values, { setSubmitting }) => {
-      let formatedDate = moment(date).format("YYYY-MM-DD");
-      values.dob = formatedDate;
-      axios
-        .post(`${apiUrl}/api/register`, values)
-        .then((res) => {
-          toast.success(res.data.message, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          setSubmitting(false);
-          setShowRegister(false);
-          if (res) {
-              loginHelper(res.data.data.token, res.data.data.user);
-          }
-        })
-        .catch((err) => {
-          const errors = {};
-          if (err.response.status === 403) {
-            Object.keys(err.response.data.errors).forEach((key) => {
-              errors[key] = err.response.data.errors[key];
-            });
-          }
-          setValidationError(errors);
-          setSubmitting(false);
-        });
-    },
-  });
+  // const formik = useFormik({
+  //   initialValues: {
+  //     name: "",
+  //     email: "",
+  //   },
+  //   onSubmit: (values, { setSubmitting }) => {
+  //     let formatedDate = moment(date).format("YYYY-MM-DD");
+  //     values.dob = formatedDate;
+  //     axios
+  //       .post(`${apiUrl}/api/registerModal`, values)
+  //       .then((res) => {
+  //         toast.success(res.data.message, {
+  //           position: "top-right",
+  //           autoClose: 5000,
+  //           hideProgressBar: false,
+  //           closeOnClick: true,
+  //           pauseOnHover: true,
+  //           draggable: true,
+  //           progress: undefined,
+  //         });
+  //         setSubmitting(false);
+  //         setShowRegister(false);
+  //         if (res) {
+  //             loginHelper(res.data.data.token, res.data.data.user);
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         const errors = {};
+  //         if (err.response.status === 403) {
+  //           Object.keys(err.response.data.errors).forEach((key) => {
+  //             errors[key] = err.response.data.errors[key];
+  //           });
+  //         }
+  //         setValidationError(errors);
+  //         setSubmitting(false);
+  //       });
+  //   },
+  // });
 
   //FOR LOGIN ////////////////////////////////////////////////////
-  const formikLogin = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-    },
-    onSubmit: (values, { setSubmitting }) => {
-      // let formatedDate = moment(date).format("YYYY-MM-DD");
-      // values.dob = formatedDate;
-      axios
-        .post(`${apiUrl}/api/login`, values)
-        .then((res) => {
-          showContinueWithEmailModal(false);
-          toast.success(res.data.message, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          if (res.data.data.token) {
-            loginHelper(res.data.data.token, res.data.data.user);
-            setSubmitting(false);
-          }
-          return;
-        })
-        .catch((err) => {
-          console.log(err);
-          const errors = {};
-          if (err.response.status === 403) {
-            Object.keys(err.response.data.errors).forEach((key) => {
-              errors[key] = err.response.data.errors[key];
-            });
-          }
-          setValidationErrorLogIn(errors);
-          if (
-            err.response.data &&
-            typeof err.response.data.errors === "string"
-          ) {
-            console.log("invalid credentials");
-            setIsInvalidCredentials(true);
-          } else {
-            console.log("something went wrong");
-          }
-          // setSubmitting(false);
-        });
-    },
-  });
+  // const formikLogin = useFormik({
+  //   initialValues: {
+  //     email: "",
+  //     password: "",
+  //   },
+  //   onSubmit: (values, { setSubmitting }) => {
+  //     // let formatedDate = moment(date).format("YYYY-MM-DD");
+  //     // values.dob = formatedDate;
+  //     axios
+  //       .post(`${apiUrl}/api/login`, values)
+  //       .then((res) => {
+  //         showContinueWithEmailModal(false);
+  //         toast.success(res.data.message, {
+  //           position: "top-right",
+  //           autoClose: 5000,
+  //           hideProgressBar: false,
+  //           closeOnClick: true,
+  //           pauseOnHover: true,
+  //           draggable: true,
+  //           progress: undefined,
+  //         });
+  //         if (res.data.data.token) {
+  //           loginHelper(res.data.data.token, res.data.data.user);
+  //           setSubmitting(false);
+  //         }
+  //         return;
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //         const errors = {};
+  //         if (err.response.status === 403) {
+  //           Object.keys(err.response.data.errors).forEach((key) => {
+  //             errors[key] = err.response.data.errors[key];
+  //           });
+  //         }
+  //         setValidationErrorLogIn(errors);
+  //         if (
+  //           err.response.data &&
+  //           typeof err.response.data.errors === "string"
+  //         ) {
+  //           console.log("invalid credentials");
+  //           setIsInvalidCredentials(true);
+  //         } else {
+  //           console.log("something went wrong");
+  //         }
+  //         // setSubmitting(false);
+  //       });
+  //   },
+  // });
 
-  const {
-    values: valuesLogin,
-    resetForm: resetFormLogin,
-    handleChange: handlerChangeLogin,
-    isSubmitting: isSubmittingLogin,
-    handleSubmit: handleSubmitLogin,
-    errors: errorLogin,
-  } = formikLogin;
-  const {
-    values,
-    resetForm,
-    handleChange,
-    isSubmitting,
-    handleSubmit,
-    errors,
-  } = formik;
+  // const {
+  //   values: valuesLogin,
+  //   resetForm: resetFormLogin,
+  //   handleChange: handlerChangeLogin,
+  //   isSubmitting: isSubmittingLogin,
+  //   handleSubmit: handleSubmitLogin,
+  //   errors: errorLogin,
+  // } = formikLogin;
+  // const {
+  //   values,
+  //   resetForm,
+  //   handleChange,
+  //   isSubmitting,
+  //   handleSubmit,
+  //   errors,
+  // } = formik;
   return (
     <>
       <div className="h-left d-flex">
         <div className="language-button" onClick={toggleOpen}>
           <button
-            className="btn btn-secondary bg-white"
+            style={{background: '#3e0292'}}
+            className="btn btn-secondary"
             type="button"
             id="dropdownMenuButton"
             data-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
           >
-            <span style={{ color: "black" }}>{t("language")}</span>
+            <span style={{ color: "white" }}>{t("language")}</span>
           </button>
 
           <div
@@ -335,7 +339,7 @@ const App = () => {
                   }
                 }}
               >
-                {t(lng)}
+                {lng === 'ar' ?  <img style={{width: '30px', height: '30px'}} src="./images/saudi-icon.svg" alt="saudi" /> :  <img style={{width: '30px', height: '30px'}} src="./images/uk-flag-icon.svg" alt="eng" />}
               </div>
             ))}
           </div>
@@ -344,8 +348,8 @@ const App = () => {
           <div
             className="login-link"
             onClick={() => {
-              showLogin(true);
-              resetFormLogin();
+              setRegisterModal(true);
+              // resetFormLogin();
               setIsInvalidCredentials(null);
               setValidationErrorLogIn(null);
             }}
@@ -413,7 +417,7 @@ const App = () => {
       </div>
 
       {/* social MODAL  */}
-      <Modal
+      {/* <Modal
         className="custom-modal"
         centered
         show={login}
@@ -427,9 +431,9 @@ const App = () => {
           <Modal.Title>{t("welcomeMessage")}</Modal.Title>
           <GoogleLog />
           <FacebookLogin fbLogin={fbLogin} />
-          {/* <TwitterLogins/> */}
-          {/* <TwitterLogins /> */}
-          <Button
+          <TwitterLogins/>
+          <TwitterLogins />
+          <Button 
             onClick={() => {
               showLogin(false);
               showContinueWithEmailModal(true);
@@ -439,11 +443,23 @@ const App = () => {
             <FontAwesomeIcon className="me-2" icon={faEnvelope} />
             {t("continueWithEmail")}
           </Button>
+          <PhoneLogin showLogin={showLogin} />
+          <Button
+        onClick={() => {
+          showLogin(false);
+          // setPhoneLogin(true);
+          // showContinueWithPhoneModal(true);
+        }}
+        className="btn btn-solid mt-3 d-flex align-items-center justify-content-center w-100"
+      >
+        <FontAwesomeIcon className="me-2" icon={faPhoneAlt} />
+        {t("continueWithnumber")}
+      </Button>
         </Modal.Body>
-      </Modal>
+      </Modal> */}
 
       {/*  login modal  */}
-      <Modal
+      {/* <Modal
         className="custom-modal"
         centered
         show={continueWithEmail}
@@ -508,20 +524,20 @@ const App = () => {
                 onClick={() => {
                   showContinueWithEmailModal(false);
                   setShowRegister(true);
-                  resetForm();
+                  // resetForm();
                   setValidationError();
                 }}
               >
-                {t("register")}
+                {t("registerModal")}
               </span>
             </div>
           </Form>
         </Modal.Body>
-      </Modal>
+      </Modal> */}
 
       {/* ragister modal */}
-      <Modal
-        className="custom-modal modal-register"
+      {/* <Modal
+        className="custom-modal modal-registerModal"
         centered
         scrollable
         show={showRegister}
@@ -661,8 +677,8 @@ const App = () => {
             </Button>
           </Form>
         </Modal.Body>
-      </Modal>
-
+      </Modal> */}
+       < RegisterModel registerModal={registerModal} setRegisterModal={setRegisterModal} loginHelper={loginHelper} />
       <Provider store={store}>
         <div
           className={selectedLng === "en" ? "App-en" : "App-ar"}
@@ -680,7 +696,7 @@ const App = () => {
           </Switch>
         </div>
       </Provider>
-      {isSubmitting && <Loader />}
+      {/* {isSubmitting && <Loader />} */}
       <ToastContainer />
     </>
   );

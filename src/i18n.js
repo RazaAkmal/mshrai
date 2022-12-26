@@ -38,6 +38,7 @@ i18n
           continueWithEmail: 'تواصل مع البريد الإلكتروني',
           continueWithGoogle: 'تواصل مع جوجل',
           continueWithFacebook: 'تواصل مع الفيسبوك',
+          continueWithnumber:'تواصل مع الهاتف',
           register: 'يسجل',
           search: {
             findMyCar: "ابحث عن سيارتي",
@@ -50,6 +51,9 @@ i18n
             manufacturingYear: "الموديل",
             city: "المدينة",
             anyCity: "أي مدينة",
+            anyYear: "أي عام ",
+            anyType: "أي نوع",
+            type: "يكتب",
             searchForCity: "ابحث عن المدينة",
             see: "شاهد",
             car: "سيارة",
@@ -74,6 +78,7 @@ i18n
             email: "البريد الألكترونى",
             saveSearchResult: "ارسال اشعارات للنتائج البحث 🔔",
             sortBy: "ترتيب حسب",
+            filterBtn: "فلتر البحث",
             pleaseEnterEmail: "الرجاء إدخال البريد الإلكتروني",
             pleaseEnterPhone: "الرجاء إدخال رقم الهاتف",
             noResults: "لا يوجد نتائج توافق بحثك",
@@ -100,6 +105,7 @@ i18n
             Footer: "ابحث في اكثر من موقع ومصدر لبيع السيارات المستعمله",
             Filter: "فلترة",
             copyright: "جميع الحقوق محفوظة",
+            testLaunch: "غداء خفيف"
           },
 
           sources: {
@@ -126,7 +132,9 @@ i18n
             Female:"أنثى",
             phonenumber: "رقم الهاتف",
             Email:"البريد الإلكتروني",
-            Username:"اسم المستخدم"
+            Username:"اسم المستخدم",
+            alreadyAccount:"لديك حساب بالفعل؟",
+            loginLink:"تسجيل الدخول"
           },
           logoutSuccessfullyMessage: 'لقد تم تسجيل خروجك بنجاح!',
           hiText:'أهلاً',
@@ -164,6 +172,7 @@ i18n
           continueWithEmail: 'Continue with Email',
           continueWithGoogle: 'Continue with Google',
           continueWithFacebook: 'Continue with Facebook',
+          continueWithnumber: 'Continue with Phone',
           register: 'Register',
           search: {
             findMyCar: "Find my car",
@@ -176,6 +185,9 @@ i18n
             manufacturingYear: "Manufacturing year",
             city: "City",
             anyCity: "Any city",
+            anyYear: "Any Year ",
+            anyType: "Any Type",
+            type: "Type",
             searchForCity: "Search for the city",
             see: "See",
             car: "Car",
@@ -200,6 +212,7 @@ i18n
             email: "E-mail",
             saveSearchResult: "Send notifications of search results 🔔",
             sortBy: "Sort by",
+            filterBtn: "Search filter",
             pleaseEnterEmail: "Please enter email",
             pleaseEnterPhone: "Please enter Phone Number",
             noResults: "There are no results matching your search",
@@ -226,6 +239,7 @@ i18n
             Footer: "Search more than one site and source to sell used cars",
             Filter: "Filter",
             copyright: "All rights reserved",
+            testLaunch: "Soft Launch"
           },
 
           sources: {
@@ -252,7 +266,9 @@ i18n
             Female:"Female",
             phonenumber:"Phone Number",
             Email:"Email",
-            Username:"Username"
+            Username:"Username",
+            alreadyAccount:"Already have account?",
+            loginLink:'Login'
           },
           logoutSuccessfullyMessage: 'You have been successfully logged out!',
           hiText:'Hi',
