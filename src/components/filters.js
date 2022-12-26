@@ -231,7 +231,7 @@ export default function Filters(props) {
               </Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="1">
-              <Accordion.Header>{t("search.model")}</Accordion.Header>
+              <Accordion.Header>{t("search.anyType")}</Accordion.Header>
               <Accordion.Body>
                 <div className="panel-content">
                   <input
