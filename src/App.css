@@ -1826,6 +1826,43 @@ right: 92%;
   top: 16px;
   left: 41%;
 }
+.selct-year {
+  display: flex;
+  flex-wrap: wrap;
+  max-height: 93px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+.selct-year .fetching {
+  color: black;
+  margin: 0px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 67px;
+}
+.selct-year .fetching input[type="checkbox"] {
+  display: block;
+  margin: 0 5px;
+  border-radius: 3px;
+}
+
+.carsual-button {
+  display: flex;
+  justify-content: center;
+}
+
+.carsual-button .change-data {
+  margin: 10px 5px;
+  background: white;
+  color: black;
+}
+
+.carsual-button .change-data:hover {
+  margin: 10px 5px;
+  background: white;
+  color: black;
+}
 .gray-section-overlay {
   position: absolute;
   z-index: 9;
