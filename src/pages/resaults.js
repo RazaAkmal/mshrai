@@ -416,7 +416,12 @@ export default function Resault(props) {
       ...prevState,
       isOpen: !state.isOpen
     }));
-    setShowWrapperDiv(true)
+    if (showWrapperDiv) {
+      setShowWrapperDiv(false)
+    }else {
+      setShowWrapperDiv(true)
+
+    }
   } 
 
   const fillterBtnClickHandle = (e) => {

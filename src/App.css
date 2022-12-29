@@ -951,7 +951,7 @@ border: none;
   padding: 5px 10px 5px 5px;
 }
 .copyrights {
-  padding: 25px;
+  padding: 10px;
   text-align: center;
   width: 100%;
   font-weight: 600;
@@ -1125,7 +1125,7 @@ border: none;
   .search_hint_mobile{
     position: sticky;
     top: -2px;
-    z-index: 1;
+    z-index: 10;
     padding-bottom: 10px;
   }
   .main_screen {
@@ -1866,6 +1866,16 @@ right: 92%;
 .gray-section-overlay {
   position: absolute;
   z-index: 9;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 123%;
+  bottom: 0;
+  top: 0;
+}
+.section-overlay {
+  position: absolute;
+  z-index: 15;
   left: 0;
   right: 0;
   width: 100%;
