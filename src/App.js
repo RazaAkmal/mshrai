@@ -18,7 +18,7 @@ import uniqid from "uniqid";
 import "./i18n";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
-import { updateMomentLocaleToArabic } from "./helpers/helpers";
+import { updateMomentLocaleToArabic, updateMomentLocaleToEng } from "./helpers/helpers";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
@@ -76,6 +76,9 @@ const App = () => {
   let history = useHistory();
   const location = useLocation();
   useEffect(() => {
+    i18n.changeLanguage('ar')
+    localStorage.setItem("lang", 'ar');
+    updateMomentLocaleToArabic()
     const getID = Cookies.get("id");
     if (!getID) {
       let userId = uniqid("userId-");
@@ -335,6 +338,7 @@ const App = () => {
                   if (lng === "ar") {
                     updateMomentLocaleToArabic();
                   } else {
+                    updateMomentLocaleToEng()
                     moment.locale(lng);
                   }
                 }}

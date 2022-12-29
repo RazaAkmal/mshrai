@@ -48,3 +48,25 @@ export const updateMomentLocaleToArabic = () => {
     },
   });
 };
+export const updateMomentLocaleToEng = () => {
+  moment.updateLocale('en', {
+    relativeTime : {
+        future: "in %s",
+        past:   "%s+",
+        s  : '%d seconds',
+        ss : '%d seconds',
+        m:  "%d min",
+        mm: "%d minutes",
+        h:  "%d hr",
+        hh: "%d hrs",
+        d:  "%d d",
+        dd: "%d d",
+        w: "%d W",
+        ww: '%d w',
+        M:  "%d mth",
+        MM: "%d mths",
+        y:  "y",
+        yy: "%d ys"
+    }
+  });
+};
