@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  language: 'ar',
   searchInputs: {
     marksOptions: [],
     modelOptions: [],
@@ -60,9 +61,12 @@ export const searchSlice = createSlice({
     setReportReasons: (state, action) => {
       state.allReportReasons = action.payload;
     },
+    setLanguage: (state, action) => {
+      state.language = action.payload;
+    },
   },
 });
 
-export const { getSearchInputs, setCars , setSearchForm,setSearchFormToInital, setQuery, setResultsNumebr, setReportReasons } = searchSlice.actions;
+export const { getSearchInputs, setCars , setSearchForm, setSearchFormToInital, setLanguage, setQuery, setResultsNumebr, setReportReasons } = searchSlice.actions;
 
 export default searchSlice.reducer;

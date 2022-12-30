@@ -132,6 +132,7 @@ export default function Resault(props) {
     isOpen: false,
     cars: [],
   });
+  const selectedLng = useSelector((state) => state.search.language);
   const [loading, setLoading] = useState(false);
   const [nextPage, setNextPage] = useState(false);
   const [initialCars, setIinitialCars] = useState([]);
@@ -391,7 +392,7 @@ export default function Resault(props) {
     //   query += "&sayarah_sort={!field f=source v=Syarah}";
     // }
 
-    searchCars(query, filterSelected).then((res) => {
+    searchCars(query, filterSelected,selectedLng).then((res) => {
       $(".load_cont").fadeOut(function () {
         $(this).parent().fadeOut();
         $("body").css({ "overflow-y": "visible" });
@@ -409,7 +410,7 @@ export default function Resault(props) {
       }
     });
 
-  }, [dispatch, searchForm, page]);
+  }, [dispatch, searchForm, page,selectedLng]);
 
   const toggleOpen = () =>{
     setState((prevState) => ({

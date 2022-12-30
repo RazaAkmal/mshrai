@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useSelector } from "react";
+import React, { useEffect, useState, } from "react";
 import "./App.css";
 import ReactGA from 'react-ga';
 import {
@@ -11,8 +11,6 @@ import {
 import Resault from "./pages/resaults";
 import Search from "./pages/search";
 import Feedback from "./components/feedback";
-import { Provider } from "react-redux";
-import { store } from "./app/store";
 import Cookies from "js-cookie";
 import uniqid from "uniqid";
 import "./i18n";
@@ -47,6 +45,8 @@ import { Col, Row } from "react-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
 import GoogleLog from "./components/GoogleLogin";
 import RegisterModel from "./components/RegisterModel";
+import { setLanguage } from "./features/search/searchSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const lngs = {
   ar: { nativeName: "Arabic" },
@@ -55,7 +55,7 @@ const lngs = {
 
 const App = () => {
   const { t, i18n } = useTranslation();
-  const [selectedLng, setSelectedLng] = useState(i18n.language);
+
   const [state, setState] = useState({
     isOpen: false,
   });
@@ -72,6 +72,9 @@ const App = () => {
   const [userDetails, setUserDetails] = useState();
   const [date, setDate] = useState(new Date());
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+  const selectedLng = useSelector((state) => state.search.language);
+  const dispatch = useDispatch()
 
   let history = useHistory();
   const location = useLocation();
@@ -334,7 +337,7 @@ const App = () => {
                 onClick={() => {
                   i18n.changeLanguage(lng);
                   localStorage.setItem("lang", lng);
-                  setSelectedLng(lng);
+                  dispatch(setLanguage(lng))
                   if (lng === "ar") {
                     updateMomentLocaleToArabic();
                   } else {
@@ -683,7 +686,7 @@ const App = () => {
         </Modal.Body>
       </Modal> */}
        < RegisterModel registerModal={registerModal} setRegisterModal={setRegisterModal} loginHelper={loginHelper} />
-      <Provider store={store}>
+      
         <div
           className={selectedLng === "en" ? "App-en" : "App-ar"}
           style={{ direction: selectedLng === "en" ? "ltr" : "rtl" }}
@@ -699,7 +702,7 @@ const App = () => {
             </Route>
           </Switch>
         </div>
-      </Provider>
+
       {/* {isSubmitting && <Loader />} */}
       <ToastContainer />
     </>

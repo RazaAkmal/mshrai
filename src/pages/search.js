@@ -48,18 +48,20 @@ export default function Search() {
   const [selectedYears, setSelectedYears] = useState([]);
   const [validationError, setValidationError] = useState(false);
 
+  const selectedLng = useSelector((state) => state.search.language);
+
   const dispatch = useDispatch();
   const [state, setState] = useState({ ...searchForm });
 
   useEffect(() => {
-    fetchSearchInputs().then((result) => {
+    fetchSearchInputs(selectedLng).then((result) => {
       $(".load_cont").fadeOut(function () {
         $(this).parent().fadeOut();
         $("body").css({ "overflow-y": "visible" });
       });
       dispatch(getSearchInputs(result));
     });
-  }, [dispatch]);
+  }, [dispatch,selectedLng]);
 
   const [filterSelected, setFilterSelected] = useState(false);
 
@@ -460,6 +462,7 @@ export default function Search() {
                           <Select
                             value={selectedYears}
                             components={{ Menu }}
+                            // menuIsOpen={true}
                             isMulti
                             name="modal_year"
                             options={searchInputs.yearOptions}

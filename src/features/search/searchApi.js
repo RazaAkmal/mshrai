@@ -1,8 +1,8 @@
 import axios from "axios";
 import { apiUrl, solrUrl } from "../constants";
 
-export async function fetchSearchInputs() {
-  const response = await fetch(`${apiUrl}/search_form`, {
+export async function fetchSearchInputs(selectedLng) {
+  const response = await fetch(`${apiUrl}/search_form?lang=${selectedLng}`, {
     method: "GET",
     // headers: {
     //   "Content-Type": "application/json",
@@ -82,9 +82,9 @@ export async function fetchCars(query) {
   // .then(response => {return response.json()})
   // .catch(error => console.log('error', error));
 }
-export async function searchCars(payload, filterSelected) {
+export async function searchCars(payload, filterSelected,selectedLng) {
   try {
-    const { data } = await axios.post(`${apiUrl}/api/search`, {
+    const { data } = await axios.post(`${apiUrl}/api/search?lang=${selectedLng}`, {
       query: payload,
       filter: filterSelected
     });
