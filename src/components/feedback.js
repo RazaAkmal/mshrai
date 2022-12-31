@@ -111,7 +111,7 @@ const Feedback = ({selectedLng}) => {
                 alt="icon"
               />
             </Button>
-            <div style={{display: open ? "block" : "none", }} className="section-overlay" onClick={closeSmileMenuButton}></div>
+            <div style={{display: open ? "block" : "none", }} className="gray-section-overlay" onClick={closeSmileMenuButton}></div>
             <Popper style={{zIndex: 20}} open={open} anchorEl={anchorEl} placement="top" transition>
               {({ TransitionProps }) => (
                 <Fade {...TransitionProps} timeout={350}>
