@@ -7,10 +7,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min.js";
 import "font-awesome/css/font-awesome.min.css";
 import { BrowserRouter } from "react-router-dom";
+import { NavActiveProvider } from "./context/NavActive";
 
 ReactDOM.render(
   <BrowserRouter>
-    <App />
+    <NavActiveProvider>
+      <App />
+    </NavActiveProvider>
   </BrowserRouter>,
   document.getElementById("root")
 );
