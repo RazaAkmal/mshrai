@@ -307,7 +307,7 @@ export default function Search() {
       {/* <div className="firstpage_logo">
         <img className="firstpage_logo_img" src="./images/logo.png" alt="logo" />
       </div> */}
-      <header>
+      <header style={{ "background": "#3e0292" }}>
         <div className="container">
           <div className="row logo-row">
             <div className="col-6">
@@ -580,7 +580,7 @@ export default function Search() {
                   </button> */}
                   <button
                     type="button"
-                    className="search-button"
+                    className="search-button btn-primary"
                     onClick={navigateToResult}
                   >
                     {t("search.see")} {(state.brand_id.length > 0 || state.brand_type_id.length > 0) ? resultsNumber : ''} {t("search.car")}
