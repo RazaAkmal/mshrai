@@ -27,7 +27,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { parseParams } from "../helpers/helpers";
 import "react-toastify/dist/ReactToastify.css";
 import { Spinner } from "react-bootstrap";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 
@@ -204,6 +204,11 @@ export default function Resault(props) {
         setPage(1)
         dispatch(setSearchForm({ ...searchForm, city_id: value, index: 0 }));
         break;
+      case "manufacturing_year":
+        let filteredYear = searchForm.manufacturing_year.filter(element => element !== value); // [1,2,4,5,7]
+        setPage(1)
+        dispatch(setSearchForm({ ...searchForm, manufacturing_year: filteredYear, index: 0 }));
+        break;
       case "model_year":
         setPage(1)
         dispatch(
@@ -211,6 +216,7 @@ export default function Resault(props) {
             ...searchForm,
             model_year_start: value.model_year_start,
             model_year_end: value.model_year_end,
+            manufacturing_year: []
           })
         );
         break;
@@ -293,11 +299,23 @@ export default function Resault(props) {
     const query = {
       page: page,
     }
-    let modelYear=[{
-      min: searchForm.model_year_start,
-      max: searchForm.model_year_end
-    }]
-    query['model_year']= modelYear
+    if (searchForm.manufacturing_year && searchForm.manufacturing_year != null && searchForm.manufacturing_year.length > 0) {
+      let yearSelected = []
+      searchForm.manufacturing_year.forEach((id, index) => {
+        yearSelected.push({
+          min: id,
+          max: id
+        })
+      });
+      query['model_year']=yearSelected
+    } else {
+      let modelYear = [{
+        min: searchForm.model_year_start,
+        max: searchForm.model_year_end
+      }]
+      query['model_year'] = modelYear
+    }
+    
     if (
       searchForm.brand_id &&
       searchForm.brand_id != null &&
@@ -393,10 +411,18 @@ export default function Resault(props) {
 
   }, [dispatch, searchForm, page]);
 
-  const toggleOpen = () => setState((prevState) => ({
-    ...prevState,
-    isOpen: !state.isOpen
-  }));
+  const toggleOpen = () =>{
+    setState((prevState) => ({
+      ...prevState,
+      isOpen: !state.isOpen
+    }));
+    if (showWrapperDiv) {
+      setShowWrapperDiv(false)
+    }else {
+      setShowWrapperDiv(true)
+
+    }
+  } 
 
   const fillterBtnClickHandle = (e) => {
     setShowWrapperDiv(true)
@@ -410,6 +436,13 @@ export default function Resault(props) {
       $(".toggle-container").removeClass("move");
       setShowWrapperDiv(false)
       e.stopPropagation();
+    }
+    if(state.isOpen) {
+      setState((prevState) => ({
+        ...prevState,
+        isOpen: !state.isOpen
+      }))
+      setShowWrapperDiv(false)
     }
   };
   const getBrandValueAswell = (model, index) => {
@@ -446,7 +479,7 @@ export default function Resault(props) {
     return returnVal;
   };
 
-  let totalpages = Math.floor(resultsNumber/12);
+  let totalpages = Math.floor(resultsNumber/25);
   const changePage  = (e, value) => {
     // setPage(page+1)
     setPage(value);
@@ -456,8 +489,12 @@ export default function Resault(props) {
   const menuClass = `dropdown-menu${state.isOpen ? " show" : ""}`;
   return (
     <>
+      <div style={{
+        display: showWrapperDiv ? "block" : "none"}} 
+        className="gray-section-overlay" onClick={closeFilterMenuHandle}>
+      </div>
       <header>
-      <ScrollButton />
+      {/* <ScrollButton /> */}
 
         <div className="container">
           <div className="row logo-row">
@@ -491,9 +528,6 @@ export default function Resault(props) {
         </div>
       </header>
       <section className="section-gray" >
-        <div style={{
-              display: showWrapperDiv ? "block" : "none",
-            }} className="gray-section-overlay" onClick={closeFilterMenuHandle}></div>
         <div className="container-fluid">
           <div
             id="scrollableDiv"
@@ -503,6 +537,7 @@ export default function Resault(props) {
               position: "relative",
             }}
           >
+                    {/* <h2 style={{textAlign:'center'}}><Trans i18nKey="description.testLaunch" /></h2> */}
             <div className="row">
               <div className="col">
                 <div className="search_hint">
@@ -720,6 +755,20 @@ export default function Resault(props) {
                 ) : (
                   ""
                 )}
+                {searchForm.manufacturing_year && searchForm.manufacturing_year.length > 0
+                  ? searchForm.manufacturing_year.map((year, index) => (
+                    <li>
+                    {year}
+                    <span
+                      onClick={() => {
+                        _handleStartSearch("manufacturing_year", year);
+                      }}
+                    >
+                      <IoIosClose />
+                    </span>
+                  </li>
+                  ))
+                  : ""}
 
                 {/*  this will require when we remove reange manufacturing_year filter  
                     {searchForm.manufacturing_year && searchForm.manufacturing_year.length > 0
@@ -772,13 +821,13 @@ export default function Resault(props) {
                 />
               </div>
               <div className="col-lg-10">
-                <div className="search_hint">
+                <div className="search_hint search_hint_mobile">
                   <button
                     className="filter_btn link"
                     onClick={fillterBtnClickHandle}
                   >
                     <i className="fas fa-sliders-h"></i>
-                    فلتر البحث
+                    {t('results.filterBtn')}
                   </button>
                   <div
                     className="dropdown bg-white border rounded"
