@@ -231,7 +231,7 @@ export default function Filters(props) {
               </Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="1">
-              <Accordion.Header>{t("search.model")}</Accordion.Header>
+              <Accordion.Header>{t("search.anyType")}</Accordion.Header>
               <Accordion.Body>
                 <div className="panel-content">
                   <input
@@ -436,8 +436,9 @@ export default function Filters(props) {
                   {searchInputs.cityOptions
                     .filter((v) => filterValue(v, filterCity))
                     .map((city, index) => {
-                      return (
+                      return ( 
                         <div className="form-group" key={"city" + index}>
+                        {(index === 4 ? <hr /> : "")}
                           <input
                             id={"city" + index}
                             type="checkbox"
