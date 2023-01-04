@@ -1924,3 +1924,11 @@ right: 92%;
   align-items: center;
   direction: initial;
 }
+.modal-header {
+  padding: 0 !important;
+  border: none !important;
+  position: absolute !important;
+  left: 10px !important;
+  top: 15px !important;
+  z-index: 9;
+}
