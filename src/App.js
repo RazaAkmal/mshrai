@@ -47,6 +47,7 @@ import GoogleLog from "./components/GoogleLogin";
 import RegisterModel from "./components/RegisterModel";
 import { setLanguage } from "./features/search/searchSlice";
 import { useDispatch, useSelector } from "react-redux";
+import FeedbackModel from "./components/FeedbackModel";
 
 const lngs = {
   ar: { nativeName: "Arabic" },
@@ -303,6 +304,7 @@ const App = () => {
   // } = formik;
   return (
     <>
+    <FeedbackModel />
       <div className="h-left d-flex">
         <div className="language-button" onClick={toggleOpen}>
           <button
