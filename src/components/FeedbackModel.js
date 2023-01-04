@@ -41,27 +41,6 @@ const FeedbackModel = ({ selectedLng }) => {
             
         }, 180000);
     }, [])
-    
-
-  const [visible, setVisible] = useState(false);
-
-  const toggleVisible = () => {
-    const scrolled = document.getElementById("scrollableDiv").scrollTop;
-    if (scrolled > 100) {
-      setVisible(true);
-    } else if (scrolled <= 300) {
-      setVisible(false);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", toggleVisible);
-
-    return () => {
-      window.removeEventListener("scroll", toggleVisible);
-    };
-  }, []);
-
 
   const { t } = useTranslation();
   

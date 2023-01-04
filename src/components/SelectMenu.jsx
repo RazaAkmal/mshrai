@@ -41,7 +41,7 @@ const Menu = (props) => {
         setTotalPages(12);
         let chunkArray = _.chunk(optionsArray, 12);
         setOptionsArray(chunkArray);
-      } else if (windowwidth >= 576) {
+      } else if (windowwidth < 768 ) {
         setTotalPages(8);
         let chunkArray = _.chunk(optionsArray, 8);
         setOptionsArray(chunkArray);
