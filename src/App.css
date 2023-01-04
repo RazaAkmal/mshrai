@@ -1832,6 +1832,7 @@ right: 92%;
   max-height: 93px;
   overflow: hidden;
   margin-top: 10px;
+  justify-content: space-between;
 }
 .selct-year .fetching {
   color: black;
@@ -1904,4 +1905,19 @@ right: 92%;
 }
 .border-red-600{
   border-color: red !important;
+}
+.year-paginat button{
+  align-items: center;
+  direction: initial; 
+  background-color: white !important;
+  border-radius: 50%;
+  color: black;
+}
+.year-paginat .MuiPaginationItem-root.Mui-selected {
+  background-color: white !important;
+  color: var(--acent_color) !important;
+}
+.year-paginat{
+  align-items: center;
+  direction: initial;
 }

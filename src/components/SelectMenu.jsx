@@ -1,6 +1,8 @@
 import { components } from "react-select";
 import { Form } from "react-bootstrap";
 import { useState, useEffect } from "react";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const Menu = (props) => {
   const isEnglish = localStorage.getItem("lang") === "en";
@@ -9,6 +11,17 @@ const Menu = (props) => {
   const [totalpages, setTotalPages] = useState(16)
   const endpage = Math.ceil(props.options.length/totalpages);
 
+  const changePage  = (e, value) => {
+    
+    setPageOnYear(value)
+    if(pageonyear >= value){
+      
+      setPageLength(pageLength / 2)
+
+    } else if(pageonyear <= value ){
+      setPageLength(pageLength * 2)
+    }};
+    
   const getWindowWidth = () => {
     const { innerWidth: width } = window;
     return width;
@@ -41,16 +54,16 @@ const Menu = (props) => {
 
 
   
-  const prevPage = (e) => {
-    setPageOnYear(pageonyear - 1)
-    setPageLength(pageLength / 2)
-    e.preventDefault();
-  }
-  const nextPage = (e) => {
-    setPageOnYear(pageonyear + 1)
-    setPageLength(pageLength * 2)
-    e.preventDefault()
-  }
+  // const prevPage = (e) => {
+  //   setPageOnYear(pageonyear - 1)
+  //   setPageLength(pageLength / 2)
+  //   e.preventDefault();
+  // }
+  // const nextPage = (e) => {
+  //   setPageOnYear(pageonyear + 1)
+  //   setPageLength(pageLength * 2)
+  //   e.preventDefault()
+  // }
 
 
 
@@ -88,7 +101,7 @@ const Menu = (props) => {
             </div>
           )}
           <div className="carsual-button">
-            <button
+            {/* <button
               className={"change-data"}
               onClick={prevPage}
               disabled={ pageonyear === 1 }  
@@ -101,8 +114,15 @@ const Menu = (props) => {
               disabled={pageonyear === endpage }
             >
               {isEnglish ? <i class="fa fa-arrow-right"></i> : <i class="fa fa-arrow-left"></i>}
-              {/* <i class="fa fa-arrow-right"></i> */}
-            </button>
+            </button> */}
+            <Stack spacing={4} className="year-paginat">
+          <Pagination
+            count={endpage}
+            page={pageonyear}
+            onChange={changePage}
+            style={{backgroundColor:"white", color:'black'}}
+          />
+        </Stack>
           </div>
         </div>
       </components.Menu>
