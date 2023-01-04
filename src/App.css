@@ -1122,6 +1122,9 @@ border: none;
 }
 
 @media all and (max-width: 575.98px) {
+  .scrolldivhieght{
+    height: 82vh !important;
+  }
   .search_hint_mobile{
     position: sticky;
     top: -2px;
