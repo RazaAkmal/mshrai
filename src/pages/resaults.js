@@ -532,6 +532,7 @@ export default function Resault(props) {
         <div className="container-fluid">
           <div
             id="scrollableDiv"
+            className="scrolldivhieght"
             style={{
               height: "100vh",
               overflow: "auto",
