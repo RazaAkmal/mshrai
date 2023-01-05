@@ -387,7 +387,7 @@ export default function Search() {
                             name="brand"
                             options={searchInputs.marksOptions}
                             className="basic-multi-select"
-                            placeholder=""
+                            placeholder={t("search.selectMore")}
                             styles={ validationError ? errorStyle : colourStyles}
                             onChange={(value) => {
                               if (value.length <= 3) {
