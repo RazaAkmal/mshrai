@@ -39,7 +39,7 @@ const FeedbackModel = ({ selectedLng }) => {
         setTimeout(() => {
             SetFeedbackHide(true)
             
-        }, 180000);
+        }, 300000);
     }, [])
 
   const { t } = useTranslation();
