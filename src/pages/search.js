@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import $ from "jquery";
 import { useHistory } from "react-router-dom";
 import Select from "react-select";
-import { colourStyles,errorStyle } from "../constants";
+import { colourStyles, errorStyle } from "../constants";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { Tabs, Tab } from "react-bootstrap";
@@ -19,6 +19,7 @@ import {
   setResultsNumebr,
 } from "../features/search/searchSlice";
 import { useTranslation, Trans } from "react-i18next";
+import LoadingComponent from "../components/LoadingComponent";
 
 const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range);
@@ -61,7 +62,7 @@ export default function Search() {
       });
       dispatch(getSearchInputs(result));
     });
-  }, [dispatch,selectedLng]);
+  }, [dispatch, selectedLng]);
 
   const [filterSelected, setFilterSelected] = useState(false);
 
@@ -86,7 +87,7 @@ export default function Search() {
     );
     setSelectedModels(modelOptionsStored);
   }, [searchInputs]);
-  
+
   useEffect(() => {
     let callApi = false
     if (state.brand_id.length) {
@@ -119,7 +120,7 @@ export default function Search() {
           max: id
         })
       });
-      query['model_year']=yearSelected
+      query['model_year'] = yearSelected
     }
     if (state.brand_id && state.brand_id != null && state.brand_id.length > 0) {
       callApi = true
@@ -135,28 +136,28 @@ export default function Search() {
       state.brand_type_id.length > 0
     ) {
       callApi = true
-      let brandType=[]
+      let brandType = []
       state.brand_type_id.forEach((id, index) => {
         brandType.push(id)
       });
-      query['brand_type_id']=brandType
+      query['brand_type_id'] = brandType
     }
 
     if (state.city_id && state.city_id != null && state.city_id.length > 0) {
-      let city=[]
+      let city = []
       state.city_id.forEach((id, index) => {
-          city.push(id)
+        city.push(id)
       });
-      query['city_id']=city
+      query['city_id'] = city
     }
     if (callApi) {
       searchCars(query, filterSelected).then((res) => {
-        if (res && res.response ) {
+        if (res && res.response) {
           dispatch(setResultsNumebr(res.response.numFound));
         }
       });
     }
-    
+
   }, [state]);
 
   const addShape = (i) => {
@@ -271,7 +272,7 @@ export default function Search() {
       setValidationError(true);
       // showError(t("search.searchConditionError"))      
     }
-    
+
   }
   const [key, setKey] = useState("findCar");
 
@@ -310,14 +311,14 @@ export default function Search() {
 
   return (
     <>
-    {/* <div className="firstpage_logo">
+      {/* <div className="firstpage_logo">
         <img className="firstpage_logo_img" src="./images/logo.png" alt="logo" />
       </div> */}
-      <header>
-          <div className="container">
+      <header style={{ "background": "#3e0292" }}>
+        <div className="container">
           <div className="row logo-row">
             <div className="col-6">
-                <img src="./images/logo.png" alt="logo" />
+              <img src="./images/logo.png" alt="logo" />
             </div>
           </div>
         </div>
@@ -333,10 +334,10 @@ export default function Search() {
                   <Trans i18nKey="description.Footer" />
                 </h1>
                 <div className="sources_img_main" >
-                {sortedSearchSources.map( ({image}) => {
-                  return <img src={image} alt="img" className="source_img"></img>
-                })
-                }
+                  {sortedSearchSources.map(({ image }) => {
+                    return <img src={image} alt="img" className="source_img"></img>
+                  })
+                  }
                 </div>
                 <form className="search_form">
                   <Tabs
@@ -346,7 +347,7 @@ export default function Search() {
                     className="mb-3"
                   >
                     <Tab eventKey="findCar">
-                    {/* <Tab eventKey="findCar" style={{backgroundColor:'white'}} title={t("search.findMyCar")}> */}
+                      {/* <Tab eventKey="findCar" style={{backgroundColor:'white'}} title={t("search.findMyCar")}> */}
                       <div className="row px-2">
                         {/* Commenting this Code is its not required yet
                     <div className="col-12">
@@ -388,7 +389,7 @@ export default function Search() {
                             options={searchInputs.marksOptions}
                             className="basic-multi-select"
                             placeholder={t("search.selectMore")}
-                            styles={ validationError ? errorStyle : colourStyles}
+                            styles={validationError ? errorStyle : colourStyles}
                             onChange={(value) => {
                               if (value.length <= 3) {
                                 setValidationError(false)
@@ -406,7 +407,7 @@ export default function Search() {
                             }}
                             formatOptionLabel={formatOptionLabel}
 
-                            // classNamePrefix="select"
+                          // classNamePrefix="select"
                           />
                         </div>
                         {/* FOR MODELS /////////////////////////////////////////////////////////////*/}
@@ -435,7 +436,7 @@ export default function Search() {
                               label: isEnglish ? i.label_en : i.label,
                             }))}
                             className="basic-multi-select"
-                            placeholder= {t("search.anyType")}
+                            placeholder={t("search.anyType")}
                             styles={colourStyles}
                             onChange={(value) => {
                               if (value.length <= 3) {
@@ -452,12 +453,12 @@ export default function Search() {
                               }
                             }}
 
-                            // classNamePrefix="select"
+                          // classNamePrefix="select"
                           />
                         </div>
                         <div className="col-md-6 col-sm-6 mb-3">
                           <label className="text-end d-block">
-                          {t("search.model")}
+                            {t("search.model")}
                           </label>
                           <Select
                             value={selectedYears}
@@ -488,7 +489,7 @@ export default function Search() {
                               }
                             }
                             }
-                          classNamePrefix="select"
+                            classNamePrefix="select"
                           />
                         </div>
                         {/* <div className="col-md-6 col-sm-6  mb-3">
@@ -572,7 +573,7 @@ export default function Search() {
                             placeholder={t("search.anyCity")}
                             styles={colourStyles}
                             onChange={(value) => addCity(value)}
-                            // classNamePrefix="select"
+                          // classNamePrefix="select"
                           />
                         </div>
 
@@ -607,7 +608,7 @@ export default function Search() {
                   </button> */}
                   <button
                     type="button"
-                    className="search-button"
+                    className="search-button btn-primary"
                     onClick={navigateToResult}
                   >
                     {t("search.see")} {(state.brand_id.length > 0 || state.brand_type_id.length > 0) ? resultsNumber : ''} {t("search.car")}
@@ -619,11 +620,7 @@ export default function Search() {
           </div>
         </div>
       </div>
-      <div className="loading">
-        <div className="load_cont">
-          <img src="./images/loading.gif" alt="loading" />
-        </div>
-      </div>
+      <LoadingComponent />
       <ToastContainer />
     </>
   );

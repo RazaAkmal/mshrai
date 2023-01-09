@@ -9,11 +9,14 @@ import "font-awesome/css/font-awesome.min.css";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./app/store";
+import { NavActiveProvider } from "./context/NavActive";
 
 ReactDOM.render(
   <BrowserRouter>
-  <Provider store={store}>
-    <App />
+    <Provider store={store}>
+      <NavActiveProvider>
+        <App />
+      </NavActiveProvider>
     </Provider>
   </BrowserRouter>,
   document.getElementById("root")

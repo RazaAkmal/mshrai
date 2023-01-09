@@ -44,25 +44,25 @@ export default function Resault(props) {
     let model_year_start = ''
     let model_year_end = ''
     for (const [key, value] of params.entries()) {
-      if(key.includes('brand_id')) {
+      if (key.includes('brand_id')) {
         brand_id.push(Number(value))
       }
-      if(key.includes('brand_type_id')) {
+      if (key.includes('brand_type_id')) {
         brand_type_id.push(Number(value))
       }
-      if(key.includes('source_id')) {
+      if (key.includes('source_id')) {
         source_id.push(Number(value))
       }
-      if(key.includes('city_id')) {
+      if (key.includes('city_id')) {
         city_id.push(Number(value))
       }
-      if(key.includes('model_year[0][max]')) {
+      if (key.includes('model_year[0][max]')) {
         model_year_end = value
       }
-      if(key.includes('model_year[0][min]')) {
+      if (key.includes('model_year[0][min]')) {
         model_year_start = value
       }
-      if(key.includes('kilometer')) {
+      if (key.includes('kilometer')) {
         kilometer.push(Number(value))
       }
     }
@@ -73,8 +73,8 @@ export default function Resault(props) {
 
     let query = {
       brand_id: brand_id,
-      model_year: [{ min: model_year_start, max: model_year_end}],
-  }
+      model_year: [{ min: model_year_start, max: model_year_end }],
+    }
 
 
     if (brand_type_id.length > 0) {
@@ -122,7 +122,7 @@ export default function Resault(props) {
     reportReasons().then((res) => {
       dispatch(setReportReasons(res.data));
     }).catch((err) => {
-        console.log(err);
+      console.log(err);
     });
   }, []);
 
@@ -308,7 +308,7 @@ export default function Resault(props) {
           max: id
         })
       });
-      query['model_year']=yearSelected
+      query['model_year'] = yearSelected
     } else {
       let modelYear = [{
         min: searchForm.model_year_start,
@@ -316,7 +316,7 @@ export default function Resault(props) {
       }]
       query['model_year'] = modelYear
     }
-    
+
     if (
       searchForm.brand_id &&
       searchForm.brand_id != null &&
@@ -333,11 +333,11 @@ export default function Resault(props) {
       searchForm.brand_type_id != null &&
       searchForm.brand_type_id.length > 0
     ) {
-      let brandType=[]
+      let brandType = []
       searchForm.brand_type_id.forEach((id, index) => {
         brandType.push(id)
       });
-      query['brand_type_id']=brandType
+      query['brand_type_id'] = brandType
     }
     // if (
     //   searchForm.shape_id &&
@@ -355,33 +355,33 @@ export default function Resault(props) {
       searchForm.city_id != null &&
       searchForm.city_id.length > 0
     ) {
-      let city=[]
+      let city = []
       searchForm.city_id.forEach((id, index) => {
-          city.push(id)
+        city.push(id)
       });
-      query['city_id']=city
+      query['city_id'] = city
     }
     if (
       searchForm.source_id &&
       searchForm.source_id != null &&
       searchForm.source_id.length > 0
     ) {
-      let source=[]
+      let source = []
       searchForm.source_id.forEach((id, index) => {
-          source.push(id)
+        source.push(id)
       });
-      query['source_id']=source
+      query['source_id'] = source
     }
     if (searchForm.kilometer && searchForm.kilometer.length > 0) {
       query['kilometer'] = searchForm.kilometer_obj
     }
     if (searchForm.price && searchForm.price.length > 0) {
-      query['price']=searchForm.price_obj
+      query['price'] = searchForm.price_obj
     }
     if (searchForm.sort && searchForm.sort !== "") {
       let type = searchForm.sort.includes('price') ? 'price' : 'date'
       let order = searchForm.sort.includes('asc') ? 'asc' : 'desc'
-      query['sort']= {
+      query['sort'] = {
         order: order,
         column: type
       }
@@ -392,13 +392,13 @@ export default function Resault(props) {
     //   query += "&sayarah_sort={!field f=source v=Syarah}";
     // }
 
-    searchCars(query, filterSelected,selectedLng).then((res) => {
+    searchCars(query, filterSelected, selectedLng).then((res) => {
       $(".load_cont").fadeOut(function () {
         $(this).parent().fadeOut();
         $("body").css({ "overflow-y": "visible" });
       });
       if (res && res.response && res.response.docs) {
-        
+
         setIinitialCars(res.response.docs);
         let carsArray =
           nextPage
@@ -410,20 +410,20 @@ export default function Resault(props) {
       }
     });
 
-  }, [dispatch, searchForm, page,selectedLng]);
+  }, [dispatch, searchForm, page, selectedLng]);
 
-  const toggleOpen = () =>{
+  const toggleOpen = () => {
     setState((prevState) => ({
       ...prevState,
       isOpen: !state.isOpen
     }));
     if (showWrapperDiv) {
       setShowWrapperDiv(false)
-    }else {
+    } else {
       setShowWrapperDiv(true)
 
     }
-  } 
+  }
 
   const fillterBtnClickHandle = (e) => {
     setShowWrapperDiv(true)
@@ -438,7 +438,7 @@ export default function Resault(props) {
       setShowWrapperDiv(false)
       e.stopPropagation();
     }
-    if(state.isOpen) {
+    if (state.isOpen) {
       setState((prevState) => ({
         ...prevState,
         isOpen: !state.isOpen
@@ -480,8 +480,8 @@ export default function Resault(props) {
     return returnVal;
   };
 
-  let totalpages = Math.floor(resultsNumber/25);
-  const changePage  = (e, value) => {
+  let totalpages = Math.floor(resultsNumber / 25);
+  const changePage = (e, value) => {
     // setPage(page+1)
     setPage(value);
   };
@@ -491,11 +491,12 @@ export default function Resault(props) {
   return (
     <>
       <div style={{
-        display: showWrapperDiv ? "block" : "none"}} 
+        display: showWrapperDiv ? "block" : "none"
+      }}
         className="gray-section-overlay" onClick={closeFilterMenuHandle}>
       </div>
-      <header>
-      {/* <ScrollButton /> */}
+      <header style={{ "background": "#3e0292" }}>
+        {/* <ScrollButton /> */}
 
         <div className="container">
           <div className="row logo-row">
@@ -539,7 +540,7 @@ export default function Resault(props) {
               position: "relative",
             }}
           >
-                    {/* <h2 style={{textAlign:'center'}}><Trans i18nKey="description.testLaunch" /></h2> */}
+            {/* <h2 style={{textAlign:'center'}}><Trans i18nKey="description.testLaunch" /></h2> */}
             <div className="row">
               <div className="col">
                 <div className="search_hint">
@@ -583,36 +584,36 @@ export default function Resault(props) {
               <ul className="search_tags">
                 {searchForm.brand_id && searchForm.brand_id.length > 0
                   ? searchInputs.marksOptions.map((mark, index) => {
-                      return searchForm.brand_id.includes(mark.value) &&
-                        modalOfbrandNotSelected(mark.value, index) ? (
-                        <>
-                          <li key={"searchMarks" + index}>
-                            {isEnglish ? mark.label_en : mark.label}
-                            <span
-                              onClick={() => {
-                                let marks = [...searchForm.brand_id];
-                                if (marks.includes(mark.value)) {
-                                  marks.splice(marks.indexOf(mark.value), 1);
-                                }
-                                _handleStartSearch("brand_id", marks);
-                              }}
-                            >
-                              <IoIosClose />
-                            </span>
-                          </li>
-                        </>
-                      ) : (
-                        false
-                      );
-                    })
+                    return searchForm.brand_id.includes(mark.value) &&
+                      modalOfbrandNotSelected(mark.value, index) ? (
+                      <>
+                        <li key={"searchMarks" + index}>
+                          {isEnglish ? mark.label_en : mark.label}
+                          <span
+                            onClick={() => {
+                              let marks = [...searchForm.brand_id];
+                              if (marks.includes(mark.value)) {
+                                marks.splice(marks.indexOf(mark.value), 1);
+                              }
+                              _handleStartSearch("brand_id", marks);
+                            }}
+                          >
+                            <IoIosClose />
+                          </span>
+                        </li>
+                      </>
+                    ) : (
+                      false
+                    );
+                  })
                   : ""}
-                {searchForm.brand_type_id && 
-                searchForm.brand_type_id.length > 0
+                {searchForm.brand_type_id &&
+                  searchForm.brand_type_id.length > 0
                   ? searchInputs.modelOptions.map((model, index) => {
-                      return searchForm.brand_type_id.includes(model.value)
-                        ? getBrandValueAswell(model, index)
-                        : false;
-                    })
+                    return searchForm.brand_type_id.includes(model.value)
+                      ? getBrandValueAswell(model, index)
+                      : false;
+                  })
                   : ""}
               </ul>
             </div>
@@ -620,125 +621,125 @@ export default function Resault(props) {
               <ul className="search_tags">
                 {searchForm.shape_id && searchForm.shape_id.length > 0
                   ? searchInputs.shapes.map((shape, index) => {
-                      return searchForm.shape_id.includes(shape.id) ? (
-                        <li key={"searchShapes" + index}>
-                          {isEnglish ? shape.title_en : shape.title}
-                          <span
-                            onClick={() => {
-                              let shapes = [...searchForm.shape_id];
-                              if (shapes.includes(shape.value)) {
-                                shapes.splice(shapes.indexOf(shape.value), 1);
-                              }
-                              _handleStartSearch("shape_id", shapes);
-                            }}
-                          >
-                            <IoIosClose />
-                          </span>
-                        </li>
-                      ) : (
-                        false
-                      );
-                    })
+                    return searchForm.shape_id.includes(shape.id) ? (
+                      <li key={"searchShapes" + index}>
+                        {isEnglish ? shape.title_en : shape.title}
+                        <span
+                          onClick={() => {
+                            let shapes = [...searchForm.shape_id];
+                            if (shapes.includes(shape.value)) {
+                              shapes.splice(shapes.indexOf(shape.value), 1);
+                            }
+                            _handleStartSearch("shape_id", shapes);
+                          }}
+                        >
+                          <IoIosClose />
+                        </span>
+                      </li>
+                    ) : (
+                      false
+                    );
+                  })
                   : ""}
                 {searchForm.source_id && searchForm.source_id.length > 0
                   ? searchInputs.sources.map((source, index) => {
-                      return searchForm.source_id.includes(source.value) ? (
-                        <li key={"searchcities" + index}>
-                          {source.label === "Snap"
-                            ? "Social Media"
-                            : isEnglish
+                    return searchForm.source_id.includes(source.value) ? (
+                      <li key={"searchcities" + index}>
+                        {source.label === "Snap"
+                          ? "Social Media"
+                          : isEnglish
                             ? source.label_en
                             : source.label}
-                          <span
-                            onClick={() => {
-                              let sources = [...searchForm.source_id];
-                              if (sources.includes(source.value)) {
-                                sources.splice(
-                                  sources.indexOf(source.value),
-                                  1
-                                );
-                              }
-                              _handleStartSearch("source_id", sources);
-                            }}
-                          >
-                            <IoIosClose />
-                          </span>
-                        </li>
-                      ) : (
-                        false
-                      );
-                    })
+                        <span
+                          onClick={() => {
+                            let sources = [...searchForm.source_id];
+                            if (sources.includes(source.value)) {
+                              sources.splice(
+                                sources.indexOf(source.value),
+                                1
+                              );
+                            }
+                            _handleStartSearch("source_id", sources);
+                          }}
+                        >
+                          <IoIosClose />
+                        </span>
+                      </li>
+                    ) : (
+                      false
+                    );
+                  })
                   : ""}
                 {searchForm.price && searchForm.price.length > 0
                   ? searchForm.price.map((price, index) => {
-                      return (
-                        <li
-                          style={{ direction: "ltr" }}
-                          key={"searchcities" + index}
+                    return (
+                      <li
+                        style={{ direction: "ltr" }}
+                        key={"searchcities" + index}
+                      >
+                        {price}
+                        <span
+                          onClick={() => {
+                            let prices = [...searchForm.price];
+                            prices.splice(prices.indexOf(price), 1);
+                            _handleStartSearch("price", prices);
+                          }}
                         >
-                          {price}
-                          <span
-                            onClick={() => {
-                              let prices = [...searchForm.price];
-                              prices.splice(prices.indexOf(price), 1);
-                              _handleStartSearch("price", prices);
-                            }}
-                          >
-                            <IoIosClose />
-                          </span>
-                        </li>
-                      );
-                    })
+                          <IoIosClose />
+                        </span>
+                      </li>
+                    );
+                  })
                   : ""}
                 {searchForm.kilometer && searchForm.kilometer.length > 0
                   ? searchForm.kilometer.map((kilometer, index) => {
-                      return (
-                        <li
-                          style={{ direction: "ltr" }}
-                          key={"searchcities" + index}
+                    return (
+                      <li
+                        style={{ direction: "ltr" }}
+                        key={"searchcities" + index}
+                      >
+                        {kilometer}
+                        <span
+                          onClick={() => {
+                            let kilometers = [...searchForm.kilometer];
+                            kilometers.splice(
+                              kilometers.indexOf(kilometer),
+                              1
+                            );
+                            _handleStartSearch("kilometer", kilometers);
+                          }}
                         >
-                          {kilometer}
-                          <span
-                            onClick={() => {
-                              let kilometers = [...searchForm.kilometer];
-                              kilometers.splice(
-                                kilometers.indexOf(kilometer),
-                                1
-                              );
-                              _handleStartSearch("kilometer", kilometers);
-                            }}
-                          >
-                            <IoIosClose />
-                          </span>
-                        </li>
-                      );
-                    })
+                          <IoIosClose />
+                        </span>
+                      </li>
+                    );
+                  })
                   : ""}
                 {searchForm.city_id && searchForm.city_id.length > 0
                   ? searchInputs.cityOptions.map((city, index) => {
-                      return searchForm.city_id.includes(city.value) ? (
-                        <li key={"searchcities" + index}>
-                          {isEnglish ? city.label_en : city.label}
-                          <span
-                            onClick={() => {
-                              let cities = [...searchForm.city_id];
-                              if (cities.includes(city.value)) {
-                                cities.splice(cities.indexOf(city.value), 1);
-                              }
-                              _handleStartSearch("city_id", cities);
-                            }}
-                          >
-                            <IoIosClose />
-                          </span>
-                        </li>
-                      ) : (
-                        false
-                      );
-                    })
+                    return searchForm.city_id.includes(city.value) ? (
+                      <li key={"searchcities" + index}>
+                        {isEnglish ? city.label_en : city.label}
+                        <span
+                          onClick={() => {
+                            let cities = [...searchForm.city_id];
+                            if (cities.includes(city.value)) {
+                              cities.splice(cities.indexOf(city.value), 1);
+                            }
+                            _handleStartSearch("city_id", cities);
+                          }}
+                        >
+                          <IoIosClose />
+                        </span>
+                      </li>
+                    ) : (
+                      false
+                    );
+                  })
                   : ""}
                 {searchForm.model_year_end &&
-                (searchForm.model_year_end < new Date().getFullYear() ||
-                  searchForm.model_year_start > 1990) ? (
+                  (searchForm.model_year_end < new Date().getFullYear() ||
+                    searchForm.model_year_start > 1990) ? (
                   <li>
                     {searchForm.model_year_start +
                       "-" +
@@ -760,15 +761,15 @@ export default function Resault(props) {
                 {searchForm.manufacturing_year && searchForm.manufacturing_year.length > 0
                   ? searchForm.manufacturing_year.map((year, index) => (
                     <li>
-                    {year}
-                    <span
-                      onClick={() => {
-                        _handleStartSearch("manufacturing_year", year);
-                      }}
-                    >
-                      <IoIosClose />
-                    </span>
-                  </li>
+                      {year}
+                      <span
+                        onClick={() => {
+                          _handleStartSearch("manufacturing_year", year);
+                        }}
+                      >
+                        <IoIosClose />
+                      </span>
+                    </li>
                   ))
                   : ""}
 
@@ -802,14 +803,14 @@ export default function Resault(props) {
                   searchForm.model_year_end < new Date().getFullYear() ||
                   searchForm.model_year_start > 1990 ||
                   searchForm.brand_id.length > 0) && (
-                  <li
-                    className="search_tags-remove"
-                    key={"searchcitiesclear"}
-                    onClick={() => _handleStartSearch("clearall")}
-                  >
-                    {isEnglish ? "Clear All" : "امسح الكل"}
-                  </li>
-                )}
+                    <li
+                      className="search_tags-remove"
+                      key={"searchcitiesclear"}
+                      onClick={() => _handleStartSearch("clearall")}
+                    >
+                      {isEnglish ? "Clear All" : "امسح الكل"}
+                    </li>
+                  )}
               </ul>
             </div>
             <div className="row">
