@@ -6,6 +6,10 @@ import { fetchSearchInputs } from "../features/search/searchApi";
 import { getSearchInputs } from "../features/search/searchSlice";
 import { Accordion } from "react-bootstrap";
 import { Trans, useTranslation } from "react-i18next";
+import CityListPopper from "./CityListPopper";
+import Divider from '@mui/material/Divider';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range);
@@ -18,6 +22,22 @@ export default function Filters(props) {
   const [filterCity, setFilterCity] = useState("");
   const [filterSource, setFilterSource] = useState("");
   const isEnglish = localStorage.getItem("lang") === "en";
+
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [placement, setPlacement] = useState();
+  const [selectedProvience, setSelectedProvience] = useState('')
+  const [showWrapperDiv, setShowWrapperDiv] = useState(false)
+  
+  const handleClick = (newPlacement, provience) => (event) => {
+    setAnchorEl(event.currentTarget);
+    setOpen((prev) => placement !== newPlacement || !prev);
+    setPlacement(newPlacement);
+    setSelectedProvience(provience)
+    setShowWrapperDiv(true)
+    document.body.style.overflow = 'hidden';
+  };
 
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -425,15 +445,67 @@ export default function Filters(props) {
             <Accordion.Item eventKey="4">
               <Accordion.Header>{t("search.city")}</Accordion.Header>
               <Accordion.Body>
-                <div className="panel-content">
-                  <input
+                <div className="panel-content-province">
+                  {/* <input
                     placeholder={t("search.searchForCity")}
                     type="text"
-                    style={{ marginTop: "0" }}
+                    style={{  }}
                     className="form-control"
                     onChange={(e) => setFilterCity(e.target.value)}
-                  />
+                  /> */}
+                  <Divider style={{paddingBottom:"10px",}}>{t("search.popularCities")}</Divider>
                   {searchInputs.cityOptions
+                    // .filter((v) => filterValue(v, filterCity))
+                    .map((city, index) => {
+                      return ( 
+                        <div className="form-group" key={"city" + index}>
+                          <input
+                            id={"city" + index}
+                            type="checkbox"
+                            name="city"
+                            checked={props.searchState.city_id.includes(
+                              city.value
+                            )}
+                            onChange={(v) => addValue("city_id", city.value)}
+                          />
+                          {(index <= 3 &&
+                          <label className="d-block" style={{fontSize:'1rem'}} htmlFor={"city" + index}>
+                            {localStorage.getItem("lang") === "en"
+                              ? city.label_en
+                              : city.label}{" "}
+                          </label>
+                           )}
+                        </div>
+                      );
+                    })}
+                    <Divider style={{paddingBottom:"10px"}}>{t("search.provinces")}</Divider>
+
+                 {
+                    Object.values(searchInputs.provincesOption)
+                    .map((province, index) => (
+                        <div onClick={handleClick('right-start', province[0].province === null ? "UAE" : province[0].province )} 
+                        className={isEnglish ? "form-group-province-en" : "form-group-province-ar"} 
+                        key={"city" + index}>
+                         { province[0].province === null ? <label className="label-province " >
+                            {localStorage.getItem("lang") === "en"
+                              ? "Gulf Countries"
+                              : t("search.gulfCountries") }
+                          </label> : <label className="label-province " >
+                            {localStorage.getItem("lang") === "en"
+                              ? province[0].province_en
+                              : province[0].province}{" "}
+                          </label> }
+                          {isEnglish ? <FontAwesomeIcon icon={faChevronRight} />
+                          : <FontAwesomeIcon icon={faChevronLeft} /> }
+                        </div>
+                    ))
+                  } 
+                  
+                  <CityListPopper showWrapperDiv={showWrapperDiv} setShowWrapperDiv={setShowWrapperDiv} open={open} setOpen={setOpen} anchorEl={anchorEl} addValue={addValue} searchState={props.searchState}
+                  searchInputs={searchInputs} placement={placement} 
+                  selectedProvience={selectedProvience} filterValue={filterValue}/>
+  
+                  {/* {searchInputs.cityOptions
                     .filter((v) => filterValue(v, filterCity))
                     .map((city, index) => {
                       return ( 
@@ -455,7 +527,7 @@ export default function Filters(props) {
                           </label>
                         </div>
                       );
-                    })}
+                    })} */}
                 </div>
               </Accordion.Body>
             </Accordion.Item>

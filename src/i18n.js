@@ -68,7 +68,10 @@ i18n
             filterLimitError: "لا يمكنك تحديد أكثر من ثلاث خدمات",
             brandLimitError:"لا يمكنك تحديد أكثر من ثلاث ماركات",
             modelLimitError:"لا يمكنك تحديد أكثر من ثلاثة طرازات",
-            searchConditionError: "الرجاء تحديد ماركة واحدة"
+            searchConditionError: "الرجاء تحديد ماركة واحدة",
+            popularCities:"المدن الشعبية ",
+            provinces:" المقاطعات",
+            gulfCountries: "دول الخليج",
           },
           results: {
             searchResultForCar: "نتيجة بحث عن سيارة معروضة للبيع",
@@ -203,7 +206,10 @@ i18n
             filterLimitError: "you can’t select more than three services",
             brandLimitError:"You can't select more than three",
             modelLimitError:"you cannot select more than three models",
-            searchConditionError: "Please select a modal"
+            searchConditionError: "Please select a modal",
+            popularCities:"Popular Cities",
+            provinces:"Provinces",
+            gulfCountries: "Gulf Countries",
           },
           results: {
             searchResultForCar: "Search result for a car for sale",

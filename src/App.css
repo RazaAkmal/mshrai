@@ -1935,3 +1935,93 @@ right: 92%;
   top: 15px !important;
   z-index: 9;
 }
+.form-group-poper{
+    max-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(255, 255, 255);
+    box-shadow: rgb(0 0 0 / 30%) 0px 2px 16px 0px;
+    width: 300px;
+    z-index: 9;
+    overflow: auto;
+    padding-bottom: 15px;
+}
+.city-header{
+  position: sticky;
+    padding: 16px 24px;
+    text-align: center;
+    display: block;
+    top: 0;
+    z-index: 999;
+    background-color: white;
+}
+.clearButton{
+  position: absolute !important;
+    left: 10px;
+    top: 10px;
+    padding: 0px;
+    z-index: 2;
+}
+.closeButton{
+  position: absolute !important;
+    right: 15px;
+    top: 10px;
+    padding: 0px;
+    z-index: 2;
+}
+.section-div-overlay{
+  position: fixed;
+  z-index: 9;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  bottom: 0;
+  top: 0px;
+
+}
+.form-group-province-ar{
+  display: flex;
+  cursor: pointer;
+  justify-content: space-between;
+  padding-right: 10px;
+  padding-left: 10px
+}
+.form-group-province-en{
+  display: flex;
+  cursor: pointer;
+  justify-content: space-between;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.label-province {
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: normal;
+}
+.panel-content-province {
+  padding: 10px 7px 5px;
+  max-height: 280px;
+  overflow-y: auto;
+  background-color: rgb(245, 247, 251);
+  text-align: justify;
+}
+.form-group-province-ar:hover{
+  border-right: 3px solid var(--primary_color);
+  transition: 0.3s;
+}
+.form-group-province-en:hover{
+  border-left: 3px solid var(--primary_color);
+  transition: 0.3s;
+}
+
+.checkbox-en{
+  direction: ltr;
+
+}
+.checkbox-ar{
+  direction: rtl;
+}
+.MuiFormControlLabel-root{
+  margin: 1px !important;
+}
