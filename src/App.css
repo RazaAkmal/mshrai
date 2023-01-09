@@ -353,6 +353,9 @@ section {
   margin: 30px 0 auto 0;
   font-size: 18px;
 }
+.carsual-button button {
+  padding: 0 12px !important;
+}
 .search_form button {
   border: 0;
   height: 35px;
@@ -952,7 +955,7 @@ body .login-drop {
   padding: 5px 10px 5px 5px;
 }
 .copyrights {
-  padding: 25px;
+  padding: 10px;
   text-align: center;
   width: 100%;
   font-weight: 600;
@@ -1087,7 +1090,7 @@ body .login-drop {
   .main_screen .cont h1 {
     font-size: 22px;
     line-height: 34px;
-    margin-top: 70px;
+    /* margin-top: 70px; */
   }
   .search_tags {
     margin-bottom: 0px;
@@ -1125,8 +1128,17 @@ body .login-drop {
 }
 
 @media all and (max-width: 575.98px) {
+  .scrolldivhieght {
+    height: 82vh !important;
+  }
+  .search_hint_mobile {
+    position: sticky;
+    top: -2px;
+    z-index: 10;
+    padding-bottom: 10px;
+  }
   .main_screen {
-    position: relative;
+    position: sticky;
   }
 
   .main_screen .cont {
@@ -1475,7 +1487,6 @@ body .login-drop {
   left: 127px;
   top: 19px;
   color: #fff;
-  /* color: var(--brand-color); */
   z-index: 1;
   cursor: pointer;
 }
@@ -1535,10 +1546,8 @@ body .login-drop {
 }
 .custom-modal .btn-solid {
   background-color: transparent !important;
-  /* border: 1px solid var(--primary_color);
-  color: var(--primary_color) !important; */
-  color: #303030 !important;
-  border: 1px solid #303030;
+  border: 1px solid var(--primary_color);
+  color: var(--primary_color) !important;
   font-weight: 400;
   font-family: "Almarai", sans-serif;
   font-size: 18px;
@@ -1616,8 +1625,6 @@ input[type="radio"] + label {
 }
 .App-en header img {
   margin-left: auto !important;
-  /* min-height: 40px; */
-  object-fit: contain;
 }
 .App-en header .logo-row {
   flex-direction: row-reverse !important;
@@ -1710,12 +1717,13 @@ input[type="radio"] + label {
 
 .paper-en {
   width: 500px;
-  margin-right: 50px;
+  margin-right: 10px;
   margin-bottom: 10px;
+  margin-left: 10px;
 }
 .paper-ar {
   width: 500px;
-  margin-left: 50px;
+  margin-left: 10px;
   margin-bottom: 10px;
 }
 
@@ -1806,13 +1814,61 @@ input[type="radio"] + label {
   top: 16px;
   left: 41%;
 }
+.selct-year {
+  display: flex;
+  flex-wrap: wrap;
+  max-height: 93px;
+  overflow: hidden;
+  margin-top: 10px;
+  justify-content: space-between;
+}
+.selct-year .fetching {
+  color: black;
+  margin: 0px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 67px;
+}
+.selct-year .fetching input[type="checkbox"] {
+  display: block;
+  margin: 0 5px;
+  border-radius: 3px;
+}
+
+.carsual-button {
+  display: flex;
+  justify-content: center;
+}
+
+.carsual-button .change-data {
+  margin: 10px 5px;
+  background: white;
+  color: black;
+}
+
+.carsual-button .change-data:hover {
+  margin: 10px 5px;
+  background: white;
+  color: black;
+}
 .gray-section-overlay {
   position: absolute;
   z-index: 9;
   left: 0;
   right: 0;
   width: 100%;
-  height: 100%;
+  height: 123%;
+  bottom: 0;
+  top: 0;
+}
+.section-overlay {
+  position: absolute;
+  z-index: 15;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 123%;
   bottom: 0;
   top: 0;
 }
@@ -1823,13 +1879,130 @@ input[type="radio"] + label {
 }
 .loader_stack {
   align-items: center;
-  padding-top: 10px;
   direction: initial;
 }
 .MuiPaginationItem-root.Mui-selected {
   background-color: var(--acent_color) !important;
 }
-/******   BLogs  *******/
+.card-body {
+  padding: 0px !important;
+}
+.blog__link a,
+.blog__link a:hover,
+.blog__link a:active,
+.blog__link a:focus {
+  text-decoration: none;
+  color: inherit;
+}
+.form-control {
+  width: 100% !important;
+}
+.border-red-600 {
+  border-color: red !important;
+}
+.year-paginat button {
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  background-color: #fff;
+  color: #303030;
+  box-shadow: 0 0 4px rgb(0, 0, 0, 0.2);
+  /* background:linear-gradient(0deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)) ; */
+  direction: initial;
+  background-color: white !important;
+  border-radius: 50%;
+  color: black;
+}
+.page__title h2 {
+  position: relative;
+  /* color: #fff; */
+  font-size: 2.5rem;
+}
+.year-paginat .MuiPaginationItem-root.Mui-selected {
+  background-color: white !important;
+  color: var(--acent_color) !important;
+}
+.cards__container {
+  padding: 80px 0;
+}
+.cards__container .row {
+  --bs-gutter-y: 1.5rem;
+}
+.blog__card__link,
+.blog__card__link:hover {
+  text-decoration: none;
+  color: #1a202c;
+}
+
+.blog__card__link .card {
+  box-shadow: 0px 15px 15px -10px rgb(0 0 0 / 5%);
+  padding: 7px;
+}
+.image-blog-wrapper {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  height: 250px;
+  margin-bottom: 20px;
+  background-color: #303030;
+}
+.blog__card__link img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.image-blog-wrapper.img-full {
+  height: auto;
+  width: 100%;
+  min-height: 350px;
+}
+.blog__card__link .img-full img {
+  height: 100%;
+  height: auto;
+  width: 100%;
+
+  object-fit: contain;
+}
+.blog__card__link img.thumbnail {
+  height: 150px;
+  width: 100%;
+  object-fit: contain;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+.blog__card__link .img-full {
+  display: flex;
+}
+.year-paginat {
+  align-items: center;
+  direction: initial;
+}
+.blog__card__link img.blog-logo {
+  max-width: 120px;
+  object-fit: contain;
+}
+.modal-header {
+  padding: 0 !important;
+  border: none !important;
+  position: absolute !important;
+  left: 10px !important;
+  top: 15px !important;
+  z-index: 9;
+}
+
+.details-btn {
+  background-color: #131313 !important;
+}
+.details-btn.btn,
+.details-btn.btn:hover {
+  color: #fff;
+}
+/* .language-button:hover,
+.language-button:focus,
+.language-button:active
+{
+  background-color: #303030;
+  color: #fff;
+} */ /******   BLogs  *******/
 .blog__link {
   position: absolute;
   left: 180px;

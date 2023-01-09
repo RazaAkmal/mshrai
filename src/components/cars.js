@@ -12,24 +12,6 @@ import { ReportModal } from "./reportModal";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
-// moment.updateLocale('en', {
-//   relativeTime : {
-//       future: "in %s",
-//       past:   "%s+",
-//       s  : 'a few seconds',
-//       ss : '%d seconds',
-//       m:  "a minute",
-//       mm: "%d minutes",
-//       h:  "an hour",
-//       hh: "%dh",
-//       d:  "a day",
-//       dd: "%d days",
-//       M:  "a month",
-//       MM: "%d months",
-//       y:  "a year",
-//       yy: "%d years"
-//   }
-// });
 
 export default function Cars({ cars }) {
   const searchInputs = useSelector((state) => state.search.searchInputs);
@@ -199,7 +181,7 @@ export default function Cars({ cars }) {
                     {brandName ? <h3>{brandName + " - " + modelName}</h3> : ""}
                     <p>
                       <i className="far fa-clock"></i>
-                      {moment(car.date).fromNow(false)}
+                      {moment(car.date).fromNow()}
                     </p>
                     <div className="three_dot_icon"
                       onClick={(e) => {

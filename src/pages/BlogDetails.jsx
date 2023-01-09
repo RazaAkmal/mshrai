@@ -13,7 +13,6 @@ const BlogDetails = ({ selectedLng }) => {
   const id = useParams();
   const { specificById, isLoadingSpecificById, errorSpecificById } =
     useSelector((state) => state.blogs);
-  console.log(specificById, isLoadingSpecificById, errorSpecificById);
   useEffect(() => {
     dispatch(getBlogById(id));
   }, [dispatch]);

@@ -1,14 +1,21 @@
 import { components } from "react-select";
 import { Form } from "react-bootstrap";
 import { useState, useEffect } from "react";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import _ from 'lodash';
 
 const Menu = (props) => {
   const isEnglish = localStorage.getItem("lang") === "en";
   const [pageonyear, setPageOnYear] = useState(1)
-  const [pageLength, setPageLength] = useState(16)
   const [totalpages, setTotalPages] = useState(16)
+  const [optionsArray , setOptionsArray] = useState(props.options)
   const endpage = Math.ceil(props.options.length/totalpages);
 
+  const changePage = (e, value) => {
+    setPageOnYear(value);
+  };
+    
   const getWindowWidth = () => {
     const { innerWidth: width } = window;
     return width;
@@ -27,49 +34,32 @@ const Menu = (props) => {
 
     useEffect(() => {
       if (windowwidth >= 992) {
-        setTotalPages(16)
-        setPageLength(16)
-      } else if (windowwidth >= 768){
-        setTotalPages(12)
-        setPageLength(12)
-      } else if (windowwidth >= 576){
-        setPageLength(8)
-        setTotalPages(10)
+        let chunkArray = _.chunk(optionsArray, 16);
+        setOptionsArray(chunkArray);
+        setTotalPages(16);
+      } else if (windowwidth >= 768) {
+        setTotalPages(12);
+        let chunkArray = _.chunk(optionsArray, 12);
+        setOptionsArray(chunkArray);
+      } else if (windowwidth < 768 ) {
+        setTotalPages(8);
+        let chunkArray = _.chunk(optionsArray, 8);
+        setOptionsArray(chunkArray);
       }
-    }, [windowwidth])
+    }, [windowwidth]);
     
-
-
-  
-  const prevPage = (e) => {
-    setPageOnYear(pageonyear - 1)
-    setPageLength(pageLength / 2)
-    e.preventDefault();
-  }
-  const nextPage = (e) => {
-    setPageOnYear(pageonyear + 1)
-    setPageLength(pageLength * 2)
-    e.preventDefault()
-  }
-
-
 
   return (
     <>
       <components.Menu {...props}>
         <div>
-          {props.selectProps.fetchingData ? (
-            <span className="fetching">Fetching data...</span>
-          ) : (
             <div className="selct-year">
-              {props.options.map((item, index) => {
+              {_.isArray(optionsArray[pageonyear - 1]) && optionsArray[pageonyear - 1].map((item, index) => {
                 let checkedValue = props.selectProps.value.some(
                   (element) => element?.label === item.label
                 );
                 return (
                   <>
-                  { 
-                  ((pageonyear === 1 && index < pageLength) || (pageonyear > 1 && index >= (pageLength / 2) && index < pageLength)) && 
                   <span className="fetching">
                     <Form.Check
                       checked={checkedValue}
@@ -80,29 +70,20 @@ const Menu = (props) => {
                       type="checkbox"
                     />
                     <span> {item.value}</span>
-                  </span> }
-
+                  </span> 
                   </>
                 );
               })}
             </div>
-          )}
           <div className="carsual-button">
-            <button
-              className={"change-data"}
-              onClick={prevPage}
-              disabled={ pageonyear === 1 }  
-            >
-              {isEnglish ? <i class="fa fa-arrow-left"></i> : <i class="fa fa-arrow-right"></i>}
-            </button>
-            <button
-              className={"change-data"}
-              onClick={nextPage}
-              disabled={pageonyear === endpage }
-            >
-              {isEnglish ? <i class="fa fa-arrow-right"></i> : <i class="fa fa-arrow-left"></i>}
-              {/* <i class="fa fa-arrow-right"></i> */}
-            </button>
+            <Stack spacing={4} className="year-paginat">
+          <Pagination
+            count={endpage}
+            page={pageonyear}
+            onChange={changePage}
+            style={{backgroundColor:"white", color:'black'}}
+          />
+        </Stack>
           </div>
         </div>
       </components.Menu>

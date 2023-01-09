@@ -104,14 +104,14 @@ const Feedback = ({selectedLng}) => {
   };
   return (
     <div>
-      <Button style={{bottom: visible ? '80px' : '10px', }} className={ selectedLng === 'en'? "float-en" : 'float-ar'} onClick={handleClick}>
+      <Button style={{bottom: visible ? '80px' : '50px', }} className={ selectedLng === 'en'? "float-en" : 'float-ar'} onClick={handleClick}>
               <img
                 style={{ width: '40px', height: '40px' }}
                 src="../images/happy-active.png"
                 alt="icon"
               />
             </Button>
-            <div style={{display: open ? "block" : "none", }} className="gray-section-overlay" onClick={closeSmileMenuButton}></div>
+            <div style={{display: open ? "block" : "none", }} className="section-overlay" onClick={closeSmileMenuButton}></div>
             <Popper style={{zIndex: 20}} open={open} anchorEl={anchorEl} placement="top" transition>
               {({ TransitionProps }) => (
                 <Fade {...TransitionProps} timeout={350}>

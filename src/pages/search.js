@@ -2,13 +2,16 @@ import React, { useEffect, useState, useRef } from "react";
 import $ from "jquery";
 import { useHistory } from "react-router-dom";
 import Select from "react-select";
-import { colourStyles } from "../constants";
+import { colourStyles, errorStyle } from "../constants";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { Tabs, Tab } from "react-bootstrap";
 import { fetchSearchInputs, searchCars } from "../features/search/searchApi";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
+import Menu from '../components/SelectMenu'
+import Option from '../components/SelectOption'
+import OptionCity from '../components/OptionCity'
 
 import {
   getSearchInputs,
@@ -44,19 +47,22 @@ export default function Search() {
   const [selectedBrand, setSelectedBrand] = useState([]);
   const [brandOptions, setBrandOptions] = useState([]);
   const [selectedYears, setSelectedYears] = useState([]);
+  const [validationError, setValidationError] = useState(false);
+
+  const selectedLng = useSelector((state) => state.search.language);
 
   const dispatch = useDispatch();
   const [state, setState] = useState({ ...searchForm });
 
   useEffect(() => {
-    fetchSearchInputs().then((result) => {
+    fetchSearchInputs(selectedLng).then((result) => {
       $(".load_cont").fadeOut(function () {
         $(this).parent().fadeOut();
         $("body").css({ "overflow-y": "visible" });
       });
       dispatch(getSearchInputs(result));
     });
-  }, [dispatch]);
+  }, [dispatch, selectedLng]);
 
   const [filterSelected, setFilterSelected] = useState(false);
 
@@ -263,7 +269,8 @@ export default function Search() {
       console.log(state);
       history.push("/results");
     } else {
-      showError(t("search.searchConditionError"))
+      setValidationError(true);
+      // showError(t("search.searchConditionError"))      
     }
 
   }
@@ -322,6 +329,7 @@ export default function Search() {
             <div className="col-12 mb-5">
               <div className="cont">
                 {/* <img src="../images/logo_color.png" alt="" className="logo" /> */}
+                {/* <h2 className="pb-4"><Trans i18nKey="description.testLaunch" /></h2> */}
                 <h1>
                   <Trans i18nKey="description.Footer" />
                 </h1>
@@ -380,10 +388,11 @@ export default function Search() {
                             name="brand"
                             options={searchInputs.marksOptions}
                             className="basic-multi-select"
-                            placeholder=""
-                            styles={colourStyles}
+                            placeholder={t("search.selectMore")}
+                            styles={validationError ? errorStyle : colourStyles}
                             onChange={(value) => {
                               if (value.length <= 3) {
+                                setValidationError(false)
                                 setBrand(value);
                               } else {
                                 toast.error(t("search.brandLimitError"), {
@@ -404,7 +413,7 @@ export default function Search() {
                         {/* FOR MODELS /////////////////////////////////////////////////////////////*/}
                         <div className="col-md-6 col-sm-6  mb-3">
                           <label className="text-end d-block">
-                            {t("search.model")}
+                            {t("search.type")}
                           </label>
                           <Select
                             defaultValue={searchInputs.modelOptions.map((i) =>
@@ -427,7 +436,7 @@ export default function Search() {
                               label: isEnglish ? i.label_en : i.label,
                             }))}
                             className="basic-multi-select"
-                            placeholder=""
+                            placeholder={t("search.anyType")}
                             styles={colourStyles}
                             onChange={(value) => {
                               if (value.length <= 3) {
@@ -449,20 +458,38 @@ export default function Search() {
                         </div>
                         <div className="col-md-6 col-sm-6 mb-3">
                           <label className="text-end d-block">
-                            {t("search.specificYearOfManufacture")}
+                            {t("search.model")}
                           </label>
                           <Select
                             value={selectedYears}
+                            components={{ Menu }}
+                            // menuIsOpen={true}
                             isMulti
                             name="modal_year"
                             options={searchInputs.yearOptions}
                             className="basic-multi-select"
-                            placeholder=""
+                            placeholder={t("search.anyYear")}
                             styles={colourStyles}
-                            onChange={(value) =>
-                              setYearRange(value)
+                            onChange={(value) => {
+                              if (value.length >= 0) {
+                                setYearRange(value)
+                              } else {
+                                console.log(typeof document.getElementById(value.label).value, "document.getElementById('isYearSelected')")
+                                if (document.getElementById(value.label).value !== "false") {
+                                  let newValue = [...selectedYears]
+                                  const index = newValue.findIndex((element) => element?.label === value.label)
+                                  newValue.splice(index, 1)
+                                  setYearRange(newValue)
+                                } else {
+                                  let newValue = [...selectedYears]
+                                  newValue.push(value)
+                                  const truthyArray = newValue.filter(Boolean)
+                                  setYearRange(truthyArray)
+                                }
+                              }
                             }
-                          // classNamePrefix="select"
+                            }
+                            classNamePrefix="select"
                           />
                         </div>
                         {/* <div className="col-md-6 col-sm-6  mb-3">
@@ -535,6 +562,7 @@ export default function Search() {
                             defaultValue={searchInputs.cityOptions.map((i) =>
                               state.city_id.indexOf(i.value) != -1 ? i : false
                             )}
+                            components={{ Option: OptionCity }}
                             isMulti
                             name="city"
                             options={searchInputs.cityOptions.map((i) => ({

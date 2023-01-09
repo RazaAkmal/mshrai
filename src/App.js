@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useSelector } from "react";
+import React, { useEffect, useState, } from "react";
 import "./App.css";
-import ReactGA from "react-ga";
+import ReactGA from 'react-ga';
 import {
   Switch,
   Route,
@@ -12,21 +12,18 @@ import {
 import Resault from "./pages/resaults";
 import Search from "./pages/search";
 import Feedback from "./components/feedback";
-import { Provider } from "react-redux";
-import { store } from "./app/store";
 import Cookies from "js-cookie";
 import uniqid from "uniqid";
 import "./i18n";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
-import { updateMomentLocaleToArabic } from "./helpers/helpers";
+import { updateMomentLocaleToArabic, updateMomentLocaleToEng } from "./helpers/helpers";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FacebookLogin from "./components/FacebookLogin";
 import TwitterLogins from "./components/TwitterLogin";
-import { FaBars } from "react-icons/fa";
 import {
   faEnvelope,
   faUser,
@@ -34,8 +31,9 @@ import {
   faStar,
   faCommentAlt,
   faEyeSlash,
+  faPhoneAlt,
 } from "@fortawesome/free-solid-svg-icons";
-
+import { FaBars } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useFormik } from "formik";
@@ -47,6 +45,10 @@ import { apiUrl } from "./features/constants";
 import { Col, Row } from "react-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
 import GoogleLog from "./components/GoogleLogin";
+import RegisterModel from "./components/RegisterModel";
+import { setLanguage } from "./features/search/searchSlice";
+import { useDispatch, useSelector } from "react-redux";
+import FeedbackModel from "./components/FeedbackModel";
 import Blog from "./pages/Blog";
 import BlogDetails from "./pages/BlogDetails";
 import { NavActiveProvider, useNavBarContext } from "./context/NavActive";
@@ -58,7 +60,6 @@ const lngs = {
 
 const App = () => {
   const { t, i18n } = useTranslation();
-  const [selectedLng, setSelectedLng] = useState(i18n.language);
 
   const [state, setState] = useState({
     isOpen: false,
@@ -67,6 +68,7 @@ const App = () => {
   const toggleOpen = () => setState({ isOpen: !state.isOpen });
 
   const [login, showLogin] = useState(false);
+  const [registerModal, setRegisterModal] = useState(false)
   const [showRegister, setShowRegister] = useState(false);
   const [continueWithEmail, showContinueWithEmailModal] = useState(false);
   const [validationError, setValidationError] = useState();
@@ -76,15 +78,21 @@ const App = () => {
   const [date, setDate] = useState(new Date());
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const selectedLng = useSelector((state) => state.search.language);
+  const dispatch = useDispatch()
+
   let history = useHistory();
   const location = useLocation();
   useEffect(() => {
+    i18n.changeLanguage('ar')
+    localStorage.setItem("lang", 'ar');
+    updateMomentLocaleToArabic()
     const getID = Cookies.get("id");
     if (!getID) {
       let userId = uniqid("userId-");
       Cookies.set("id", userId);
     }
-    ReactGA.initialize("UA-248573380-1");
+    ReactGA.initialize('UA-248573380-1');
     ReactGA.pageview(window.location.pathname + window.location.search);
   }, []);
 
@@ -118,22 +126,25 @@ const App = () => {
     setUserDetails(userData);
     setIsLoggedIn(true);
     setIsInvalidCredentials(false);
-    resetFormLogin();
+    // resetFormLogin();
     setValidationErrorLogIn(undefined);
     history.push("/results");
     // setSubmitting(false);
-    showLogin(false);
+    showRegister(false);
   };
 
   // FOR GOOGLE LOGIN
   const googleFn = async (val) => {
     localStorage.removeItem("loginFrom");
-    const res = await axios(`${apiUrl}/api/auth/callback/google${val}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    });
+    const res = await axios(
+      `${apiUrl}/api/auth/callback/google${val}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    );
     if (res.data.data.token) {
       loginHelper(res.data.data.token, res.data.data.user);
     }
@@ -151,12 +162,15 @@ const App = () => {
   const twitterLogin = async (val) => {
     localStorage.removeItem("loginFrom");
     try {
-      const res = await axios(`${apiUrl}/api/auth/callback/twitter${val}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
+      const res = await axios(
+        `${apiUrl}/api/auth/callback/twitter${val}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      );
       if (res) {
         loginHelper(res.data.data.token, res.data.data.user);
         // window.close();
@@ -165,6 +179,7 @@ const App = () => {
       console.log(err);
       // window.close();
     }
+
   };
 
   // TO LOGOUT
@@ -185,124 +200,124 @@ const App = () => {
     history.push("/");
   };
 
-  const formik = useFormik({
-    initialValues: {
-      name: "",
-      email: "",
-    },
-    onSubmit: (values, { setSubmitting }) => {
-      let formatedDate = moment(date).format("YYYY-MM-DD");
-      values.dob = formatedDate;
-      axios
-        .post(`${apiUrl}/api/register`, values)
-        .then((res) => {
-          toast.success(res.data.message, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          setSubmitting(false);
-          setShowRegister(false);
-          if (res) {
-            loginHelper(res.data.data.token, res.data.data.user);
-          }
-        })
-        .catch((err) => {
-          const errors = {};
-          if (err.response.status === 403) {
-            Object.keys(err.response.data.errors).forEach((key) => {
-              errors[key] = err.response.data.errors[key];
-            });
-          }
-          setValidationError(errors);
-          setSubmitting(false);
-        });
-    },
-  });
+  // const formik = useFormik({
+  //   initialValues: {
+  //     name: "",
+  //     email: "",
+  //   },
+  //   onSubmit: (values, { setSubmitting }) => {
+  //     let formatedDate = moment(date).format("YYYY-MM-DD");
+  //     values.dob = formatedDate;
+  //     axios
+  //       .post(`${apiUrl}/api/registerModal`, values)
+  //       .then((res) => {
+  //         toast.success(res.data.message, {
+  //           position: "top-right",
+  //           autoClose: 5000,
+  //           hideProgressBar: false,
+  //           closeOnClick: true,
+  //           pauseOnHover: true,
+  //           draggable: true,
+  //           progress: undefined,
+  //         });
+  //         setSubmitting(false);
+  //         setShowRegister(false);
+  //         if (res) {
+  //             loginHelper(res.data.data.token, res.data.data.user);
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         const errors = {};
+  //         if (err.response.status === 403) {
+  //           Object.keys(err.response.data.errors).forEach((key) => {
+  //             errors[key] = err.response.data.errors[key];
+  //           });
+  //         }
+  //         setValidationError(errors);
+  //         setSubmitting(false);
+  //       });
+  //   },
+  // });
 
   //FOR LOGIN ////////////////////////////////////////////////////
-  const formikLogin = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-    },
-    onSubmit: (values, { setSubmitting }) => {
-      // let formatedDate = moment(date).format("YYYY-MM-DD");
-      // values.dob = formatedDate;
-      axios
-        .post(`${apiUrl}/api/login`, values)
-        .then((res) => {
-          showContinueWithEmailModal(false);
-          toast.success(res.data.message, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          if (res.data.data.token) {
-            loginHelper(res.data.data.token, res.data.data.user);
-            setSubmitting(false);
-          }
-          return;
-        })
-        .catch((err) => {
-          console.log(err);
-          const errors = {};
-          if (err.response.status === 403) {
-            Object.keys(err.response.data.errors).forEach((key) => {
-              errors[key] = err.response.data.errors[key];
-            });
-          }
-          setValidationErrorLogIn(errors);
-          if (
-            err.response.data &&
-            typeof err.response.data.errors === "string"
-          ) {
-            console.log("invalid credentials");
-            setIsInvalidCredentials(true);
-          } else {
-            console.log("something went wrong");
-          }
-          // setSubmitting(false);
-        });
-    },
-  });
+  // const formikLogin = useFormik({
+  //   initialValues: {
+  //     email: "",
+  //     password: "",
+  //   },
+  //   onSubmit: (values, { setSubmitting }) => {
+  //     // let formatedDate = moment(date).format("YYYY-MM-DD");
+  //     // values.dob = formatedDate;
+  //     axios
+  //       .post(`${apiUrl}/api/login`, values)
+  //       .then((res) => {
+  //         showContinueWithEmailModal(false);
+  //         toast.success(res.data.message, {
+  //           position: "top-right",
+  //           autoClose: 5000,
+  //           hideProgressBar: false,
+  //           closeOnClick: true,
+  //           pauseOnHover: true,
+  //           draggable: true,
+  //           progress: undefined,
+  //         });
+  //         if (res.data.data.token) {
+  //           loginHelper(res.data.data.token, res.data.data.user);
+  //           setSubmitting(false);
+  //         }
+  //         return;
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //         const errors = {};
+  //         if (err.response.status === 403) {
+  //           Object.keys(err.response.data.errors).forEach((key) => {
+  //             errors[key] = err.response.data.errors[key];
+  //           });
+  //         }
+  //         setValidationErrorLogIn(errors);
+  //         if (
+  //           err.response.data &&
+  //           typeof err.response.data.errors === "string"
+  //         ) {
+  //           console.log("invalid credentials");
+  //           setIsInvalidCredentials(true);
+  //         } else {
+  //           console.log("something went wrong");
+  //         }
+  //         // setSubmitting(false);
+  //       });
+  //   },
+  // });
 
-  const {
-    values: valuesLogin,
-    resetForm: resetFormLogin,
-    handleChange: handlerChangeLogin,
-    isSubmitting: isSubmittingLogin,
-    handleSubmit: handleSubmitLogin,
-    errors: errorLogin,
-  } = formikLogin;
-  const {
-    values,
-    resetForm,
-    handleChange,
-    isSubmitting,
-    handleSubmit,
-    errors,
-  } = formik;
+  // const {
+  //   values: valuesLogin,
+  //   resetForm: resetFormLogin,
+  //   handleChange: handlerChangeLogin,
+  //   isSubmitting: isSubmittingLogin,
+  //   handleSubmit: handleSubmitLogin,
+  //   errors: errorLogin,
+  // } = formikLogin;
+  // const {
+  //   values,
+  //   resetForm,
+  //   handleChange,
+  //   isSubmitting,
+  //   handleSubmit,
+  //   errors,
+  // } = formik;
   const { open, handleClick } = useNavBarContext();
-
   return (
     <>
+      <FeedbackModel />
       <div className="bars" onClick={handleClick}>
         <FaBars />
       </div>
-      <div className={`h-left d-flex `}>
+      <div className="h-left d-flex">
         <div className="language-button" onClick={toggleOpen}>
           <button
-            // style={{ background: "#3e0292" }}
-            className="btn "
+            // style={{ background: '#3e0292' }}
+            className="btn btn-secondary"
             type="button"
             id="dropdownMenuButton"
             data-toggle="dropdown"
@@ -332,47 +347,35 @@ const App = () => {
                 onClick={() => {
                   i18n.changeLanguage(lng);
                   localStorage.setItem("lang", lng);
-                  setSelectedLng(lng);
+                  dispatch(setLanguage(lng))
                   if (lng === "ar") {
                     updateMomentLocaleToArabic();
                   } else {
+                    updateMomentLocaleToEng()
                     moment.locale(lng);
                   }
                 }}
               >
-                {lng === "ar" ? (
-                  <img
-                    style={{ width: "30px", height: "30px" }}
-                    src="./images/saudi-icon.svg"
-                    alt="saudi"
-                  />
-                ) : (
-                  <img
-                    style={{ width: "30px", height: "30px" }}
-                    src="./images/uk-flag-icon.svg"
-                    alt="eng"
-                  />
-                )}
+                {lng === 'ar' ? <img style={{ width: '30px', height: '30px' }} src="./images/saudi-icon.svg" alt="saudi" /> : <img style={{ width: '30px', height: '30px' }} src="./images/uk-flag-icon.svg" alt="eng" />}
               </div>
             ))}
           </div>
         </div>
 
         <div
-          className={`blog__link ${
-            selectedLng === "ar" ? "blog__link-ar" : "blog__link-en"
-          } ${open && "active"}`}
+          className={`blog__link ${selectedLng === "ar" ? "blog__link-ar" : "blog__link-en"
+            } ${open && "active"}`}
         >
           <Link to="/blogs">{t("blogLink")}</Link>
         </div>
         {!isLoggedIn ? (
           <div
-            className={`login-link ${
-              selectedLng === "ar" ? "login-link-ar" : "login-link-en"
-            }`}
+            // className="login-link"
+            className={`login-link ${selectedLng === "ar" ? "login-link-ar" : "login-link-en"
+              }`}
             onClick={() => {
-              showLogin(true);
-              resetFormLogin();
+              setRegisterModal(true);
+              // resetFormLogin();
               setIsInvalidCredentials(null);
               setValidationErrorLogIn(null);
             }}
@@ -393,93 +396,38 @@ const App = () => {
               <Dropdown.Divider />
               <Dropdown.Item href="#/action-2">
                 <FontAwesomeIcon icon={faUser} />
-                {selectedLng === "en" ? (
-                  <>
-                    {t("profileMenu.MyProfile")}{" "}
-                    <span style={{ color: "#00CEBD" }}>
-                      {t("profileMenu.commingSoon")}
-                    </span>{" "}
-                  </>
-                ) : (
-                  <>
-                    <span style={{ color: "#00CEBD" }}>
-                      {t("profileMenu.commingSoon")}
-                    </span>{" "}
-                    {t("profileMenu.MyProfile")}{" "}
-                  </>
-                )}
+                {selectedLng === "en" ?
+                  <>{t("profileMenu.MyProfile")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
+                  <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.MyProfile")}   </>
+                }
               </Dropdown.Item>
               <Dropdown.Item href="#/action-3">
                 <FontAwesomeIcon icon={faEye} />
-                {selectedLng === "en" ? (
-                  <>
-                    {t("profileMenu.MyRequest")}{" "}
-                    <span style={{ color: "#00CEBD" }}>
-                      {t("profileMenu.commingSoon")}
-                    </span>{" "}
-                  </>
-                ) : (
-                  <>
-                    <span style={{ color: "#00CEBD" }}>
-                      {t("profileMenu.commingSoon")}
-                    </span>{" "}
-                    {t("profileMenu.MyRequest")}{" "}
-                  </>
-                )}
+                {selectedLng === "en" ?
+                  <>{t("profileMenu.MyRequest")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
+                  <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.MyRequest")}   </>
+                }
               </Dropdown.Item>
               <Dropdown.Item href="#/action-3">
                 <FontAwesomeIcon icon={faStar} />{" "}
-                {selectedLng === "en" ? (
-                  <>
-                    {t("profileMenu.RelatedPosts")}{" "}
-                    <span style={{ color: "#00CEBD" }}>
-                      {t("profileMenu.commingSoon")}
-                    </span>{" "}
-                  </>
-                ) : (
-                  <>
-                    <span style={{ color: "#00CEBD" }}>
-                      {t("profileMenu.commingSoon")}
-                    </span>{" "}
-                    {t("profileMenu.RelatedPosts")}{" "}
-                  </>
-                )}
+                {selectedLng === "en" ?
+                  <>{t("profileMenu.RelatedPosts")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
+                  <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.RelatedPosts")}   </>
+                }
               </Dropdown.Item>
               <Dropdown.Item href="#/action-3">
                 <FontAwesomeIcon icon={faCommentAlt} />{" "}
-                {selectedLng === "en" ? (
-                  <>
-                    {t("profileMenu.CommentedPosts")}{" "}
-                    <span style={{ color: "#00CEBD" }}>
-                      {t("profileMenu.commingSoon")}
-                    </span>{" "}
-                  </>
-                ) : (
-                  <>
-                    <span style={{ color: "#00CEBD" }}>
-                      {t("profileMenu.commingSoon")}
-                    </span>{" "}
-                    {t("profileMenu.CommentedPosts")}{" "}
-                  </>
-                )}
+                {selectedLng === "en" ?
+                  <>{t("profileMenu.CommentedPosts")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
+                  <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.CommentedPosts")}   </>
+                }
               </Dropdown.Item>
               <Dropdown.Item href="#/action-3">
                 <FontAwesomeIcon icon={faEyeSlash} />{" "}
-                {selectedLng === "en" ? (
-                  <>
-                    {t("profileMenu.HiddenPosts")}{" "}
-                    <span style={{ color: "#00CEBD" }}>
-                      {t("profileMenu.commingSoon")}
-                    </span>{" "}
-                  </>
-                ) : (
-                  <>
-                    <span style={{ color: "#00CEBD" }}>
-                      {t("profileMenu.commingSoon")}
-                    </span>{" "}
-                    {t("profileMenu.HiddenPosts")}{" "}
-                  </>
-                )}
+                {selectedLng === "en" ?
+                  <>{t("profileMenu.HiddenPosts")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
+                  <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.HiddenPosts")}   </>
+                }
               </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item onClick={logoutHandler}>
@@ -493,8 +441,9 @@ const App = () => {
           // </div>
         )}
       </div>
+
       {/* social MODAL  */}
-      <Modal
+      {/* <Modal
         className="custom-modal"
         centered
         show={login}
@@ -508,9 +457,9 @@ const App = () => {
           <Modal.Title>{t("welcomeMessage")}</Modal.Title>
           <GoogleLog />
           <FacebookLogin fbLogin={fbLogin} />
-          {/* <TwitterLogins/> */}
-          {/* <TwitterLogins /> */}
-          <Button
+          <TwitterLogins/>
+          <TwitterLogins />
+          <Button 
             onClick={() => {
               showLogin(false);
               showContinueWithEmailModal(true);
@@ -520,11 +469,23 @@ const App = () => {
             <FontAwesomeIcon className="me-2" icon={faEnvelope} />
             {t("continueWithEmail")}
           </Button>
+          <PhoneLogin showLogin={showLogin} />
+          <Button
+        onClick={() => {
+          showLogin(false);
+          // setPhoneLogin(true);
+          // showContinueWithPhoneModal(true);
+        }}
+        className="btn btn-solid mt-3 d-flex align-items-center justify-content-center w-100"
+      >
+        <FontAwesomeIcon className="me-2" icon={faPhoneAlt} />
+        {t("continueWithnumber")}
+      </Button>
         </Modal.Body>
-      </Modal>
+      </Modal> */}
 
       {/*  login modal  */}
-      <Modal
+      {/* <Modal
         className="custom-modal"
         centered
         show={continueWithEmail}
@@ -589,20 +550,20 @@ const App = () => {
                 onClick={() => {
                   showContinueWithEmailModal(false);
                   setShowRegister(true);
-                  resetForm();
+                  // resetForm();
                   setValidationError();
                 }}
               >
-                {t("register")}
+                {t("registerModal")}
               </span>
             </div>
           </Form>
         </Modal.Body>
-      </Modal>
+      </Modal> */}
 
       {/* ragister modal */}
-      <Modal
-        className="custom-modal modal-register"
+      {/* <Modal
+        className="custom-modal modal-registerModal"
         centered
         scrollable
         show={showRegister}
@@ -742,32 +703,32 @@ const App = () => {
             </Button>
           </Form>
         </Modal.Body>
-      </Modal>
+      </Modal> */}
+      < RegisterModel registerModal={registerModal} setRegisterModal={setRegisterModal} loginHelper={loginHelper} />
 
-      <Provider store={store}>
-        <div
-          className={selectedLng === "ar" ? "App-ar" : "App-en"}
-          style={{ direction: selectedLng === "ar" ? "rtl" : "ltr" }}
-        >
-          {/* <div className="App"> */}
-          <Switch>
-            <Route exact path="/">
-              <Search />
-            </Route>
-            <Route exact path="/blogs">
-              <Blog selectedLng={selectedLng} />
-            </Route>
-            <Route path="/blogs/:id">
-              <BlogDetails selectedLng={selectedLng} />
-            </Route>
-            <Route path="/results">
-              <Resault />
-              <Feedback selectedLng={selectedLng} />
-            </Route>
-          </Switch>
-        </div>
-      </Provider>
-      {isSubmitting && <Loader />}
+      <div
+        className={selectedLng === "en" ? "App-en" : "App-ar"}
+        style={{ direction: selectedLng === "en" ? "ltr" : "rtl" }}
+      >
+        {/* <div className="App"> */}
+        <Switch>
+          <Route exact path="/">
+            <Search />
+          </Route>
+          <Route path="/results">
+            <Resault />
+            <Feedback selectedLng={selectedLng} />
+          </Route>
+          <Route exact path="/blogs">
+            <Blog selectedLng={selectedLng} />
+          </Route>
+          <Route path="/blogs/:id">
+            <BlogDetails selectedLng={selectedLng} />
+          </Route>
+        </Switch>
+      </div>
+
+      {/* {isSubmitting && <Loader />} */}
       <ToastContainer />
     </>
   );
