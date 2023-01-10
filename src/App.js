@@ -316,7 +316,7 @@ const App = () => {
       <div className="h-left d-flex">
         <div className="language-button" onClick={toggleOpen}>
           <button
-            // style={{ background: '#3e0292' }}
+            style={{ background: '#3e0292' }}
             className="btn btn-secondary"
             type="button"
             id="dropdownMenuButton"

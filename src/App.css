@@ -2115,6 +2115,9 @@ input[type="radio"] + label {
   background-color: #303030;
   color: #fff;
 } */
+header img {
+  cursor: pointer;
+}
 /****** Responsive ******/
 .bars {
   display: none;
