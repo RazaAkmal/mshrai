@@ -151,7 +151,6 @@ input[type="radio"] + label::before {
   font-weight: 900;
   text-align: center;
   position: absolute;
-  left: 0;
   top: 0;
   bottom: 0;
   margin: auto;
@@ -612,6 +611,9 @@ border: none;
 
 
 @media all and (max-width: 991.98px) {
+  .filter-desktop{
+    display: none !important;
+  }
   .firstpage_logo_img {
     width: 148px;
      }
@@ -1025,7 +1027,7 @@ border: none;
   }
 }
 @media all and (max-width: 991.98px) {
-  .toggle-container {
+  /* .toggle-container {
     position: fixed;
     margin: auto;
     top: 0;
@@ -1044,7 +1046,7 @@ border: none;
   }
   .toggle-container.move {
     right: 0;
-  }
+  } */
   /* .toggle-container.move::before {
     content: " ";
     position: fixed;
@@ -1981,6 +1983,7 @@ right: 92%;
 
 }
 .form-group-province-ar{
+  direction: rtl;
   display: flex;
   cursor: pointer;
   justify-content: space-between;
@@ -1988,6 +1991,7 @@ right: 92%;
   padding-left: 10px
 }
 .form-group-province-en{
+  direction: ltr;
   display: flex;
   cursor: pointer;
   justify-content: space-between;
@@ -2024,4 +2028,30 @@ right: 92%;
 }
 .MuiFormControlLabel-root{
   margin: 1px !important;
+}
+.filter-desktop{
+  display: block;
+}
+
+.MuiPaper-root {
+  width: 100% !important;
+}
+
+.close-drawer-btn {
+  position: relative;
+  margin-bottom: 20px;
+  line-height: 32px;
+  border: 0 !important;
+  width: 45px;
+  height: 25px;
+  left: 15px;
+  top: 10px;
+  background-color: transparent !important;
+}
+.d-block{
+  text-align: -webkit-match-parent;
+}
+.d-block::before{
+  left: 90%;
+  right: 90%;
 }

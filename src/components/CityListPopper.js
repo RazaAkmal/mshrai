@@ -10,7 +10,10 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 
 
-const CityListPopper = (props) => {
+
+export const ProvienceCity = (props) => {
+  const { t } = useTranslation();
+
   const isEnglish = localStorage.getItem("lang") === "en";
   const [filterCity, setFilterCity] = useState("");
 
@@ -24,42 +27,21 @@ const CityListPopper = (props) => {
     }
   };
 
-  const closeDivWrapper = () => {
-    props.setOpen(false);
-    props.setShowWrapperDiv(false);
-  };
-
-  const { t } = useTranslation();
   const closePoper = (e) => {
     props.setOpen(!props.open);
     props.setShowWrapperDiv(false);
   };
+console.log(props.searchState.city_id.includes(
+  29
+), "props.searchState.city_id")
 
-  return (
-    <>
-      <div
-        style={{
-          display: props.showWrapperDiv ? "block" : "none",
-        }}
-        className="section-div-overlay"
-        onClick={closeDivWrapper}
-      ></div>
-      <Popper
-        className="form-group-poper"
-        open={props.open}
-        anchorEl={props.anchorEl}
-        placement={props.placement}
-        transition
-      >
-        {({ TransitionProps }) => (
-          <Fade {...TransitionProps} timeout={350}>
-            <Paper style={{ boxShadow: "none" }}>
-              <div className="city-header">
-                {/* <Button disableRipple={true} className="clearButton">Clear</Button> */}
+  return <>
+  <div className="city-header">
+                {/* <Button disableRipple={true} className="closeButton">Clear</Button> */}
                 <Typography style={{ fontSize: "20px" }}>Cities</Typography>
                 <Button
                   disableRipple={true}
-                  className="closeButton"
+                  className="clearButton"
                   onClick={closePoper}
                 >
                   {" "}
@@ -94,10 +76,9 @@ const CityListPopper = (props) => {
                         control={
                           <Checkbox
                             disableRipple={true}
-                            id={"city" + index}
-                            name="city"
+                            value={item.id}
                             onChange={(v) => props.addValue("city_id", item.id)}
-                            Checked={props.searchState.city_id.includes(
+                            checked={props.searchState.city_id.includes(
                               item.id
                             )}
                           />
@@ -108,6 +89,41 @@ const CityListPopper = (props) => {
                     </FormGroup>
                   );
                 })}
+  </>
+}
+
+
+const CityListPopper = (props) => {
+
+
+  const closeDivWrapper = () => {
+    props.setOpen(false);
+    props.setShowWrapperDiv(false);
+  };
+
+
+
+
+  return (
+    <>
+      <div
+        style={{
+          display: props.showWrapperDiv ? "block" : "none",
+        }}
+        className="section-div-overlay"
+        onClick={closeDivWrapper}
+      ></div>
+      <Popper
+        className="form-group-poper"
+        open={props.open}
+        anchorEl={props.anchorEl}
+        placement={props.placement}
+        transition
+      >
+        {({ TransitionProps }) => (
+          <Fade {...TransitionProps} timeout={350}>
+            <Paper style={{ boxShadow: "none" }}>
+              <ProvienceCity {...props} />
             </Paper>
           </Fade>
         )}
