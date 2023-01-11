@@ -30,6 +30,7 @@ import { Spinner } from "react-bootstrap";
 import { useTranslation, Trans } from "react-i18next";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import FilterDrawer from "../components/FilterDrawer";
 
 export default function Resault(props) {
   useEffect(() => {
@@ -145,6 +146,7 @@ export default function Resault(props) {
   const allReportReasons = useSelector((state) => state.search.allReportReasons);
   const [filterSelected, setFilterSelected] = useState(false);
   const [page, setPage] = useState(1);
+  const [openfilter, setOpenFilter] = useState(false);
   useEffect(() => {
     setState((prevState) => ({
       ...prevState,
@@ -152,11 +154,33 @@ export default function Resault(props) {
     }));
   }, [cars])
 
-
   const { t } = useTranslation();
   const limit = 8;
 
   const dispatch = useDispatch();
+  const getWindowWidth = () => {
+    const { innerWidth: width } = window;
+    return width;
+  }
+  const [windowwidth, setWindowWidth] = useState(getWindowWidth());
+
+  
+    useEffect(() => {
+      const handleResize = () => {
+        setWindowWidth(getWindowWidth());
+      }
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    useEffect(() => {
+      if(windowwidth > 991){
+        setOpenFilter(false)
+
+      }
+ 
+    }, [windowwidth])
+    
 
 
   const _handleStartSearch = (type, value, value_obj) => {
@@ -426,8 +450,9 @@ export default function Resault(props) {
   } 
 
   const fillterBtnClickHandle = (e) => {
-    setShowWrapperDiv(true)
-    $(".toggle-container").addClass("move");
+    setOpenFilter(!openfilter)
+    // setShowWrapperDiv(true)
+    // $(".toggle-container").addClass("move");
     e.stopPropagation();
   };
   const [showWrapperDiv, setShowWrapperDiv] = useState(false)
@@ -490,12 +515,15 @@ export default function Resault(props) {
   const menuClass = `dropdown-menu${state.isOpen ? " show" : ""}`;
   return (
     <>
-      <div style={{
-        display: showWrapperDiv ? "block" : "none"}} 
-        className="gray-section-overlay" onClick={closeFilterMenuHandle}>
-      </div>
+      <div
+        style={{
+          display: showWrapperDiv ? "block" : "none",
+        }}
+        className="gray-section-overlay"
+        onClick={closeFilterMenuHandle}
+      ></div>
       <header>
-      {/* <ScrollButton /> */}
+        {/* <ScrollButton /> */}
 
         <div className="container">
           <div className="row logo-row">
@@ -606,8 +634,7 @@ export default function Resault(props) {
                       );
                     })
                   : ""}
-                {searchForm.brand_type_id && 
-                searchForm.brand_type_id.length > 0
+                {searchForm.brand_type_id && searchForm.brand_type_id.length > 0
                   ? searchInputs.modelOptions.map((model, index) => {
                       return searchForm.brand_type_id.includes(model.value)
                         ? getBrandValueAswell(model, index)
@@ -757,19 +784,20 @@ export default function Resault(props) {
                 ) : (
                   ""
                 )}
-                {searchForm.manufacturing_year && searchForm.manufacturing_year.length > 0
+                {searchForm.manufacturing_year &&
+                searchForm.manufacturing_year.length > 0
                   ? searchForm.manufacturing_year.map((year, index) => (
-                    <li>
-                    {year}
-                    <span
-                      onClick={() => {
-                        _handleStartSearch("manufacturing_year", year);
-                      }}
-                    >
-                      <IoIosClose />
-                    </span>
-                  </li>
-                  ))
+                      <li>
+                        {year}
+                        <span
+                          onClick={() => {
+                            _handleStartSearch("manufacturing_year", year);
+                          }}
+                        >
+                          <IoIosClose />
+                        </span>
+                      </li>
+                    ))
                   : ""}
 
                 {/*  this will require when we remove reange manufacturing_year filter  
@@ -814,22 +842,34 @@ export default function Resault(props) {
             </div>
             <div className="row">
               <div className="col-lg-2">
-                <Filters
+                  {windowwidth > 991 ? <Filters windowwidth={windowwidth}
+                  closeFilterMenuHandle={closeFilterMenuHandle}
+                  handleStartSearch={(type, value, value_obj) =>
+                    _handleStartSearch(type, value, value_obj)
+                  }
+                  searchState={searchForm}
+                /> 
+                : <FilterDrawer
+                windowwidth={windowwidth}
+                  openfilter={openfilter}
+                  setOpenFilter={setOpenFilter}
                   closeFilterMenuHandle={closeFilterMenuHandle}
                   handleStartSearch={(type, value, value_obj) =>
                     _handleStartSearch(type, value, value_obj)
                   }
                   searchState={searchForm}
                 />
+                }
               </div>
               <div className="col-lg-10">
                 <div className="search_hint search_hint_mobile">
+              
                   <button
                     className="filter_btn link"
                     onClick={fillterBtnClickHandle}
                   >
                     <i className="fas fa-sliders-h"></i>
-                    {t('results.filterBtn')}
+                    {t("results.filterBtn")}
                   </button>
                   <div
                     className="dropdown bg-white border rounded"

@@ -10,7 +10,7 @@ import CityListPopper from "./CityListPopper";
 import Divider from '@mui/material/Divider';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
-
+import MobileCityDrawer from './MobileCityDrawer'
 const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range);
 
@@ -200,16 +200,13 @@ export default function Filters(props) {
       <div className="filter-title">
         <Trans i18nKey="description.Filter" />
       </div>
-      <form className="toggle-container" onClick={(event) => event.stopPropagation()} id="accordion1">
-        <button
-          className="icon_link close_btn"
-          type="button"
-          onClick={props.closeFilterMenuHandle}
-        >
-          <i className="fa fa-times"></i>
-        </button>
+      <form
+        className="toggle-container"
+        onClick={(event) => event.stopPropagation()}
+        id="accordion1"
+      >
         <Accordion>
-          <div className="filter-accordion">
+          <div className="filter-accordion" style={{direction: isEnglish ? 'ltr' : 'rtl'}}>
             <Accordion.Item eventKey="0">
               <Accordion.Header>{t("search.brand")}</Accordion.Header>
               <Accordion.Body>
@@ -217,7 +214,7 @@ export default function Filters(props) {
                   <input
                     type="text"
                     placeholder={t("search.searchBrand")}
-                    style={{ marginTop: "0" }}
+                    style={{ marginTop: "0", textAlign:'-webkit-match-parent' }}
                     className="form-control"
                     onChange={(e) => setFilterbrand(e.target.value)}
                   />
@@ -257,7 +254,7 @@ export default function Filters(props) {
                   <input
                     type="text"
                     placeholder={t("search.searchModal")}
-                    style={{ marginTop: "0" }}
+                    style={{ marginTop: "0", textAlign:'-webkit-match-parent' }}
                     className="form-control"
                     onChange={(e) => setFilterModal(e.target.value)}
                   />
@@ -370,7 +367,9 @@ export default function Filters(props) {
                       type="checkbox"
                       name="price"
                       checked={props.searchState.price.includes("[0 TO 70000]")}
-                      onChange={() => addValue("price", "[0 TO 70000]", 0, 70000)}
+                      onChange={() =>
+                        addValue("price", "[0 TO 70000]", 0, 70000)
+                      }
                     />
                     <label className="d-block" htmlFor="price1">
                       {" "}
@@ -385,7 +384,9 @@ export default function Filters(props) {
                       checked={props.searchState.price.includes(
                         "[70000 TO 120000]"
                       )}
-                      onChange={() => addValue("price", "[70000 TO 120000]", 70000, 120000)}
+                      onChange={() =>
+                        addValue("price", "[70000 TO 120000]", 70000, 120000)
+                      }
                     />
                     <label className="d-block" htmlFor="price2">
                       {" "}
@@ -400,7 +401,9 @@ export default function Filters(props) {
                       checked={props.searchState.price.includes(
                         "[120000 TO 170000]"
                       )}
-                      onChange={() => addValue("price", "[120000 TO 170000]", 120000, 170000)}
+                      onChange={() =>
+                        addValue("price", "[120000 TO 170000]", 120000, 170000)
+                      }
                     />
                     <label className="d-block" htmlFor="price3">
                       {" "}
@@ -415,7 +418,9 @@ export default function Filters(props) {
                       checked={props.searchState.price.includes(
                         "[170000 TO 200000]"
                       )}
-                      onChange={() => addValue("price", "[170000 TO 200000]", 170000, 200000)}
+                      onChange={() =>
+                        addValue("price", "[170000 TO 200000]", 170000, 200000)
+                      }
                     />
                     <label className="d-block" htmlFor="price4">
                       {" "}
@@ -431,7 +436,12 @@ export default function Filters(props) {
                         "[200000 TO 999999999]"
                       )}
                       onChange={() =>
-                        addValue("price", "[200000 TO 999999999]", 200000,  999999999)
+                        addValue(
+                          "price",
+                          "[200000 TO 999999999]",
+                          200000,
+                          999999999
+                        )
                       }
                     />
                     <label className="d-block" htmlFor="price5">
@@ -453,12 +463,18 @@ export default function Filters(props) {
                     className="form-control"
                     onChange={(e) => setFilterCity(e.target.value)}
                   /> */}
-                  <Divider style={{paddingBottom:"10px",}}>{t("search.popularCities")}</Divider>
+                  <Divider style={{ paddingBottom: "10px" }}>
+                    {t("search.popularCities")}
+                  </Divider>
                   {searchInputs.cityOptions
                     // .filter((v) => filterValue(v, filterCity))
                     .map((city, index) => {
-                      return ( 
-                        <div className="form-group" key={"city" + index}>
+                      const newLocal = index >= 4;
+                      if (newLocal) {
+                        return ''
+                      }
+                      return (
+                        <div className="form-group" key={"city" + index} style={{paddingLeft: '10px'}}>
                           <input
                             id={"city" + index}
                             type="checkbox"
@@ -468,43 +484,85 @@ export default function Filters(props) {
                             )}
                             onChange={(v) => addValue("city_id", city.value)}
                           />
-                          {(index <= 3 &&
-                          <label className="d-block" style={{fontSize:'1rem'}} htmlFor={"city" + index}>
-                            {localStorage.getItem("lang") === "en"
-                              ? city.label_en
-                              : city.label}{" "}
-                          </label>
-                           )}
+                            <label
+                              className="d-block"
+                              style={{ fontSize: "1rem" }}
+                              htmlFor={"city" + index}
+                            >
+                              {localStorage.getItem("lang") === "en"
+                                ? city.label_en
+                                : city.label}{" "}
+                            </label>
                         </div>
                       );
                     })}
-                    <Divider style={{paddingBottom:"10px"}}>{t("search.provinces")}</Divider>
-
-                 {
-                    Object.values(searchInputs.provincesOption)
-                    .map((province, index) => (
-                        <div onClick={handleClick('right-start', province[0].province === null ? "UAE" : province[0].province )} 
-                        className={isEnglish ? "form-group-province-en" : "form-group-province-ar"} 
-                        key={"city" + index}>
-                         { province[0].province === null ? <label className="label-province " >
+                  <Divider style={{ marginBottom: "15px" }} />
+                  {Object.values(searchInputs.provincesOption).map(
+                    (province, index) => (
+                      <div
+                        onClick={handleClick(
+                          "right-start",
+                          province[0].province === null
+                            ? "UAE"
+                            : province[0].province
+                        )}
+                        className={
+                          isEnglish
+                            ? "form-group-province-en"
+                            : "form-group-province-ar"
+                        }
+                        key={"city" + index}
+                      >
+                        {province[0].province === null ? (
+                          <label className="label-province ">
                             {localStorage.getItem("lang") === "en"
                               ? "Gulf Countries"
-                              : t("search.gulfCountries") }
-                          </label> : <label className="label-province " >
+                              : t("search.gulfCountries")}
+                          </label>
+                        ) : (
+                          <label className="label-province ">
                             {localStorage.getItem("lang") === "en"
                               ? province[0].province_en
                               : province[0].province}{" "}
-                          </label> }
-                          {isEnglish ? <FontAwesomeIcon icon={faChevronRight} />
-                          : <FontAwesomeIcon icon={faChevronLeft} /> }
-                        </div>
-                    ))
-                  } 
-                  
-                  <CityListPopper showWrapperDiv={showWrapperDiv} setShowWrapperDiv={setShowWrapperDiv} open={open} setOpen={setOpen} anchorEl={anchorEl} addValue={addValue} searchState={props.searchState}
-                  searchInputs={searchInputs} placement={placement} 
-                  selectedProvience={selectedProvience} filterValue={filterValue}/>
-  
+                          </label>
+                        )}
+                        {isEnglish ? (
+                          <FontAwesomeIcon icon={faChevronRight} />
+                        ) : (
+                          <FontAwesomeIcon icon={faChevronLeft} />
+                        )}
+                      </div>
+                    )
+                  )}
+                  {props.windowwidth > 990 ? (
+                    <CityListPopper
+                      showWrapperDiv={showWrapperDiv}
+                      setShowWrapperDiv={setShowWrapperDiv}
+                      open={open}
+                      setOpen={setOpen}
+                      anchorEl={anchorEl}
+                      addValue={addValue}
+                      searchState={props.searchState}
+                      searchInputs={searchInputs}
+                      placement={placement}
+                      selectedProvience={selectedProvience}
+                      filterValue={filterValue}
+                    />
+                  ) : (
+                    <MobileCityDrawer
+                      showWrapperDiv={showWrapperDiv}
+                      setShowWrapperDiv={setShowWrapperDiv}
+                      open={open}
+                      setOpen={setOpen}
+                      anchorEl={anchorEl}
+                      addValue={addValue}
+                      searchState={props.searchState}
+                      searchInputs={searchInputs}
+                      placement={placement}
+                      selectedProvience={selectedProvience}
+                      filterValue={filterValue}
+                    />
+                  )}
                   {/* {searchInputs.cityOptions
                     .filter((v) => filterValue(v, filterCity))
                     .map((city, index) => {
@@ -543,7 +601,9 @@ export default function Filters(props) {
                       checked={props.searchState.kilometer.includes(
                         "[0 TO 9999]"
                       )}
-                      onChange={() => addValue("kilometer", "[0 TO 9999]", 0, 9999)}
+                      onChange={() =>
+                        addValue("kilometer", "[0 TO 9999]", 0, 9999)
+                      }
                     />
                     <label className="d-block" htmlFor="ep1">
                       {" "}
@@ -558,7 +618,9 @@ export default function Filters(props) {
                       checked={props.searchState.kilometer.includes(
                         "[10000 TO 50000]"
                       )}
-                      onChange={() => addValue("kilometer", "[10000 TO 50000]", 10000, 50000)}
+                      onChange={() =>
+                        addValue("kilometer", "[10000 TO 50000]", 10000, 50000)
+                      }
                     />
                     <label className="d-block" htmlFor="ep2">
                       {" "}
@@ -573,7 +635,9 @@ export default function Filters(props) {
                       checked={props.searchState.kilometer.includes(
                         "[50000 TO 75000]"
                       )}
-                      onChange={() => addValue("kilometer", "[50000 TO 75000]", 50000, 75000)}
+                      onChange={() =>
+                        addValue("kilometer", "[50000 TO 75000]", 50000, 75000)
+                      }
                     />
                     <label className="d-block" htmlFor="ep3">
                       {" "}
@@ -589,7 +653,12 @@ export default function Filters(props) {
                         "[75000 TO 100000]"
                       )}
                       onChange={() =>
-                        addValue("kilometer", "[75000 TO 100000]",75000,  100000)
+                        addValue(
+                          "kilometer",
+                          "[75000 TO 100000]",
+                          75000,
+                          100000
+                        )
                       }
                     />
                     <label className="d-block" htmlFor="ep4">
@@ -606,7 +675,12 @@ export default function Filters(props) {
                         "[100000 TO 150000]"
                       )}
                       onChange={() =>
-                        addValue("kilometer", "[100000 TO 150000]", 100000,  150000)
+                        addValue(
+                          "kilometer",
+                          "[100000 TO 150000]",
+                          100000,
+                          150000
+                        )
                       }
                     />
                     <label className="d-block" htmlFor="ep5">
@@ -623,7 +697,12 @@ export default function Filters(props) {
                         "[150000 TO 200000]"
                       )}
                       onChange={() =>
-                        addValue("kilometer", "[150000 TO 200000]", 150000, 200000)
+                        addValue(
+                          "kilometer",
+                          "[150000 TO 200000]",
+                          150000,
+                          200000
+                        )
                       }
                     />
                     <label className="d-block" htmlFor="ep6">
@@ -640,7 +719,12 @@ export default function Filters(props) {
                         "[200001 TO 999999999]"
                       )}
                       onChange={() =>
-                        addValue("kilometer", "[200001 TO 999999999]", 200001, 999999999)
+                        addValue(
+                          "kilometer",
+                          "[200001 TO 999999999]",
+                          200001,
+                          999999999
+                        )
                       }
                     />
                     <label className="d-block" htmlFor="ep7">
@@ -658,7 +742,7 @@ export default function Filters(props) {
                   <input
                     type="text"
                     placeholder={t("search.searchSource")}
-                    style={{ marginTop: "0" }}
+                    style={{ marginTop: "0", textAlign:'-webkit-match-parent' }}
                     className="form-control"
                     onChange={(e) => setFilterSource(e.target.value)}
                   />
