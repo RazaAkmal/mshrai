@@ -35,10 +35,11 @@ i18n
           thanksMessage: "يمكنك ملء هذا الاستبيان لمدة 5 دقائق والحصول على اشتراك مجاني فى مشراى",
           Login: 'تسجيل الدخول',
           welcomeMessage: 'مرحبا بكم في مشراي',
+          blogLink: 'المدونة',
           continueWithEmail: 'تواصل مع البريد الإلكتروني',
           continueWithGoogle: 'تواصل مع جوجل',
           continueWithFacebook: 'تواصل مع الفيسبوك',
-          continueWithnumber:'تواصل مع الهاتف',
+          continueWithnumber: 'تواصل مع الهاتف',
           register: 'يسجل',
           search: {
             findMyCar: "ابحث عن سيارتي",
@@ -126,31 +127,35 @@ i18n
             Shobbak: "شوباک",
           },
           formFields: {
-            createYourAccoutonMsh:"قم بإنشاء حسابك على مشروعي",
+            createYourAccoutonMsh: "قم بإنشاء حسابك على مشروعي",
             password: 'كلمة المرور',
             createaccount: "إصنع حساب",
             dateofbirth: "تاريخ الولادة",
             City: "مدينة",
             Gender: "جنس",
-            Male:"الذكر",
-            Female:"أنثى",
+            Male: "الذكر",
+            Female: "أنثى",
             phonenumber: "رقم الهاتف",
-            Email:"البريد الإلكتروني",
-            Username:"اسم المستخدم",
-            alreadyAccount:"لديك حساب بالفعل؟",
-            loginLink:"تسجيل الدخول"
+            Email: "البريد الإلكتروني",
+            Username: "اسم المستخدم",
+            alreadyAccount: "لديك حساب بالفعل؟",
+            loginLink: "تسجيل الدخول"
           },
           logoutSuccessfullyMessage: 'لقد تم تسجيل خروجك بنجاح!',
-          hiText:'أهلاً',
-          profileMenu:{
-            MyProfile:'الملف الشخصي الخاص بي',
+          hiText: 'أهلاً',
+          profileMenu: {
+            MyProfile: 'الملف الشخصي الخاص بي',
             commingSoon: '(قريبا) ',
-            MyRequest:'طلبي',
-            RelatedPosts:'المنشورات ذات الصلة',
-            CommentedPosts:'المشاركات المعلق عليها',
-            HiddenPosts:'المشاركات المخفية',
-            LogOut:'تسجيل خروج',
-            invalidCredentials:'بيانات الاعتماد غير صالحة'
+            MyRequest: 'طلبي',
+            RelatedPosts: 'المنشورات ذات الصلة',
+            CommentedPosts: 'المشاركات المعلق عليها',
+            HiddenPosts: 'المشاركات المخفية',
+            LogOut: 'تسجيل خروج',
+            invalidCredentials: 'بيانات الاعتماد غير صالحة'
+          }
+          ,
+          blogCard: {
+            details: "التفاصيل"
           }
         },
       },
@@ -173,6 +178,7 @@ i18n
           thanksMessage: "you can take this 5 min survey and have a free subscription in Mshrai",
           Login: 'Login',
           welcomeMessage: 'WELCOME TO Mshrai',
+          blogLink: 'Blogs',
           continueWithEmail: 'Continue with Email',
           continueWithGoogle: 'Continue with Google',
           continueWithFacebook: 'Continue with Facebook',
@@ -264,31 +270,34 @@ i18n
             Shobbak: "Shobbak",
           },
           formFields: {
-            createYourAccoutonMsh : "Create your account on Mshrai",
+            createYourAccoutonMsh: "Create your account on Mshrai",
             password: 'Password',
             createaccount: "Create Account",
-            dateofbirth:"Date of Birth",
-            City:"City",
-            Gender:'Gender',
-            Male:"Male",
-            Female:"Female",
-            phonenumber:"Phone Number",
-            Email:"Email",
-            Username:"Username",
-            alreadyAccount:"Already have account?",
-            loginLink:'Login'
+            dateofbirth: "Date of Birth",
+            City: "City",
+            Gender: 'Gender',
+            Male: "Male",
+            Female: "Female",
+            phonenumber: "Phone Number",
+            Email: "Email",
+            Username: "Username",
+            alreadyAccount: "Already have account?",
+            loginLink: 'Login'
           },
           logoutSuccessfullyMessage: 'You have been successfully logged out!',
-          hiText:'Hi',
-          profileMenu:{
-            MyProfile:'My Profile ',
+          hiText: 'Hi',
+          profileMenu: {
+            MyProfile: 'My Profile ',
             commingSoon: '(Soon)',
-            MyRequest:'My Request',
-            RelatedPosts:'Related',
-            CommentedPosts:'Commented Posts',
-            HiddenPosts:'Hidden Posts',
-            LogOut:'Log out',
-            invalidCredentials:'Invalid Credentials'
+            MyRequest: 'My Request',
+            RelatedPosts: 'Related',
+            CommentedPosts: 'Commented Posts',
+            HiddenPosts: 'Hidden Posts',
+            LogOut: 'Log out',
+            invalidCredentials: 'Invalid Credentials'
+          },
+          blogCard: {
+            details: "Details"
           }
 
         },

@@ -7,6 +7,7 @@ import {
   useHistory,
   Router,
   useLocation,
+  Link,
 } from "react-router-dom";
 import Resault from "./pages/resaults";
 import Search from "./pages/search";
@@ -32,7 +33,7 @@ import {
   faEyeSlash,
   faPhoneAlt,
 } from "@fortawesome/free-solid-svg-icons";
-
+import { FaBars } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useFormik } from "formik";
@@ -48,6 +49,9 @@ import RegisterModel from "./components/RegisterModel";
 import { setLanguage } from "./features/search/searchSlice";
 import { useDispatch, useSelector } from "react-redux";
 import FeedbackModel from "./components/FeedbackModel";
+import Blog from "./pages/Blog";
+import BlogDetails from "./pages/BlogDetails";
+import { NavActiveProvider, useNavBarContext } from "./context/NavActive";
 
 const lngs = {
   ar: { nativeName: "Arabic" },
@@ -64,7 +68,7 @@ const App = () => {
   const toggleOpen = () => setState({ isOpen: !state.isOpen });
 
   const [login, showLogin] = useState(false);
-  const [registerModal,setRegisterModal] = useState(false)
+  const [registerModal, setRegisterModal] = useState(false)
   const [showRegister, setShowRegister] = useState(false);
   const [continueWithEmail, showContinueWithEmailModal] = useState(false);
   const [validationError, setValidationError] = useState();
@@ -73,7 +77,7 @@ const App = () => {
   const [userDetails, setUserDetails] = useState();
   const [date, setDate] = useState(new Date());
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
+
   const selectedLng = useSelector((state) => state.search.language);
   const dispatch = useDispatch()
 
@@ -108,7 +112,7 @@ const App = () => {
     const loginFrom = localStorage.getItem("loginFrom");
     if (loginFrom === "twitter") {
       twitterLogin(location.search);
-    } else if(loginFrom==="google") {
+    } else if (loginFrom === "google") {
       googleFn(location.search);
     }
   }, [location.search]);
@@ -157,7 +161,7 @@ const App = () => {
   // FOR TWITTER
   const twitterLogin = async (val) => {
     localStorage.removeItem("loginFrom");
-    try{
+    try {
       const res = await axios(
         `${apiUrl}/api/auth/callback/twitter${val}`,
         {
@@ -171,7 +175,7 @@ const App = () => {
         loginHelper(res.data.data.token, res.data.data.user);
         // window.close();
       }
-    }catch(err){
+    } catch (err) {
       console.log(err);
       // window.close();
     }
@@ -302,13 +306,17 @@ const App = () => {
   //   handleSubmit,
   //   errors,
   // } = formik;
+  const { open, handleClick } = useNavBarContext();
   return (
     <>
-    <FeedbackModel />
+      <FeedbackModel />
+      <div className="bars" onClick={handleClick}>
+        <FaBars />
+      </div>
       <div className="h-left d-flex">
         <div className="language-button" onClick={toggleOpen}>
           <button
-            style={{background: '#3e0292'}}
+            style={{ background: '#3e0292' }}
             className="btn btn-secondary"
             type="button"
             id="dropdownMenuButton"
@@ -348,14 +356,23 @@ const App = () => {
                   }
                 }}
               >
-                {lng === 'ar' ?  <img style={{width: '30px', height: '30px'}} src="./images/saudi-icon.svg" alt="saudi" /> :  <img style={{width: '30px', height: '30px'}} src="./images/uk-flag-icon.svg" alt="eng" />}
+                {lng === 'ar' ? <img style={{ width: '30px', height: '30px' }} src="./images/saudi-icon.svg" alt="saudi" /> : <img style={{ width: '30px', height: '30px' }} src="./images/uk-flag-icon.svg" alt="eng" />}
               </div>
             ))}
           </div>
         </div>
+
+        <div
+          className={`blog__link ${selectedLng === "ar" ? "blog__link-ar" : "blog__link-en"
+            } ${open && "active"}`}
+        >
+          <Link to="/blogs">{t("blogLink")}</Link>
+        </div>
         {!isLoggedIn ? (
           <div
-            className="login-link"
+            // className="login-link"
+            className={`login-link ${selectedLng === "ar" ? "login-link-ar" : "login-link-en"
+              }`}
             onClick={() => {
               setRegisterModal(true);
               // resetFormLogin();
@@ -363,7 +380,7 @@ const App = () => {
               setValidationErrorLogIn(null);
             }}
           >
-            {t("login")}
+            {t("Login")}
           </div>
         ) : (
           <Dropdown className="login-drop">
@@ -379,38 +396,38 @@ const App = () => {
               <Dropdown.Divider />
               <Dropdown.Item href="#/action-2">
                 <FontAwesomeIcon icon={faUser} />
-                  {selectedLng === "en" ?
-                    <>{t("profileMenu.MyProfile")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
-                    <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.MyProfile")}   </>
-                  }
+                {selectedLng === "en" ?
+                  <>{t("profileMenu.MyProfile")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
+                  <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.MyProfile")}   </>
+                }
               </Dropdown.Item>
               <Dropdown.Item href="#/action-3">
                 <FontAwesomeIcon icon={faEye} />
                 {selectedLng === "en" ?
-                    <>{t("profileMenu.MyRequest")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
-                    <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.MyRequest")}   </>
-                  }
+                  <>{t("profileMenu.MyRequest")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
+                  <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.MyRequest")}   </>
+                }
               </Dropdown.Item>
               <Dropdown.Item href="#/action-3">
                 <FontAwesomeIcon icon={faStar} />{" "}
                 {selectedLng === "en" ?
-                    <>{t("profileMenu.RelatedPosts")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
-                    <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.RelatedPosts")}   </>
-                  }
+                  <>{t("profileMenu.RelatedPosts")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
+                  <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.RelatedPosts")}   </>
+                }
               </Dropdown.Item>
               <Dropdown.Item href="#/action-3">
                 <FontAwesomeIcon icon={faCommentAlt} />{" "}
                 {selectedLng === "en" ?
-                    <>{t("profileMenu.CommentedPosts")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
-                    <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.CommentedPosts")}   </>
-                  }
+                  <>{t("profileMenu.CommentedPosts")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
+                  <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.CommentedPosts")}   </>
+                }
               </Dropdown.Item>
               <Dropdown.Item href="#/action-3">
                 <FontAwesomeIcon icon={faEyeSlash} />{" "}
                 {selectedLng === "en" ?
-                    <>{t("profileMenu.HiddenPosts")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
-                    <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.HiddenPosts")}   </>
-                  }
+                  <>{t("profileMenu.HiddenPosts")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
+                  <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.HiddenPosts")}   </>
+                }
               </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item onClick={logoutHandler}>
@@ -687,23 +704,29 @@ const App = () => {
           </Form>
         </Modal.Body>
       </Modal> */}
-       < RegisterModel registerModal={registerModal} setRegisterModal={setRegisterModal} loginHelper={loginHelper} />
-      
-        <div
-          className={selectedLng === "en" ? "App-en" : "App-ar"}
-          style={{ direction: selectedLng === "en" ? "ltr" : "rtl" }}
-        >
-          {/* <div className="App"> */}
-          <Switch>
-            <Route exact path="/">
-              <Search />
-            </Route>
-            <Route path="/results">
-              <Resault />
-              <Feedback selectedLng={selectedLng} />
-            </Route>
-          </Switch>
-        </div>
+      < RegisterModel registerModal={registerModal} setRegisterModal={setRegisterModal} loginHelper={loginHelper} />
+
+      <div
+        className={selectedLng === "en" ? "App-en" : "App-ar"}
+        style={{ direction: selectedLng === "en" ? "ltr" : "rtl" }}
+      >
+        {/* <div className="App"> */}
+        <Switch>
+          <Route exact path="/">
+            <Search />
+          </Route>
+          <Route path="/results">
+            <Resault />
+            <Feedback selectedLng={selectedLng} />
+          </Route>
+          <Route exact path="/blogs">
+            <Blog selectedLng={selectedLng} />
+          </Route>
+          <Route path="/blogs/:id">
+            <BlogDetails selectedLng={selectedLng} />
+          </Route>
+        </Switch>
+      </div>
 
       {/* {isSubmitting && <Loader />} */}
       <ToastContainer />
