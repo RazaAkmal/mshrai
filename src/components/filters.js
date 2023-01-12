@@ -180,7 +180,7 @@ export default function Filters(props) {
       <div className="filter-title">
         <Trans i18nKey="description.Filter" />
       </div>
-      <form className="toggle-container" id="accordion1">
+      <form className="toggle-container" onClick={(event) => event.stopPropagation()} id="accordion1">
         <button
           className="icon_link close_btn"
           type="button"
@@ -231,7 +231,7 @@ export default function Filters(props) {
               </Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="1">
-              <Accordion.Header>{t("search.model")}</Accordion.Header>
+              <Accordion.Header>{t("search.anyType")}</Accordion.Header>
               <Accordion.Body>
                 <div className="panel-content">
                   <input
@@ -285,7 +285,7 @@ export default function Filters(props) {
                       //   2022: `2022`,
                       // }}
                       min={1990}
-                      max={new Date().getFullYear()}
+                      max={2023}
                       value={[
                         props.searchState.model_year_start,
                         props.searchState.model_year_end,
@@ -340,7 +340,7 @@ export default function Filters(props) {
             </Accordion.Item>
             <Accordion.Item eventKey="3">
               <Accordion.Header>
-                {t("search.price")} [{t("search.saudiRiyal")}]
+                {t("search.price")}
               </Accordion.Header>
               <Accordion.Body>
                 <div className="panel-content">
@@ -436,8 +436,9 @@ export default function Filters(props) {
                   {searchInputs.cityOptions
                     .filter((v) => filterValue(v, filterCity))
                     .map((city, index) => {
-                      return (
+                      return ( 
                         <div className="form-group" key={"city" + index}>
+                        {(index === 4 ? <hr /> : "")}
                           <input
                             id={"city" + index}
                             type="checkbox"

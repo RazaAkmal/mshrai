@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import Button from 'react-bootstrap/Button';
 import Fade from '@mui/material/Fade';
 import Paper from '@mui/material/Paper';
@@ -9,6 +9,7 @@ import {
   saveFeedback,
 } from "../features/search/searchApi";
 import { useTranslation } from "react-i18next";
+// import { setReportReasons } from '../features/search/searchSlice';
 
 
 const feedback = [
@@ -41,15 +42,43 @@ const feedback = [
   },
 ]
 const Feedback = ({selectedLng}) => {
+
+
+  const [visible, setVisible] = useState(false)
+  
+  const toggleVisible = () => {
+    const scrolled = document.getElementById('scrollableDiv').scrollTop;
+    if (scrolled > 100){
+      setVisible(true)
+    } 
+    else if (scrolled <= 300){
+      setVisible(false)
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', toggleVisible);
+  
+    return () => {
+      window.removeEventListener('scroll', toggleVisible)
+    }
+  }, [])
+
+  const closeSmileMenuButton = (e) => {
+    setOpen(false)
+  };
+
   const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
   const [rate, setRate] = useState('')
   const [note, setNote] = useState('')
   const [submited, setSubmited] = useState(false)
-  const handleClick = (event) => {
+  const handleClick = (event) => { 
+    setOpen(true)
+    // setOpen((prev) => !prev);
     setAnchorEl(event.currentTarget);
-    setOpen((prev) => !prev);
+    event.stopPropagation();
   };
   const handleSubmit = () => {
     const data={
@@ -75,14 +104,15 @@ const Feedback = ({selectedLng}) => {
   };
   return (
     <div>
-      <Button className={ selectedLng === 'en'? "float-en" : 'float-ar'} onClick={handleClick}>
+      <Button style={{bottom: visible ? '80px' : '50px', }} className={ selectedLng === 'en'? "float-en" : 'float-ar'} onClick={handleClick}>
               <img
                 style={{ width: '40px', height: '40px' }}
                 src="../images/happy-active.png"
                 alt="icon"
               />
             </Button>
-            <Popper open={open} anchorEl={anchorEl} placement="top" transition>
+            <div style={{display: open ? "block" : "none", }} className="section-overlay" onClick={closeSmileMenuButton}></div>
+            <Popper style={{zIndex: 20}} open={open} anchorEl={anchorEl} placement="top" transition>
               {({ TransitionProps }) => (
                 <Fade {...TransitionProps} timeout={350}>
                   <Paper className={ selectedLng === 'en'? "paper-en" : 'paper-ar'}>
@@ -114,7 +144,7 @@ const Feedback = ({selectedLng}) => {
                       <div style={{ padding: '20px', textAlign: 'center', fontWeight: '500' }}>
                         <div>{t("thanksTitle")}</div>
                         <div style={{fontWeight: '400'}}>{t("thanksMessage")}</div>
-                        <a style={{fontWeight: '400'}} href="https://docs.google.com/forms/d/e/1FAIpQLSeeQpZ3ZTBTit9s_ZAfftdTb8Dk4o-zJjd3I1Ut2uGfB6Sv-w/viewform?usp=sf_link"> Please Click Here</a>
+                        <a style={{fontWeight: '400'}} href="https://forms.gle/aSH7T9E2UKkNR9U6A"> Please Click Here</a>
                       </div>
                     }
                   </Paper>

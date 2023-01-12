@@ -2,13 +2,16 @@ import React, { useEffect, useState, useRef } from "react";
 import $ from "jquery";
 import { useHistory } from "react-router-dom";
 import Select from "react-select";
-import { colourStyles } from "../constants";
+import { colourStyles, errorStyle } from "../constants";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { Tabs, Tab } from "react-bootstrap";
 import { fetchSearchInputs, searchCars } from "../features/search/searchApi";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
+import Menu from '../components/SelectMenu'
+import Option from '../components/SelectOption'
+import OptionCity from '../components/OptionCity'
 
 import {
   getSearchInputs,
@@ -16,6 +19,7 @@ import {
   setResultsNumebr,
 } from "../features/search/searchSlice";
 import { useTranslation, Trans } from "react-i18next";
+import LoadingComponent from "../components/LoadingComponent";
 
 const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range);
@@ -42,31 +46,26 @@ export default function Search() {
   const [selectedModels, setSelectedModels] = useState([]);
   const [selectedBrand, setSelectedBrand] = useState([]);
   const [brandOptions, setBrandOptions] = useState([]);
+  const [selectedYears, setSelectedYears] = useState([]);
+  const [validationError, setValidationError] = useState(false);
+
+  const selectedLng = useSelector((state) => state.search.language);
 
   const dispatch = useDispatch();
   const [state, setState] = useState({ ...searchForm });
 
   useEffect(() => {
-    fetchSearchInputs().then((result) => {
+    fetchSearchInputs(selectedLng).then((result) => {
       $(".load_cont").fadeOut(function () {
         $(this).parent().fadeOut();
         $("body").css({ "overflow-y": "visible" });
       });
       dispatch(getSearchInputs(result));
     });
-  }, [dispatch]);
-
-  const [yearList, setYearList] = useState([]);
+  }, [dispatch, selectedLng]);
 
   const [filterSelected, setFilterSelected] = useState(false);
 
-  useEffect(() => {
-    const yearOption = [];
-    for (let index = 1990; index < new Date().getFullYear(); index++) {
-      yearOption.push({ id: index, label: index });
-    }
-    setYearList(yearOption);
-  }, []);
 
   useEffect(() => {
     const brandOptionsStored = searchInputs.marksOptions.map((i) =>
@@ -76,13 +75,21 @@ export default function Search() {
   }, [searchInputs]);
 
   useEffect(() => {
+    const yearOptionSelected = searchInputs.yearOptions.map((i) =>
+      state.manufacturing_year.indexOf(i.value) !== -1 ? i : false
+    );
+    setSelectedYears(yearOptionSelected);
+  }, [searchInputs]);
+
+  useEffect(() => {
     const modelOptionsStored = searchInputs.modelOptions.map((i) =>
       state.brand_type_id.indexOf(i.value) !== -1 ? i : false
     );
     setSelectedModels(modelOptionsStored);
   }, [searchInputs]);
-  
+
   useEffect(() => {
+    let callApi = false
     if (state.brand_id.length) {
       if (state.brand_type_id.length > 3) {
         state.model_brand_id = state.model_brand_id.slice(0, 3);
@@ -104,13 +111,19 @@ export default function Search() {
     }
     const query = {
     }
-    let modelYear=[{
-      min: state.model_year_start,
-      max: state.model_year_end
-    }]
-    query['model_year']=modelYear
-
+    query['page'] = 1
+    if (state.manufacturing_year && state.manufacturing_year != null && state.manufacturing_year.length > 0) {
+      let yearSelected = []
+      state.manufacturing_year.forEach((id, index) => {
+        yearSelected.push({
+          min: id,
+          max: id
+        })
+      });
+      query['model_year'] = yearSelected
+    }
     if (state.brand_id && state.brand_id != null && state.brand_id.length > 0) {
+      callApi = true
       let brandId = []
       state.brand_id.forEach((id, index) => {
         brandId.push(id)
@@ -122,25 +135,29 @@ export default function Search() {
       state.brand_type_id != null &&
       state.brand_type_id.length > 0
     ) {
-      let brandType=[]
+      callApi = true
+      let brandType = []
       state.brand_type_id.forEach((id, index) => {
         brandType.push(id)
       });
-      query['brand_type_id']=brandType
+      query['brand_type_id'] = brandType
     }
 
     if (state.city_id && state.city_id != null && state.city_id.length > 0) {
-      let city=[]
+      let city = []
       state.city_id.forEach((id, index) => {
-          city.push(id)
+        city.push(id)
       });
-      query['city_id']=city
+      query['city_id'] = city
     }
-    searchCars(query, filterSelected).then((res) => {
-      if (res && res.response ) {
-        dispatch(setResultsNumebr(res.response.numFound));
-      }
-    });
+    if (callApi) {
+      searchCars(query, filterSelected).then((res) => {
+        if (res && res.response) {
+          dispatch(setResultsNumebr(res.response.numFound));
+        }
+      });
+    }
+
   }, [state]);
 
   const addShape = (i) => {
@@ -227,19 +244,35 @@ export default function Search() {
   };
 
   const setYearRange = (values) => {
+    let year_range_values = values.map((value) => value.label);
     setState({
       ...state,
-      model_year_start: values[0],
-      model_year_end: values[1],
+      manufacturing_year: [...year_range_values],
     });
+    setSelectedYears(values);
     setFilterSelected(true)
   };
 
+  // const setYearRange = (values) => {
+  //   setState({
+  //     ...state,
+  //     model_year_start: values[0],
+  //     model_year_end: values[1],
+  //   });
+  //   setFilterSelected(true)
+  // };
+
   function navigateToResult() {
-    dispatch(setSearchForm(state));
-    localStorage.setItem("savedSearch", JSON.stringify(state));
-    console.log(state);
-    history.push("/results");
+    if (state.brand_id.length > 0 || state.brand_type_id.length > 0) {
+      dispatch(setSearchForm(state));
+      localStorage.setItem("savedSearch", JSON.stringify(state));
+      console.log(state);
+      history.push("/results");
+    } else {
+      setValidationError(true);
+      // showError(t("search.searchConditionError"))      
+    }
+
   }
   const [key, setKey] = useState("findCar");
 
@@ -258,17 +291,54 @@ export default function Search() {
     );
   };
 
+  const sortedSearchSources = searchInputs.sources
+    .reduce((acc, element) => {
+      if (
+        element.label_en !== "Snapchat" &&
+        element.label_en !== "Instagram" &&
+        element.label_en !== "Twitter"
+      ) {
+        return [element, ...acc];
+      }
+      return [...acc, element];
+    }, [])
+    .filter(
+      (element) =>
+        element.label_en !== "Snapchat" &&
+        element.label_en !== "Instagram" &&
+        element.label_en !== "Twitter"
+    );
+
   return (
     <>
+      {/* <div className="firstpage_logo">
+        <img className="firstpage_logo_img" src="./images/logo.png" alt="logo" />
+      </div> */}
+      <header style={{ "background": "#3e0292" }}>
+        <div className="container">
+          <div className="row logo-row">
+            <div className="col-6">
+              <img src="./images/logo.png" alt="logo" />
+            </div>
+          </div>
+        </div>
+      </header>
       <div className="main_screen img_bc">
         <div className="container">
           <div className="row">
-            <div className="col-12 mt-5 pt-5">
+            <div className="col-12 mb-5">
               <div className="cont">
-                <img src="../images/logo_color.png" alt="" className="logo" />
+                {/* <img src="../images/logo_color.png" alt="" className="logo" /> */}
+                {/* <h2 className="pb-4"><Trans i18nKey="description.testLaunch" /></h2> */}
                 <h1>
-                  <Trans i18nKey="description.Header" />
+                  <Trans i18nKey="description.Footer" />
                 </h1>
+                <div className="sources_img_main" >
+                  {sortedSearchSources.map(({ image }) => {
+                    return <img src={image} alt="img" className="source_img"></img>
+                  })
+                  }
+                </div>
                 <form className="search_form">
                   <Tabs
                     id="controlled-tab-example"
@@ -276,7 +346,8 @@ export default function Search() {
                     onSelect={(k) => setKey(k)}
                     className="mb-3"
                   >
-                    <Tab eventKey="findCar" title={t("search.findMyCar")}>
+                    <Tab eventKey="findCar">
+                      {/* <Tab eventKey="findCar" style={{backgroundColor:'white'}} title={t("search.findMyCar")}> */}
                       <div className="row px-2">
                         {/* Commenting this Code is its not required yet
                     <div className="col-12">
@@ -306,7 +377,7 @@ export default function Search() {
                           />
                         </div> */}
                         {/* FOR BRANDS ////////////////////////////////////////////////////////////////*/}
-                        <div className="col-md-6 col-6  mb-3 d-none d-sm-block">
+                        <div className="col-md-6 col-sm-6  mb-3 d-sm-block">
                           <label className="text-end d-block">
                             {t("search.brand")}
                           </label>
@@ -317,10 +388,11 @@ export default function Search() {
                             name="brand"
                             options={searchInputs.marksOptions}
                             className="basic-multi-select"
-                            placeholder=""
-                            styles={colourStyles}
+                            placeholder={t("search.selectMore")}
+                            styles={validationError ? errorStyle : colourStyles}
                             onChange={(value) => {
                               if (value.length <= 3) {
+                                setValidationError(false)
                                 setBrand(value);
                               } else {
                                 toast.error(t("search.brandLimitError"), {
@@ -335,13 +407,13 @@ export default function Search() {
                             }}
                             formatOptionLabel={formatOptionLabel}
 
-                            // classNamePrefix="select"
+                          // classNamePrefix="select"
                           />
                         </div>
                         {/* FOR MODELS /////////////////////////////////////////////////////////////*/}
-                        <div className="col-md-6 col-6  mb-3">
+                        <div className="col-md-6 col-sm-6  mb-3">
                           <label className="text-end d-block">
-                            {t("search.model")}
+                            {t("search.type")}
                           </label>
                           <Select
                             defaultValue={searchInputs.modelOptions.map((i) =>
@@ -364,7 +436,7 @@ export default function Search() {
                               label: isEnglish ? i.label_en : i.label,
                             }))}
                             className="basic-multi-select"
-                            placeholder=""
+                            placeholder={t("search.anyType")}
                             styles={colourStyles}
                             onChange={(value) => {
                               if (value.length <= 3) {
@@ -381,32 +453,46 @@ export default function Search() {
                               }
                             }}
 
-                            // classNamePrefix="select"
+                          // classNamePrefix="select"
                           />
                         </div>
-                        <div className="col-md-6 col-6 mb-3">
+                        <div className="col-md-6 col-sm-6 mb-3">
                           <label className="text-end d-block">
-                            {t("search.specificYearOfManufacture")}
+                            {t("search.model")}
                           </label>
                           <Select
-                            value={
-                              state.model_year_end ===
-                                state.model_year_start && [
-                                { label: state.model_year_end },
-                              ]
-                            }
+                            value={selectedYears}
+                            components={{ Menu }}
+                            // menuIsOpen={true}
+                            isMulti
                             name="modal_year"
-                            options={yearList}
+                            options={searchInputs.yearOptions}
                             className="basic-multi-select"
-                            placeholder=""
+                            placeholder={t("search.anyYear")}
                             styles={colourStyles}
-                            onChange={(value) =>
-                              setYearRange([value.label, value.label])
+                            onChange={(value) => {
+                              if (value.length >= 0) {
+                                setYearRange(value)
+                              } else {
+                                console.log(typeof document.getElementById(value.label).value, "document.getElementById('isYearSelected')")
+                                if (document.getElementById(value.label).value !== "false") {
+                                  let newValue = [...selectedYears]
+                                  const index = newValue.findIndex((element) => element?.label === value.label)
+                                  newValue.splice(index, 1)
+                                  setYearRange(newValue)
+                                } else {
+                                  let newValue = [...selectedYears]
+                                  newValue.push(value)
+                                  const truthyArray = newValue.filter(Boolean)
+                                  setYearRange(truthyArray)
+                                }
+                              }
                             }
-                            // classNamePrefix="select"
+                            }
+                            classNamePrefix="select"
                           />
                         </div>
-                        <div className="col-md-6 col-6  mb-3">
+                        {/* <div className="col-md-6 col-sm-6  mb-3">
                           <label className="text-end d-block">
                             {t("search.manufacturingYear")}
                           </label>
@@ -467,9 +553,8 @@ export default function Search() {
                               ]}
                             />
                           </div>
-                          {/* <div className="year_slider" name="slider"></div> */}
-                        </div>
-                        <div className="col-md-6 col-6  mb-3">
+                        </div> */}
+                        <div className="col-md-6 col-sm-6  mb-3">
                           <label className="text-end d-block">
                             {t("search.city")}
                           </label>
@@ -477,6 +562,7 @@ export default function Search() {
                             defaultValue={searchInputs.cityOptions.map((i) =>
                               state.city_id.indexOf(i.value) != -1 ? i : false
                             )}
+                            components={{ Option: OptionCity }}
                             isMulti
                             name="city"
                             options={searchInputs.cityOptions.map((i) => ({
@@ -487,11 +573,11 @@ export default function Search() {
                             placeholder={t("search.anyCity")}
                             styles={colourStyles}
                             onChange={(value) => addCity(value)}
-                            // classNamePrefix="select"
+                          // classNamePrefix="select"
                           />
                         </div>
 
-                        {/* <div className="col-md-6 col-6  mb-3"></div> */}
+                        {/* <div className="col-md-6 col-sm-6  mb-3"></div> */}
                         {/* Commenting this Code is its not required yet
                      <div className="col-12 flex_col  mb-3">
                       {searchInputs.shapes.map((shape, i) => {
@@ -522,23 +608,19 @@ export default function Search() {
                   </button> */}
                   <button
                     type="button"
-                    className="search-button"
+                    className="search-button btn-primary"
                     onClick={navigateToResult}
                   >
-                    {t("search.see")} {resultsNumber} {t("search.car")}
+                    {t("search.see")} {(state.brand_id.length > 0 || state.brand_type_id.length > 0) ? resultsNumber : ''} {t("search.car")}
                   </button>
                 </form>
-                <p>{t("description.Footer")}</p>
+                {/* <p>{t("description.Footer")}</p> */}
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div className="loading">
-        <div className="load_cont">
-          <img src="./images/loading.gif" alt="loading" />
-        </div>
-      </div>
+      <LoadingComponent />
       <ToastContainer />
     </>
   );

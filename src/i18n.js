@@ -35,35 +35,41 @@ i18n
           thanksMessage: "يمكنك ملء هذا الاستبيان لمدة 5 دقائق والحصول على اشتراك مجاني فى مشراى",
           Login: 'تسجيل الدخول',
           welcomeMessage: 'مرحبا بكم في مشراي',
+          blogLink: 'المدونة',
           continueWithEmail: 'تواصل مع البريد الإلكتروني',
           continueWithGoogle: 'تواصل مع جوجل',
           continueWithFacebook: 'تواصل مع الفيسبوك',
+          continueWithnumber: 'تواصل مع الهاتف',
           register: 'يسجل',
           search: {
             findMyCar: "ابحث عن سيارتي",
             brand: "الماركة",
             anyBrand: "أي علامة تجارية",
+            selectMore: "اختار اكثر من وحده",
             searchBrand: "البحث عن العلامة التجارية",
-            model: "المودل",
+            model: "الموديل",
             searchModal: "مشروط البحث",
-            specificYearOfManufacture: "سنة تصنيع محددة",
-            manufacturingYear: "سنة الصنع",
+            specificYearOfManufacture: "الموديل",
+            manufacturingYear: "الموديل",
             city: "المدينة",
-            anyCity: "أي مدينة",
+            anyCity: "أي مدينة (اختيار متعدد)",
+            anyYear: "أي عام (اختيار متعدد) ",
+            anyType: "أي نوع (اختيار متعدد)",
+            type: "النوع",
             searchForCity: "ابحث عن المدينة",
             see: "شاهد",
             car: "سيارة",
             price: "السعر",
             saudiRiyal: "ريال سعودى",
-            kilosUsed: "عدد الكيلوهات المستعملة",
+            kilosUsed: "الممشى",
             lessThan: "أقل من",
             moreThan: "أكثر من",
             source: "مصدر",
             searchSource: "مصدر البحث",
             filterLimitError: "لا يمكنك تحديد أكثر من ثلاث خدمات",
-            brandLimitError:"لا يمكنك تحديد أكثر من ثلاث ماركات",
-            modelLimitError:"لا يمكنك تحديد أكثر من ثلاثة طرازات"
-
+            brandLimitError: "لا يمكنك تحديد أكثر من ثلاث ماركات",
+            modelLimitError: "لا يمكنك تحديد أكثر من ثلاثة طرازات",
+            searchConditionError: "الرجاء تحديد ماركة واحدة"
           },
           results: {
             searchResultForCar: "نتيجة بحث عن سيارة معروضة للبيع",
@@ -72,8 +78,9 @@ i18n
             enterYourEmail:
               "أدخل بريدك الألكترونى وسيتم إبلاغك عند توافر نتائج جديدة",
             email: "البريد الألكترونى",
-            saveSearchResult: "حفظ نتائج البحث",
+            saveSearchResult: "ارسال اشعارات للنتائج البحث 🔔",
             sortBy: "ترتيب حسب",
+            filterBtn: "فلتر البحث",
             pleaseEnterEmail: "الرجاء إدخال البريد الإلكتروني",
             pleaseEnterPhone: "الرجاء إدخال رقم الهاتف",
             noResults: "لا يوجد نتائج توافق بحثك",
@@ -100,6 +107,7 @@ i18n
             Footer: "ابحث في اكثر من موقع ومصدر لبيع السيارات المستعمله",
             Filter: "فلترة",
             copyright: "جميع الحقوق محفوظة",
+            testLaunch: "غداء خفيف"
           },
 
           sources: {
@@ -116,28 +124,35 @@ i18n
             Shobbak: "شوباک",
           },
           formFields: {
-            createYourAccoutonMsh:"قم بإنشاء حسابك على مشروعي",
+            createYourAccoutonMsh: "قم بإنشاء حسابك على مشروعي",
             password: 'كلمة المرور',
             createaccount: "إصنع حساب",
             dateofbirth: "تاريخ الولادة",
             City: "مدينة",
             Gender: "جنس",
-            Male:"الذكر",
-            Female:"أنثى",
+            Male: "الذكر",
+            Female: "أنثى",
             phonenumber: "رقم الهاتف",
-            Email:"البريد الإلكتروني",
-            Username:"اسم المستخدم"
+            Email: "البريد الإلكتروني",
+            Username: "اسم المستخدم",
+            alreadyAccount: "لديك حساب بالفعل؟",
+            loginLink: "تسجيل الدخول"
           },
           logoutSuccessfullyMessage: 'لقد تم تسجيل خروجك بنجاح!',
-          hiText:'أهلاً',
-          profileMenu:{
-            MyProfile:'الملف الشخصي الخاص بي',
-            MyRequest:'طلبي',
-            RelatedPosts:'المنشورات ذات الصلة',
-            CommentedPosts:'المشاركات المعلق عليها',
-            HiddenPosts:'المشاركات المخفية',
-            LogOut:'تسجيل خروج',
-            invalidCredentials:'بيانات الاعتماد غير صالحة'
+          hiText: 'أهلاً',
+          profileMenu: {
+            MyProfile: 'الملف الشخصي الخاص بي',
+            commingSoon: '(قريبا) ',
+            MyRequest: 'طلبي',
+            RelatedPosts: 'المنشورات ذات الصلة',
+            CommentedPosts: 'المشاركات المعلق عليها',
+            HiddenPosts: 'المشاركات المخفية',
+            LogOut: 'تسجيل خروج',
+            invalidCredentials: 'بيانات الاعتماد غير صالحة'
+          }
+          ,
+          blogCard: {
+            details: "التفاصيل"
           }
         },
       },
@@ -160,21 +175,27 @@ i18n
           thanksMessage: "you can take this 5 min survey and have a free subscription in Mshrai",
           Login: 'Login',
           welcomeMessage: 'WELCOME TO Mshrai',
+          blogLink: 'Blogs',
           continueWithEmail: 'Continue with Email',
           continueWithGoogle: 'Continue with Google',
           continueWithFacebook: 'Continue with Facebook',
+          continueWithnumber: 'Continue with Phone',
           register: 'Register',
           search: {
             findMyCar: "Find my car",
             brand: "Brand",
             anyBrand: "Any brand",
+            selectMore: "Select more than one",
             searchBrand: "Brand search",
             model: "Model",
             searchModal: "Seach model",
             specificYearOfManufacture: "Specific year of manufacture",
             manufacturingYear: "Manufacturing year",
             city: "City",
-            anyCity: "Any city",
+            anyCity: "Any city (Select many)",
+            anyYear: "Any Year (Select many) ",
+            anyType: "Any Type (Select many)",
+            type: "Type",
             searchForCity: "Search for the city",
             see: "See",
             car: "Car",
@@ -186,8 +207,9 @@ i18n
             source: "Source",
             searchSource: "Serch source",
             filterLimitError: "you can’t select more than three services",
-            brandLimitError:"You can't select more than three",
-            modelLimitError:"you cannot select more than three models"
+            brandLimitError: "You can't select more than three",
+            modelLimitError: "you cannot select more than three models",
+            searchConditionError: "Please select a modal"
           },
           results: {
             searchResultForCar: "Search result for a car for sale",
@@ -196,11 +218,12 @@ i18n
             enterYourEmail:
               "Enter your email and you will be notified when new results are available",
             email: "E-mail",
-            saveSearchResult: "Save search results",
+            saveSearchResult: "Send notifications of search results 🔔",
             sortBy: "Sort by",
+            filterBtn: "Search filter",
             pleaseEnterEmail: "Please enter email",
             pleaseEnterPhone: "Please enter Phone Number",
-            noResults: "There are no results matching your search",
+            noResults: "There are no results matcSofthing your search",
             noAdditionalResults: "No additional results found",
             noPrice: "no price",
             riyal: "riyal",
@@ -224,6 +247,7 @@ i18n
             Footer: "Search more than one site and source to sell used cars",
             Filter: "Filter",
             copyright: "All rights reserved",
+            testLaunch: "Soft Launch"
           },
 
           sources: {
@@ -240,28 +264,34 @@ i18n
             Shobbak: "Shobbak",
           },
           formFields: {
-            createYourAccoutonMsh : "Create your account on Mshrai",
+            createYourAccoutonMsh: "Create your account on Mshrai",
             password: 'Password',
             createaccount: "Create Account",
-            dateofbirth:"Date of Birth",
-            City:"City",
-            Gender:'Gender',
-            Male:"Male",
-            Female:"Female",
-            phonenumber:"Phone Number",
-            Email:"Email",
-            Username:"Username"
+            dateofbirth: "Date of Birth",
+            City: "City",
+            Gender: 'Gender',
+            Male: "Male",
+            Female: "Female",
+            phonenumber: "Phone Number",
+            Email: "Email",
+            Username: "Username",
+            alreadyAccount: "Already have account?",
+            loginLink: 'Login'
           },
           logoutSuccessfullyMessage: 'You have been successfully logged out!',
-          hiText:'Hi',
-          profileMenu:{
-            MyProfile:'My Profile',
-            MyRequest:'My Request',
-            RelatedPosts:'Related',
-            CommentedPosts:'Commented Posts',
-            HiddenPosts:'Hidden Posts',
-            LogOut:'Log out',
-            invalidCredentials:'Invalid Credentials'
+          hiText: 'Hi',
+          profileMenu: {
+            MyProfile: 'My Profile ',
+            commingSoon: '(Soon)',
+            MyRequest: 'My Request',
+            RelatedPosts: 'Related',
+            CommentedPosts: 'Commented Posts',
+            HiddenPosts: 'Hidden Posts',
+            LogOut: 'Log out',
+            invalidCredentials: 'Invalid Credentials'
+          },
+          blogCard: {
+            details: "Details"
           }
 
         },

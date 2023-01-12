@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  language: 'ar',
   searchInputs: {
     marksOptions: [],
     modelOptions: [],
@@ -9,7 +10,7 @@ const initialState = {
     sources: [],
     kilometer:[],
     price: [],
-
+    yearOptions: []
   },
   cars: [],
   numFound: 0,
@@ -19,7 +20,7 @@ const initialState = {
     price: [],
     price_obj: [],
     model_year_start: 1990,
-    model_year_end: Number(new Date().getFullYear()),
+    model_year_end: 2023,
     kilometer:[],
     kilometer_obj:[],
     brand_id: [],
@@ -27,6 +28,7 @@ const initialState = {
     source_id: [],
     shape_id: [],
     city_id: [],
+    manufacturing_year: [],
     keyword: "",
     sort:"sort=date+desc",
     index: 0,
@@ -59,9 +61,12 @@ export const searchSlice = createSlice({
     setReportReasons: (state, action) => {
       state.allReportReasons = action.payload;
     },
+    setLanguage: (state, action) => {
+      state.language = action.payload;
+    },
   },
 });
 
-export const { getSearchInputs, setCars , setSearchForm,setSearchFormToInital, setQuery, setResultsNumebr, setReportReasons } = searchSlice.actions;
+export const { getSearchInputs, setCars , setSearchForm, setSearchFormToInital, setLanguage, setQuery, setResultsNumebr, setReportReasons } = searchSlice.actions;
 
 export default searchSlice.reducer;
