@@ -10,6 +10,11 @@ const MobileCityDrawer = (props) => {
   return (
  <div>
    <Drawer
+     PaperProps={{
+      sx: {
+        width: '100%',
+      }
+    }}
           anchor={ selectedLng === "en" ? "left" : "right" }
           open={props.open}
         >

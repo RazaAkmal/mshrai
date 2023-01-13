@@ -2092,12 +2092,6 @@ input[type="radio"] + label {
   display: block;
 }
 
-.css-1160xiw-MuiPaper-root-MuiDrawer-paper {
-  width: 100% !important;
-}
-.css-4t3x6l-MuiPaper-root-MuiDrawer-paper{
-  width: 100% !important;
-}
 
 .close-drawer-btn {
   position: relative;
