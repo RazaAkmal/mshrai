@@ -31,9 +31,7 @@ export const ProvienceCity = (props) => {
     props.setOpen(!props.open);
     props.setShowWrapperDiv(false);
   };
-console.log(props.searchState.city_id.includes(
-  29
-), "props.searchState.city_id")
+
 
   return <>
   <div className="city-header">
@@ -52,7 +50,7 @@ console.log(props.searchState.city_id.includes(
                   />{" "}
                 </Button>
               </div>
-              <div style={{ marginLeft: "20px", marginRight: "20px" }}>
+              {/* <div style={{ marginLeft: "20px", marginRight: "20px" }}>
                 <input
                   placeholder={t("search.searchForCity")}
                   type="text"
@@ -60,7 +58,7 @@ console.log(props.searchState.city_id.includes(
                   className="form-control"
                   onChange={(e) => setFilterCity(e.target.value)}
                 />
-              </div>
+              </div> */}
 
               {props.searchInputs.provincesOption[
                 props.selectedProvience === "UAE" ? "" : props.selectedProvience

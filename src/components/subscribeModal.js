@@ -12,6 +12,14 @@ import {
 } from "../features/search/searchApi";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import Select from "react-select";
+import { colourStyles } from "../constants";
+
+const options = [
+  { value: 3 , label: 'Every 3 hour' , label_ar: 'كل 3 ساعات'},
+  { value: 6 , label: 'Every 6 hour', label_ar: 'كل 6 ساعات' },
+  { value: 24 , label: 'Every day', label_ar: 'كل يوم' }
+]
 
 const SubscribeModal = () => {
   const [show, setShow] = useState(false);
@@ -25,6 +33,7 @@ const SubscribeModal = () => {
   const query = useSelector((state) => state.search.query);
   const searchForm = useSelector((state) => state.search.searchForm);
   const isEnglish = localStorage.getItem("lang") === "en";
+  const [notifytime, setNotifyTime] = useState('');
 
   const showError = (msg) => {
     toast.error(msg, {
@@ -37,7 +46,7 @@ const SubscribeModal = () => {
     });
   };
 
-  const _handleSaveResults = () => {
+  const _handleSaveResults = (notifytime) => {
     if ((kindOfSubscribe === "email" && email === "") || (kindOfSubscribe === "whatsapp" && whatsapp === "")) {
       showError(t(kindOfSubscribe === "email" ? "results.pleaseEnterEmail" : "results.pleaseEnterPhone"));
       return;
@@ -70,6 +79,7 @@ const SubscribeModal = () => {
     const data = {
       email: email,
       notification_medium: "email",
+      interval: notifytime,
       query: query
     };
 
@@ -113,10 +123,30 @@ const SubscribeModal = () => {
                 {isBusy ? (
                   <img src="./images/loading.gif" alt="loading" />
                 ) :
+                <div>
                   <Form.Group controlId="formBasicEmail">
                     <Form.Label style={{ marginTop: '10px' }}>{t("emailInputTitle")}</Form.Label>
                     <Form.Control style={{ marginTop: '0px' }} value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder={t("emailInputTitle")} />
                   </Form.Group>
+                   <Form.Group controlId="formBasicEmail">
+                  <Form.Label style={{ marginTop: '10px' }}>{t("notifyMe")}</Form.Label>
+
+                    <Select
+                      placeholder={t("notifyMe")}
+                      classNamePrefix="select"
+                      className="basic-multi-select"
+                      isRtl={isEnglish ? false : true}
+                      styles={colourStyles}
+                      name="color"
+                      // value={}
+                      options={options.map((i) => ({
+                        ...i,
+                        label: isEnglish ? i.label : i.label_ar
+                      }))}
+                      onChange={(item) =>  setNotifyTime(item.value) }
+                    />
+                 </Form.Group>
+                 </div>                
                 }
               </Tab>
               <Tab disabled eventKey="whatsapp" title={<div className="Tab-inner"><span style={{ marginLeft: "10px" }}>{t("tabTitleWhatsapp")}</span><span><img src="../images/whatsappicon.svg" alt="logo" /> </span></div>}>

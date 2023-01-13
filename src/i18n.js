@@ -41,6 +41,7 @@ i18n
           continueWithFacebook: 'تواصل مع الفيسبوك',
           continueWithnumber: 'تواصل مع الهاتف',
           register: 'يسجل',
+          notifyMe: 'أعلمني',
           search: {
             findMyCar: "ابحث عن سيارتي",
             brand: "الماركة",
@@ -184,6 +185,7 @@ i18n
           continueWithFacebook: 'Continue with Facebook',
           continueWithnumber: 'Continue with Phone',
           register: 'Register',
+          notifyMe: 'Notify Me',
           search: {
             findMyCar: "Find my car",
             brand: "Brand",

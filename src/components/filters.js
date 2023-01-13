@@ -194,6 +194,14 @@ export default function Filters(props) {
       return val.label && val.label.toLowerCase().includes(filter.toLowerCase());
     }
   };
+  const provinceFilterValue = (val, filter) => {
+    if (isEnglish) {
+      return val[0].city_en && val[0].city_en.toLowerCase().includes(filter.toLowerCase()); 
+    } else {
+      return val[0].city && val[0].city.toLowerCase().includes(filter.toLowerCase());
+    }
+  };
+  const famousCity = searchInputs.cityOptions.slice(0,4)
 
   return (
     <div>
@@ -456,23 +464,19 @@ export default function Filters(props) {
               <Accordion.Header>{t("search.city")}</Accordion.Header>
               <Accordion.Body>
                 <div className="panel-content-province">
-                  {/* <input
+                  <input
                     placeholder={t("search.searchForCity")}
                     type="text"
                     style={{  }}
                     className="form-control"
                     onChange={(e) => setFilterCity(e.target.value)}
-                  /> */}
+                  />
                   <Divider style={{ paddingBottom: "10px" }}>
                     {t("search.popularCities")}
                   </Divider>
-                  {searchInputs.cityOptions
-                    // .filter((v) => filterValue(v, filterCity))
+                  {famousCity
+                    .filter((v) => filterValue(v, filterCity))
                     .map((city, index) => {
-                      const newLocal = index >= 4;
-                      if (newLocal) {
-                        return ''
-                      }
                       return (
                         <div className="form-group" key={"city" + index} style={{paddingLeft: '10px'}}>
                           <input
@@ -497,9 +501,11 @@ export default function Filters(props) {
                       );
                     })}
                   <Divider style={{ marginBottom: "15px" }} />
-                  {Object.values(searchInputs.provincesOption).map(
-                    (province, index) => (
-                      <div
+                  {Object.values(searchInputs.provincesOption)
+                  .filter((v) => provinceFilterValue(v, filterCity))
+                  .map((province, index) => {
+                      if(province.length > 1){
+                      return  <div
                         onClick={handleClick(
                           "right-start",
                           province[0].province === null
@@ -532,8 +538,34 @@ export default function Filters(props) {
                           <FontAwesomeIcon icon={faChevronLeft} />
                         )}
                       </div>
-                    )
-                  )}
+                  }})}
+                  {Object.values(searchInputs.provincesOption)
+                  .filter((v) => provinceFilterValue(v, filterCity))
+                  .map( (province, index) => {
+                      if(province.length === 1 ){
+                        return (
+                          <div className="form-group" key={"city" + index} style={{paddingLeft: '10px'}}>
+                            <input
+                              id={"city" + index}
+                              type="checkbox"
+                              name="city"
+                              checked={props.searchState.city_id.includes(
+                                province[0].id
+                              )}
+                              onChange={(v) => addValue("city_id", province[0].id)}
+                            />
+                              <label
+                                className="d-block"
+                                style={{ fontSize: "1rem" }}
+                                htmlFor={"city" + index}
+                              >
+                                {localStorage.getItem("lang") === "en"
+                                ? province[0].province_en
+                                : province[0].province}{" "}
+                              </label>
+                          </div>
+                        )}
+                    })}                  
                   {props.windowwidth > 990 ? (
                     <CityListPopper
                       showWrapperDiv={showWrapperDiv}

@@ -613,6 +613,12 @@ body .login-drop {
 }
 
 @media all and (max-width: 991.98px) {
+  .form-group-province-ar{
+    padding-left: 9% !important;
+  }
+  .form-group-province-en {
+    padding-right: 7% !important;
+  }
   .filter-desktop{
     display: none !important;
   }
@@ -1982,7 +1988,7 @@ input[type="radio"] + label {
   max-width: 120px;
   object-fit: contain;
 }
-.modal-header {
+.model-poper-header {
   padding: 0 !important;
   border: none !important;
   position: absolute !important;
@@ -2086,7 +2092,10 @@ input[type="radio"] + label {
   display: block;
 }
 
-.MuiPaper-root {
+.css-1160xiw-MuiPaper-root-MuiDrawer-paper {
+  width: 100% !important;
+}
+.css-4t3x6l-MuiPaper-root-MuiDrawer-paper{
   width: 100% !important;
 }
 
@@ -2103,6 +2112,7 @@ input[type="radio"] + label {
 }
 .d-block{
   text-align: -webkit-match-parent;
+  padding-right: 15px;
 }
 .d-block::before{
   left: 90%;

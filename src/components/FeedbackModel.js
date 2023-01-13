@@ -82,7 +82,7 @@ const FeedbackModel = ({ selectedLng }) => {
         }}
       >
         <Modal.Header
-          style={{ borderBottom: "none !important" }}
+          className='model-poper-header'
           closeButton
         ></Modal.Header>
         {!submited ? (
