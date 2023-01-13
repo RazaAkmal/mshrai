@@ -505,7 +505,7 @@ export default function Resault(props) {
     return returnVal;
   };
 
-  let totalpages = Math.floor(resultsNumber / 25);
+  let totalpages = Math.ceil(resultsNumber / 25);
   const changePage = (e, value) => {
     // setPage(page+1)
     setPage(value);
