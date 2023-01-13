@@ -10,7 +10,8 @@ const initialState = {
     sources: [],
     kilometer:[],
     price: [],
-    yearOptions: []
+    yearOptions: [],
+    provincesOption: {}
   },
   cars: [],
   numFound: 0,

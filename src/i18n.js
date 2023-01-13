@@ -41,6 +41,7 @@ i18n
           continueWithFacebook: 'تواصل مع الفيسبوك',
           continueWithnumber: 'تواصل مع الهاتف',
           register: 'يسجل',
+          notifyMe: 'أعلمني',
           search: {
             findMyCar: "ابحث عن سيارتي",
             brand: "الماركة",
@@ -67,9 +68,12 @@ i18n
             source: "مصدر",
             searchSource: "مصدر البحث",
             filterLimitError: "لا يمكنك تحديد أكثر من ثلاث خدمات",
-            brandLimitError: "لا يمكنك تحديد أكثر من ثلاث ماركات",
-            modelLimitError: "لا يمكنك تحديد أكثر من ثلاثة طرازات",
-            searchConditionError: "الرجاء تحديد ماركة واحدة"
+            brandLimitError:"لا يمكنك تحديد أكثر من ثلاث ماركات",
+            modelLimitError:"لا يمكنك تحديد أكثر من ثلاثة طرازات",
+            searchConditionError: "الرجاء تحديد ماركة واحدة",
+            popularCities:"المدن الشعبية ",
+            provinces:" المقاطعات",
+            gulfCountries: "دول الخليج",
           },
           results: {
             searchResultForCar: "نتيجة بحث عن سيارة معروضة للبيع",
@@ -181,6 +185,7 @@ i18n
           continueWithFacebook: 'Continue with Facebook',
           continueWithnumber: 'Continue with Phone',
           register: 'Register',
+          notifyMe: 'Notify Me',
           search: {
             findMyCar: "Find my car",
             brand: "Brand",
@@ -207,9 +212,12 @@ i18n
             source: "Source",
             searchSource: "Serch source",
             filterLimitError: "you can’t select more than three services",
-            brandLimitError: "You can't select more than three",
-            modelLimitError: "you cannot select more than three models",
-            searchConditionError: "Please select a modal"
+            brandLimitError:"You can't select more than three",
+            modelLimitError:"you cannot select more than three models",
+            searchConditionError: "Please select a modal",
+            popularCities:"Popular Cities",
+            provinces:"Provinces",
+            gulfCountries: "Gulf Countries",
           },
           results: {
             searchResultForCar: "Search result for a car for sale",

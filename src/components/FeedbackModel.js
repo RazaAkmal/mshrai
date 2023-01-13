@@ -39,7 +39,7 @@ const FeedbackModel = ({ selectedLng }) => {
         setTimeout(() => {
             SetFeedbackHide(true)
             
-        }, 180000);
+        }, 300000);
     }, [])
 
   const { t } = useTranslation();
@@ -82,7 +82,7 @@ const FeedbackModel = ({ selectedLng }) => {
         }}
       >
         <Modal.Header
-          style={{ borderBottom: "none !important" }}
+          className='model-poper-header'
           closeButton
         ></Modal.Header>
         {!submited ? (
