@@ -140,7 +140,8 @@ i18n
             Email: "البريد الإلكتروني",
             Username: "اسم المستخدم",
             alreadyAccount: "لديك حساب بالفعل؟",
-            loginLink: "تسجيل الدخول"
+            loginLink: "تسجيل الدخول",
+            verify:'تحقق',
           },
           logoutSuccessfullyMessage: 'لقد تم تسجيل خروجك بنجاح!',
           hiText: 'أهلاً',
@@ -284,7 +285,8 @@ i18n
             Email: "Email",
             Username: "Username",
             alreadyAccount: "Already have account?",
-            loginLink: 'Login'
+            loginLink: 'Login',
+            verify:'Verify'
           },
           logoutSuccessfullyMessage: 'You have been successfully logged out!',
           hiText: 'Hi',

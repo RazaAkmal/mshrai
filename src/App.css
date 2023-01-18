@@ -1072,6 +1072,9 @@ body .login-drop {
   }
 }
 @media all and (max-width: 767.9px) {
+  .containerStyle{
+    margin: 0 !important;
+  }
   .main_screen .cont {
     margin-top: 35px;
   }
@@ -2323,4 +2326,38 @@ header img {
     max-width: 100px;
     margin-top: 10px;
   }
+}
+.otpInputStyle{
+  width: 60px !important;
+  height: 70px !important;
+  border: 1px solid #e7e7e7;
+  border-radius: 7px;
+  margin-top: 10px;
+}
+.containerStyle{
+  justify-content: space-evenly;
+  margin: 0px 75px;
+}
+.resendBtn{
+  border: none ;
+  background-color: transparent ;
+  color: #6c757d ;
+  text-decoration: underline ;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+.timer_div{
+  background-color: #ebebeb;
+  border-radius: 0.5rem;
+}
+.verifyBtn:disabled{
+  background-color: #ebebeb !important;
+  border: none;
+  color: #6c757d !important;
+  text-decoration: underline;
+  font-size: 1.2rem !important;
+}
+.verifyBtn{
+  text-decoration: underline;
+  font-size: 1.2rem !important;
 }

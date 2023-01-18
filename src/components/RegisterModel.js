@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useSelector } from "react";
+import React, { useState,  } from "react";
 import "../i18n";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
@@ -18,7 +18,6 @@ import Card from "react-bootstrap/Card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import PhoneLogin from "./PhoneLogin";
-import Loader from "./loader";
 
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/bootstrap.css";
@@ -30,11 +29,13 @@ const RegisterModel = (props) => {
   const handleCalendarOpen = () => console.log("Calendar opened");
   const [shoeaccor, setShowAccor] = useState(false);
   const [phonelogin, setPhoneLogin] = useState(false);
+  const [switchtologin, setSwitchToLogin] = useState(false);
 
   const formik = useFormik({
     initialValues: {
       name: "",
       email: "",
+      phone: props.phoneNumber,
     },
     onSubmit: (values, { setSubmitting }) => {
       let formatedDate = moment(date).format("YYYY-MM-DD");
@@ -51,8 +52,9 @@ const RegisterModel = (props) => {
             draggable: true,
             progress: undefined,
           });
+          setSwitchToLogin(true)
           setSubmitting(false);
-          props.setRegisterModal(false);
+          props.setOpenRegisterModel(false);
           if (res) {
             props.loginHelper(res.data.data.token, res.data.data.user);
           }
@@ -107,9 +109,9 @@ const RegisterModel = (props) => {
         className="custom-modal modal-register"
         centered
         scrollable
-        show={props.registerModal}
+        show={props.openregistermodel}
         onHide={() => {
-        props.setRegisterModal(false);
+        props.setOpenRegisterModel(false);
         setValidationError(null)
 
         }}
@@ -128,8 +130,8 @@ const RegisterModel = (props) => {
               <span
                 style={{ color: "blue", cursor: "pointer" }}
                 onClick={() => {
-                  setPhoneLogin(true);
-                  props.setRegisterModal(false);
+                  setSwitchToLogin(true);
+                  props.setOpenRegisterModel(false);
                 }}
               >
                 {t("formFields.loginLink")}
@@ -312,14 +314,7 @@ const RegisterModel = (props) => {
           </Form>
         </Modal.Body>
       </Modal>
-      <PhoneLogin
-        phonelogin={phonelogin}
-        setRegisterModal={props.setRegisterModal}
-        setPhoneLogin={setPhoneLogin}
-        loginHelper={props.loginHelper}
-      />
-      
-      {/* <PhoneLogin setPhoneLogin={setPhoneLogin} phonelogin={phonelogin} loginHelper={loginHelper} /> */}
+      {switchtologin && <PhoneLogin  switchtologin={switchtologin} setSwitchToLogin={setSwitchToLogin}/>}
     </>
   );
 };

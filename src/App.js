@@ -52,6 +52,7 @@ import FeedbackModel from "./components/FeedbackModel";
 import Blog from "./pages/Blog";
 import BlogDetails from "./pages/BlogDetails";
 import { NavActiveProvider, useNavBarContext } from "./context/NavActive";
+import PhoneOtpModel from "./components/PhoneOtpModel";
 
 const lngs = {
   ar: { nativeName: "Arabic" },
@@ -704,7 +705,8 @@ const App = () => {
           </Form>
         </Modal.Body>
       </Modal> */}
-      < RegisterModel registerModal={registerModal} setRegisterModal={setRegisterModal} loginHelper={loginHelper} />
+      {/* < RegisterModel registerModal={registerModal} setRegisterModal={setRegisterModal} loginHelper={loginHelper} /> */}
+      < PhoneOtpModel registerModal={registerModal} setRegisterModal={setRegisterModal} loginHelper={loginHelper} />
 
       <div
         className={selectedLng === "en" ? "App-en" : "App-ar"}
