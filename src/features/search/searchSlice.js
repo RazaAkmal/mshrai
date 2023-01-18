@@ -1,16 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  language: 'ar',
+  language: "ar",
   searchInputs: {
     marksOptions: [],
     modelOptions: [],
     cityOptions: [],
     shapes: [],
     sources: [],
-    kilometer:[],
+    kilometer: [],
     price: [],
-    yearOptions: []
+    yearOptions: [],
   },
   cars: [],
   numFound: 0,
@@ -21,8 +21,8 @@ const initialState = {
     price_obj: [],
     model_year_start: 1990,
     model_year_end: 2023,
-    kilometer:[],
-    kilometer_obj:[],
+    kilometer: [],
+    kilometer_obj: [],
     brand_id: [],
     brand_type_id: [],
     source_id: [],
@@ -30,7 +30,7 @@ const initialState = {
     city_id: [],
     manufacturing_year: [],
     keyword: "",
-    sort:"sort=date+desc",
+    sort: "sort=date+desc",
     index: 0,
   },
   allReportReasons: [],
@@ -47,16 +47,16 @@ export const searchSlice = createSlice({
       state.cars = action.payload;
     },
     setSearchForm: (state, action) => {
-      state.searchForm = action.payload
+      state.searchForm = action.payload;
     },
     setSearchFormToInital: (state, action) => {
-      state.searchForm = initialState.searchForm
+      state.searchForm = initialState.searchForm;
     },
     setQuery: (state, action) => {
-      state.query = action.payload
+      state.query = action.payload;
     },
     setResultsNumebr: (state, action) => {
-      state.numFound = action.payload
+      state.numFound = action.payload;
     },
     setReportReasons: (state, action) => {
       state.allReportReasons = action.payload;
@@ -67,6 +67,15 @@ export const searchSlice = createSlice({
   },
 });
 
-export const { getSearchInputs, setCars , setSearchForm, setSearchFormToInital, setLanguage, setQuery, setResultsNumebr, setReportReasons } = searchSlice.actions;
+export const {
+  getSearchInputs,
+  setCars,
+  setSearchForm,
+  setSearchFormToInital,
+  setLanguage,
+  setQuery,
+  setResultsNumebr,
+  setReportReasons,
+} = searchSlice.actions;
 
 export default searchSlice.reducer;

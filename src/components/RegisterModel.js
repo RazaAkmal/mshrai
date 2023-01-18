@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useSelector } from "react";
+import React, { useState } from "react";
 import "../i18n";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
@@ -9,19 +9,21 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useFormik } from "formik";
 import axios from "axios";
-import { toast } from "react-toastify";
 import { apiUrl } from "../features/constants";
 import { Col, Row } from "react-bootstrap";
 import Accordion from "react-bootstrap/Accordion";
-import { useAccordionButton } from "react-bootstrap/AccordionButton";
 import Card from "react-bootstrap/Card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import PhoneLogin from "./PhoneLogin";
-import Loader from "./loader";
 
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/bootstrap.css";
+import { notifySucess } from "../helpers";
+import FromGroupContainer from "./FormGroup/FromGroupContainer";
+import CustomToggle from "./RegisterComponents/CustomToggle";
+import ModalTitleContainer from "./RegisterComponents/ModalTitleContainer";
+import ModalLogo from "./Modal/ModalLogo";
 
 const RegisterModel = (props) => {
   const [validationError, setValidationError] = useState();
@@ -42,15 +44,8 @@ const RegisterModel = (props) => {
       axios
         .post(`${apiUrl}/api/register`, values)
         .then((res) => {
-          toast.success(res.data.message, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          notifySucess(res.data.message);
+
           setSubmitting(false);
           props.setRegisterModal(false);
           if (res) {
@@ -64,7 +59,7 @@ const RegisterModel = (props) => {
               errors[key] = err.response.data.errors[key];
             });
           }
-          console.log(errors, 'errors')
+          console.log(errors, "errors");
           setValidationError(errors);
           setSubmitting(false);
         });
@@ -80,27 +75,6 @@ const RegisterModel = (props) => {
     errors,
   } = formik;
 
-  const CustomToggle = ({ children, eventKey }) => {
-    const decoratedOnClick = useAccordionButton(
-      eventKey,
-      () => setShowAccor(!shoeaccor)
-      // console.log('totally custom!'),
-    );
-
-    return (
-      <button
-        type="button"
-        style={{
-          border: "none",
-          display: "-webkit-box",
-          backgroundColor: "#f7f9fa",
-        }}
-        onClick={decoratedOnClick}
-      >
-        {children}
-      </button>
-    );
-  };
   return (
     <>
       <Modal
@@ -109,50 +83,30 @@ const RegisterModel = (props) => {
         scrollable
         show={props.registerModal}
         onHide={() => {
-        props.setRegisterModal(false);
-        setValidationError(null)
-
+          props.setRegisterModal(false);
+          setValidationError(null);
         }}
       >
         <Modal.Header closeButton></Modal.Header>
         <Modal.Body>
-          <div className="modal-logo">
-            <img src="./images/logo_color.png" alt="logo" />
-          </div>
-          <Modal.Title>
-            {t("formFields.createYourAccoutonMsh")}
-            <p>
-            {t("formFields.alreadyAccount")}
-              {/* <span style={{ color: "darkgrey" }}>? </span> */}
-              {' '}
-              <span
-                style={{ color: "blue", cursor: "pointer" }}
-                onClick={() => {
-                  setPhoneLogin(true);
-                  props.setRegisterModal(false);
-                }}
-              >
-                {t("formFields.loginLink")}
-              </span>
-            </p>
-          </Modal.Title>
+          <ModalLogo />
+          <ModalTitleContainer
+            t={t}
+            setPhoneLogin={setPhoneLogin}
+            setRegisterModal={props.setRegisterModal}
+          />
           <Form onSubmit={handleSubmit}>
             <Row>
               <Col md="12">
-                <Form.Group className="mb-3">
-                  <Form.Label>{t("formFields.phonenumber")}</Form.Label>
-                  {/* <Form.Control
-                    type="text"
-                    value={values.phone}
-                    onChange={handleChange}
-                    name="phone"
-                    id="phone"
-                  /> */}
+                <FromGroupContainer
+                  label={t("formFields.phonenumber")}
+                  Error={validationError?.phone}
+                >
                   <PhoneInput
                     country="sa"
                     preferredCountries={["sa", "ae", "qa", "kw", "om", "bh"]}
                     value={values.phone}
-                    autoFormat	={false}
+                    autoFormat={false}
                     inputProps={{
                       name: "phone",
                       id: "phone",
@@ -161,16 +115,13 @@ const RegisterModel = (props) => {
                       onChange: handleChange,
                     }}
                   ></PhoneInput>
-                  {validationError?.phone && (
-                    <span style={{ color: "red" }}>
-                      {validationError.phone}
-                    </span>
-                  )}
-                </Form.Group>
+                </FromGroupContainer>
               </Col>
             </Row>
-            <Form.Group className="mb-3">
-              <Form.Label>{t("formFields.password")}</Form.Label>
+            <FromGroupContainer
+              label={t("formFields.password")}
+              Error={validationError?.password}
+            >
               <Form.Control
                 type="password"
                 value={values.password}
@@ -178,14 +129,15 @@ const RegisterModel = (props) => {
                 name="password"
                 id="password"
               />
-              {validationError?.password && (
-                <span style={{ color: "red" }}>{validationError.password}</span>
-              )}
-            </Form.Group>
+            </FromGroupContainer>
+
             <Accordion>
               <Card style={{ display: "contents" }}>
-                <CustomToggle eventKey="1">
-                  {" "}
+                <CustomToggle
+                  eventKey="1"
+                  shoeaccor={shoeaccor}
+                  setShowAccor={setShowAccor}
+                >
                   {shoeaccor ? (
                     <FontAwesomeIcon icon={faMinus} />
                   ) : (
@@ -198,8 +150,10 @@ const RegisterModel = (props) => {
                   <Card.Body>
                     <Row>
                       <Col md="6">
-                        <Form.Group className="mb-3">
-                          <Form.Label>{t("formFields.Username")}</Form.Label>
+                        <FromGroupContainer
+                          label={t("formFields.Username")}
+                          Error={validationError?.name}
+                        >
                           <Form.Control
                             type="text"
                             value={values.name}
@@ -207,16 +161,13 @@ const RegisterModel = (props) => {
                             name="name"
                             id="name"
                           />
-                          {validationError?.name && (
-                            <span style={{ color: "red" }}>
-                              {validationError.name}
-                            </span>
-                          )}
-                        </Form.Group>
+                        </FromGroupContainer>
                       </Col>
                       <Col md="6">
-                        <Form.Group className="mb-3">
-                          <Form.Label>{t("formFields.Email")}</Form.Label>
+                        <FromGroupContainer
+                          label={t("formFields.Email")}
+                          Error={validationError?.email}
+                        >
                           <Form.Control
                             type="text"
                             value={values.email}
@@ -224,19 +175,16 @@ const RegisterModel = (props) => {
                             name="email"
                             id="email"
                           />
-                          {validationError?.email && (
-                            <span style={{ color: "red" }}>
-                              {validationError.email}
-                            </span>
-                          )}
-                        </Form.Group>
+                        </FromGroupContainer>
                       </Col>
                     </Row>
 
                     <Row>
                       <Col md="6">
-                        <Form.Group className="mb-3">
-                          <Form.Label>{t("formFields.City")}</Form.Label>
+                        <FromGroupContainer
+                          label={t("formFields.City")}
+                          Error={validationError?.city}
+                        >
                           <Form.Control
                             type="text"
                             value={values.city}
@@ -244,34 +192,28 @@ const RegisterModel = (props) => {
                             name="city"
                             id="city"
                           />
-                          {validationError?.city && (
-                            <span style={{ color: "red" }}>
-                              {validationError.city}
-                            </span>
-                          )}
-                        </Form.Group>
+                        </FromGroupContainer>
                       </Col>
 
                       <Col md="6">
-                        <Form.Group className="mb-3">
-                          <Form.Label>{t("formFields.dateofbirth")}</Form.Label>
+                        <FromGroupContainer
+                          label={t("formFields.dateofbirth")}
+                          Error={validationError?.dob}
+                        >
                           <DatePicker
                             selected={date}
                             onChange={(date) => setDate(date)}
                             onCalendarClose={handleCalendarClose}
                             onCalendarOpen={handleCalendarOpen}
                           />
-                          {validationError?.dob && (
-                            <span style={{ color: "red" }}>
-                              {validationError.dob}
-                            </span>
-                          )}
-                        </Form.Group>
+                        </FromGroupContainer>
                       </Col>
                     </Row>
                     <Col md="6">
-                      <Form.Group className="mb-3">
-                        <Form.Label>{t("formFields.Gender")}</Form.Label>
+                      <FromGroupContainer
+                        label={t("formFields.Gender")}
+                        Error={validationError?.gender}
+                      >
                         <Form.Select
                           size="lg"
                           name="gender"
@@ -285,22 +227,15 @@ const RegisterModel = (props) => {
                             {t("formFields.Female")}
                           </option>
                         </Form.Select>
-                        {validationError?.gender && (
-                          <span style={{ color: "red" }}>
-                            {validationError.gender}
-                          </span>
-                        )}
-                      </Form.Group>
+                      </FromGroupContainer>
                     </Col>
                   </Card.Body>
                 </Accordion.Collapse>
               </Card>
             </Accordion>
             {validationError?.user && (
-                    <span style={{ color: "red" }}>
-                      {validationError.user}
-                    </span>
-                  )}
+              <span style={{ color: "red" }}>{validationError.user}</span>
+            )}
             <Button
               className="w-100 mt-3"
               size="lg"
@@ -318,10 +253,7 @@ const RegisterModel = (props) => {
         setPhoneLogin={setPhoneLogin}
         loginHelper={props.loginHelper}
       />
-      
-      {/* <PhoneLogin setPhoneLogin={setPhoneLogin} phonelogin={phonelogin} loginHelper={loginHelper} /> */}
     </>
   );
 };
-
 export default RegisterModel;

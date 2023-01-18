@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { saveResults } from "../features/search/searchApi";
-import $ from "jquery";
+import { Alert } from "./Alert/Alert";
 
 export default function SaveResults() {
   const [state, setstate] = useState("");
@@ -11,8 +11,8 @@ export default function SaveResults() {
 
   const _handleSaveResults = () => {
     if (state === "") return;
-    $(".alert-success").hide();
-    $(".alert-danger").hide();
+    document.querySelector(".alert-success").style.display = "none";
+    document.querySelector(".alert-danger").style.display = "none";
 
     let key = JSON.stringify(searchForm);
     let q = JSON.stringify(query);
@@ -26,29 +26,30 @@ export default function SaveResults() {
 
     saveResults(data).then((res) => {
       console.log(res);
-      if (res && res.code == 0) {
+      const alertDiv = document.createElement("div");
+      alertDiv.setAttribute("role", "alert");
+      const alertBtnClose = document.createElement("button");
+      alertBtnClose.className = "btn-close";
+      alertBtnClose.setAttribute("type", "button");
+      alertBtnClose.setAttribute("data-bs-dismiss", "alert");
+      alertBtnClose.setAttribute("ari-label", "Close");
+      alertDiv.appendChild(alertBtnClose);
+      const modalBody = document.querySelector(".modai-body");
+      modalBody.appendChild(alertDiv);
+      alertDiv.style.display = "block";
+      if (res && res.code === 0) {
         setstate("");
-        $(".modai-body")
-          .append(`<div className="alert alert-success alert-dismissible fade show" role="alert">
-              تم الإشتراك فى النشرة الإخبارية بنجاح.
-              <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>`);
-        $(".alert-success").show();
-        setTimeout(() => {
-          // $("[data-bs-dismiss]").trigger({ type: "click" });
-          window.$('#exampleModal').modal('hide')
-          $("body").removeClass("modal-open");
-          // $("body").css("overflow-y", "scroll");
-          $(".alert").hide();
-        }, 3000);
+        alertDiv.className = "alert alert-success alert-dismissible fade show";
+        alertDiv.innerHTML = "تم الإشتراك فى النشرة الإخبارية بنجاح.";
       } else {
-        $(".modai-body")
-          .append(`<div className="alert alert-danger alert-dismissible fade show" role="alert">
-              حدث خطأ ما تأكد من البيانات وأعد الإرسال.
-              <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>`);
-        $(".alert-danger").show();
+        alertDiv.className = "alert alert-danger alert-dismissible fade show";
+        alertDiv.innerHTML = "حدث خطأ ما تأكد من البيانات وأعد الإرسال.";
       }
+      setTimeout(() => {
+        document.querySelector("#exampleModal").style.display = "none";
+        document.body.classList.remove("modal-open");
+        document.querySelector(".alert").style.display = "none";
+      }, 3000);
     });
   };
   return (
@@ -70,30 +71,9 @@ export default function SaveResults() {
             ></button>
           </div>
           <div className="modal-body">
-            <div
-              className="alert alert-success alert-dismissible fade show"
-              role="alert"
-            >
-              تم حفظ البيانات بنجاح.
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div
-              className="alert alert-danger alert-dismissible fade show"
-              role="alert"
-            >
-              حدث خطأ ما تأكد من البيانات وأعد الإرسال.
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Close"
-              ></button>
-            </div>
+            <Alert sucess>تم حفظ البيانات بنجاح.</Alert>
+            <Alert> حدث خطأ ما تأكد من البيانات وأعد الإرسال.</Alert>
+
             <p className="text-center">
               أدخل بريدك الألكترونى وسيتم إبلاغك عند توافر نتائج جديدة
             </p>

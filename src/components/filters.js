@@ -1,6 +1,5 @@
 import Slider from "rc-slider";
 import React, { useEffect, useState } from "react";
-import $ from "jquery";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSearchInputs } from "../features/search/searchApi";
 import { getSearchInputs } from "../features/search/searchSlice";
@@ -66,8 +65,8 @@ export default function Filters(props) {
         } else {
           let priceData = {
             min,
-            max
-          }
+            max,
+          };
           prices_obj.push(priceData);
           prices.push(value);
         }
@@ -82,8 +81,8 @@ export default function Filters(props) {
         } else {
           let killometerData = {
             min,
-            max
-          }
+            max,
+          };
           kiloes_obj.push(killometerData);
           kiloes.push(value);
         }
@@ -150,28 +149,45 @@ export default function Filters(props) {
       if (result) {
         dispatch(getSearchInputs(result));
       }
-      $(".load_cont").fadeOut(function () {
-        $(this).parent().fadeOut();
-        $("body").css({ "overflow-y": "visible" });
+
+      let el = document.querySelector(".load_cont");
+      el.addEventListener("animationend", function () {
+        el.parentElement.classList.add("fadeout");
+        document.body.style.overflowY = "visible";
       });
+      el.classList.add("fadeout");
+      setTimeout(() => {
+        el.style.display = "none";
+        el.parentElement.style.display = "none";
+      }, 100);
     });
   }, [dispatch]);
 
   const handleToggleShow = (elm, item) => {
-    if ($(elm).hasClass("show")) {
-      $(elm).removeClass("show");
-      $('a[href="' + elm + '"]').addClass("collapsed");
+    let elment = document.querySelector(elm);
+    if (elment.classList.contains("show")) {
+      elment.classList.remove("show");
+      document
+        .querySelector('a[href="' + elm + '"]')
+        .classList.add("collapsed");
     } else {
-      $(elm).addClass("show");
-      $('a[href="' + elm + '"]').removeClass("collapsed");
+      elment.classList.add("show");
+      document
+        .querySelector('a[href="' + elm + '"]')
+        .classList.remove("collapsed");
     }
   };
 
   const filterValue = (val, filter) => {
     if (isEnglish) {
-      return val.label_en && val.label_en.toLowerCase().includes(filter.toLowerCase()); 
+      return (
+        val.label_en &&
+        val.label_en.toLowerCase().includes(filter.toLowerCase())
+      );
     } else {
-      return val.label && val.label.toLowerCase().includes(filter.toLowerCase());
+      return (
+        val.label && val.label.toLowerCase().includes(filter.toLowerCase())
+      );
     }
   };
 
@@ -180,7 +196,11 @@ export default function Filters(props) {
       <div className="filter-title">
         <Trans i18nKey="description.Filter" />
       </div>
-      <form className="toggle-container" onClick={(event) => event.stopPropagation()} id="accordion1">
+      <form
+        className="toggle-container"
+        onClick={(event) => event.stopPropagation()}
+        id="accordion1"
+      >
         <button
           className="icon_link close_btn"
           type="button"
@@ -339,9 +359,7 @@ export default function Filters(props) {
               </Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="3">
-              <Accordion.Header>
-                {t("search.price")}
-              </Accordion.Header>
+              <Accordion.Header>{t("search.price")}</Accordion.Header>
               <Accordion.Body>
                 <div className="panel-content">
                   <div className="form-group">
@@ -350,7 +368,9 @@ export default function Filters(props) {
                       type="checkbox"
                       name="price"
                       checked={props.searchState.price.includes("[0 TO 70000]")}
-                      onChange={() => addValue("price", "[0 TO 70000]", 0, 70000)}
+                      onChange={() =>
+                        addValue("price", "[0 TO 70000]", 0, 70000)
+                      }
                     />
                     <label className="d-block" htmlFor="price1">
                       {" "}
@@ -365,7 +385,9 @@ export default function Filters(props) {
                       checked={props.searchState.price.includes(
                         "[70000 TO 120000]"
                       )}
-                      onChange={() => addValue("price", "[70000 TO 120000]", 70000, 120000)}
+                      onChange={() =>
+                        addValue("price", "[70000 TO 120000]", 70000, 120000)
+                      }
                     />
                     <label className="d-block" htmlFor="price2">
                       {" "}
@@ -380,7 +402,9 @@ export default function Filters(props) {
                       checked={props.searchState.price.includes(
                         "[120000 TO 170000]"
                       )}
-                      onChange={() => addValue("price", "[120000 TO 170000]", 120000, 170000)}
+                      onChange={() =>
+                        addValue("price", "[120000 TO 170000]", 120000, 170000)
+                      }
                     />
                     <label className="d-block" htmlFor="price3">
                       {" "}
@@ -395,7 +419,9 @@ export default function Filters(props) {
                       checked={props.searchState.price.includes(
                         "[170000 TO 200000]"
                       )}
-                      onChange={() => addValue("price", "[170000 TO 200000]", 170000, 200000)}
+                      onChange={() =>
+                        addValue("price", "[170000 TO 200000]", 170000, 200000)
+                      }
                     />
                     <label className="d-block" htmlFor="price4">
                       {" "}
@@ -411,7 +437,12 @@ export default function Filters(props) {
                         "[200000 TO 999999999]"
                       )}
                       onChange={() =>
-                        addValue("price", "[200000 TO 999999999]", 200000,  999999999)
+                        addValue(
+                          "price",
+                          "[200000 TO 999999999]",
+                          200000,
+                          999999999
+                        )
                       }
                     />
                     <label className="d-block" htmlFor="price5">
@@ -436,9 +467,9 @@ export default function Filters(props) {
                   {searchInputs.cityOptions
                     .filter((v) => filterValue(v, filterCity))
                     .map((city, index) => {
-                      return ( 
+                      return (
                         <div className="form-group" key={"city" + index}>
-                        {(index === 4 ? <hr /> : "")}
+                          {index === 4 ? <hr /> : ""}
                           <input
                             id={"city" + index}
                             type="checkbox"
@@ -471,7 +502,9 @@ export default function Filters(props) {
                       checked={props.searchState.kilometer.includes(
                         "[0 TO 9999]"
                       )}
-                      onChange={() => addValue("kilometer", "[0 TO 9999]", 0, 9999)}
+                      onChange={() =>
+                        addValue("kilometer", "[0 TO 9999]", 0, 9999)
+                      }
                     />
                     <label className="d-block" htmlFor="ep1">
                       {" "}
@@ -486,7 +519,9 @@ export default function Filters(props) {
                       checked={props.searchState.kilometer.includes(
                         "[10000 TO 50000]"
                       )}
-                      onChange={() => addValue("kilometer", "[10000 TO 50000]", 10000, 50000)}
+                      onChange={() =>
+                        addValue("kilometer", "[10000 TO 50000]", 10000, 50000)
+                      }
                     />
                     <label className="d-block" htmlFor="ep2">
                       {" "}
@@ -501,7 +536,9 @@ export default function Filters(props) {
                       checked={props.searchState.kilometer.includes(
                         "[50000 TO 75000]"
                       )}
-                      onChange={() => addValue("kilometer", "[50000 TO 75000]", 50000, 75000)}
+                      onChange={() =>
+                        addValue("kilometer", "[50000 TO 75000]", 50000, 75000)
+                      }
                     />
                     <label className="d-block" htmlFor="ep3">
                       {" "}
@@ -517,7 +554,12 @@ export default function Filters(props) {
                         "[75000 TO 100000]"
                       )}
                       onChange={() =>
-                        addValue("kilometer", "[75000 TO 100000]",75000,  100000)
+                        addValue(
+                          "kilometer",
+                          "[75000 TO 100000]",
+                          75000,
+                          100000
+                        )
                       }
                     />
                     <label className="d-block" htmlFor="ep4">
@@ -534,7 +576,12 @@ export default function Filters(props) {
                         "[100000 TO 150000]"
                       )}
                       onChange={() =>
-                        addValue("kilometer", "[100000 TO 150000]", 100000,  150000)
+                        addValue(
+                          "kilometer",
+                          "[100000 TO 150000]",
+                          100000,
+                          150000
+                        )
                       }
                     />
                     <label className="d-block" htmlFor="ep5">
@@ -551,7 +598,12 @@ export default function Filters(props) {
                         "[150000 TO 200000]"
                       )}
                       onChange={() =>
-                        addValue("kilometer", "[150000 TO 200000]", 150000, 200000)
+                        addValue(
+                          "kilometer",
+                          "[150000 TO 200000]",
+                          150000,
+                          200000
+                        )
                       }
                     />
                     <label className="d-block" htmlFor="ep6">
@@ -568,7 +620,12 @@ export default function Filters(props) {
                         "[200001 TO 999999999]"
                       )}
                       onChange={() =>
-                        addValue("kilometer", "[200001 TO 999999999]", 200001, 999999999)
+                        addValue(
+                          "kilometer",
+                          "[200001 TO 999999999]",
+                          200001,
+                          999999999
+                        )
                       }
                     />
                     <label className="d-block" htmlFor="ep7">

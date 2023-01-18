@@ -542,10 +542,11 @@ header form .link i {
   margin-left: 5px;
 }
 body .login-drop {
-  position: absolute;
+  /* position: absolute;
   left: 125px;
-  top: 14px;
+  top: 14px; */
   z-index: 9;
+  margin: 5px 10px;
 }
 .login-drop .btn {
   background-color: #fff;
@@ -1474,18 +1475,18 @@ body .login-drop {
   }
 }
 .language-button {
-  position: absolute;
-  top: 12px;
-  left: 15px;
+  /* position: absolute; */
+  /* top: 12px;
+  left: 15px; */
   z-index: 1;
 }
 .language-button .dropdown-menu {
   min-width: 4rem !important;
 }
 .login-link {
-  position: absolute;
-  left: 127px;
-  top: 19px;
+  /* position: absolute; */
+  /* left: 127px;
+  top: 19px; */
   color: #fff;
   z-index: 1;
   cursor: pointer;
@@ -2004,9 +2005,9 @@ input[type="radio"] + label {
   color: #fff;
 } */ /******   BLogs  *******/
 .blog__link {
-  position: absolute;
-  left: 180px;
-  top: 19px;
+  /* position: absolute; */
+  /* left: 180px;
+  top: 19px; */
   color: #fff;
   z-index: 1;
   cursor: pointer;
@@ -2019,12 +2020,12 @@ input[type="radio"] + label {
   text-decoration: none;
   color: inherit;
 }
-.login-link-ar {
+/* .login-link-ar {
   left: 80px;
 }
 .blog__link-ar {
   left: 190px;
-}
+} */
 .blog__link:hover {
   color: #fff;
 }
@@ -2153,7 +2154,7 @@ header img {
   .bars {
     display: flex;
     cursor: pointer;
-    position: absolute;
+    /* position: absolute; */
     font-size: 1rem;
     width: 30px;
     height: 30px;
@@ -2164,13 +2165,11 @@ header img {
     cursor: pointer;
     border: 0.5px solid #fff;
     border-radius: 2px;
-
-    left: 180px;
-    top: 15px;
+    margin: 5px 0;
     z-index: 1;
     cursor: pointer;
   }
-  .blog__link {
+  .blog__link.logo-header-link {
     position: fixed;
     left: 0;
     top: 62px;
@@ -2183,6 +2182,7 @@ header img {
     width: 200px;
     padding: 20px;
     z-index: 9999;
+    margin: 0;
     transform: translateX(-100%);
   }
   .blog__link.active {
@@ -2199,4 +2199,42 @@ header img {
     max-width: 100px;
     margin-top: 10px;
   }
+}
+/********** Replace Jquery *********/
+@keyframes fadeout {
+  from {
+      opacity: 1;
+  }
+
+  to {
+      opacity: 0;
+  }
+}
+
+.fadeout {
+  animation-name: fadeout;
+  animation-fill-mode: forwards;
+}
+/***** fix Navbar absolute ****/
+.logo-header-link
+{
+  color: #fff;
+  margin:  5px 10px;
+  text-decoration: none;
+   --bs-gutter-x: 0rem;
+}
+.logo-header-link:hover,
+.logo-header-link:focus,
+.logo-header-link:active
+{
+  color: #fff;
+}
+.h-left
+{
+  position: absolute;
+  padding: 10px 0;
+  min-height: 60px;
+  width: 100%;
+  top: 0;
+  left: 0;
 }

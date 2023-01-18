@@ -1,14 +1,11 @@
-import { useState } from "react";
-import { t } from "i18next";
 import { useTranslation } from "react-i18next";
-import LogoHeader from "../components/LogoHeader";
+import { LogoHeader, LoadingComponent, BlogCard } from "../components";
 import "../i18n";
 import { Col, Container, Row } from "react-bootstrap";
-import BlogCard from "../components/BlogCard";
+
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchBlogs } from "../features/blog/blogSlice";
-import LoadingComponent from "../components/LoadingComponent";
 
 const Blog = ({ selectedLng }) => {
   const dispatch = useDispatch();

@@ -1,56 +1,53 @@
-import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import React, { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 import { useTranslation } from "react-i18next";
-import Form from 'react-bootstrap/Form';
-import { parseParams } from "../helpers/helpers";
-import { Spinner } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
+
 import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import {
-  saveResults,
-} from "../features/search/searchApi";
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
+import { saveResults } from "../features/search/searchApi";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+import { notifyError, notifySucess } from "../helpers";
 
 const SubscribeModal = () => {
   const [show, setShow] = useState(false);
   const { t } = useTranslation();
-  const [kindOfSubscribe, setKindOfSubscribe] = useState('email');
+  const [kindOfSubscribe, setKindOfSubscribe] = useState("email");
   const [isBusy, seIisBusy] = useState(false);
-  const [email, setEmail] = useState('');
-  const [whatsapp, setWhatsapp] = useState('');
+  const [email, setEmail] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const query = useSelector((state) => state.search.query);
   const searchForm = useSelector((state) => state.search.searchForm);
   const isEnglish = localStorage.getItem("lang") === "en";
 
-  const showError = (msg) => {
-    toast.error(msg, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
-
   const _handleSaveResults = () => {
-    if ((kindOfSubscribe === "email" && email === "") || (kindOfSubscribe === "whatsapp" && whatsapp === "")) {
-      showError(t(kindOfSubscribe === "email" ? "results.pleaseEnterEmail" : "results.pleaseEnterPhone"));
+    if (
+      (kindOfSubscribe === "email" && email === "") ||
+      (kindOfSubscribe === "whatsapp" && whatsapp === "")
+    ) {
+      notifyError(
+        t(
+          kindOfSubscribe === "email"
+            ? "results.pleaseEnterEmail"
+            : "results.pleaseEnterPhone"
+        )
+      );
       return;
     } else if (searchForm.brand_id.length === 0) {
-      showError("الرجاء تحديد علامة تجارية واحدة على الأقل");
+      notifyError("الرجاء تحديد علامة تجارية واحدة على الأقل");
       return;
     }
     seIisBusy(true);
 
     let query = {
-        brand_id: searchForm.brand_id,
-        model_year: [{ min: searchForm.model_year_start, max: searchForm.model_year_end}],
-    }
+      brand_id: searchForm.brand_id,
+      model_year: [
+        { min: searchForm.model_year_start, max: searchForm.model_year_end },
+      ],
+    };
 
     if (searchForm.brand_type_id.length > 0) {
       query["brand_type_id"] = searchForm.brand_type_id;
@@ -70,25 +67,16 @@ const SubscribeModal = () => {
     const data = {
       email: email,
       notification_medium: "email",
-      query: query
+      query: query,
     };
 
     saveResults(data).then((res) => {
       seIisBusy(false);
       if (res.message === "Request failed with status code 422") {
-        showError("يجب أن يكون البريد الإلكتروني عنوان بريد إلكتروني صالحًا");
-      }
-      else {
-        handleClose()
-        toast.success(res.message, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        notifyError("يجب أن يكون البريد الإلكتروني عنوان بريد إلكتروني صالحًا");
+      } else {
+        handleClose();
+        notifySucess(res.message);
       }
     });
   };
@@ -98,7 +86,11 @@ const SubscribeModal = () => {
       <Button variant="primary" onClick={handleShow}>
         {t("results.saveSearchResult")}
       </Button>
-      <Modal className={ isEnglish ? "subscribe-modal-en" : 'subscribe-modal'} show={show} onHide={handleClose}>
+      <Modal
+        className={isEnglish ? "subscribe-modal-en" : "subscribe-modal"}
+        show={show}
+        onHide={handleClose}
+      >
         <Modal.Header>
           <Modal.Title>{t("results.saveSearchResult")}</Modal.Title>
         </Modal.Header>
@@ -109,25 +101,70 @@ const SubscribeModal = () => {
               onSelect={(k) => setKindOfSubscribe(k)}
               className="mb-3"
             >
-              <Tab eventKey="email" title={<div className="Tab-inner"><span style={{ marginLeft: "10px" }}>{t("tabTitleEmail")}</span><span><img style={{ width: "24px", height: "24px" }} src="../images/mailicon.png" alt="logo" /> </span></div>}>
+              <Tab
+                eventKey="email"
+                title={
+                  <div className="Tab-inner">
+                    <span style={{ marginLeft: "10px" }}>
+                      {t("tabTitleEmail")}
+                    </span>
+                    <span>
+                      <img
+                        style={{ width: "24px", height: "24px" }}
+                        src="../images/mailicon.png"
+                        alt="logo"
+                      />{" "}
+                    </span>
+                  </div>
+                }
+              >
                 {isBusy ? (
                   <img src="./images/loading.gif" alt="loading" />
-                ) :
+                ) : (
                   <Form.Group controlId="formBasicEmail">
-                    <Form.Label style={{ marginTop: '10px' }}>{t("emailInputTitle")}</Form.Label>
-                    <Form.Control style={{ marginTop: '0px' }} value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder={t("emailInputTitle")} />
+                    <Form.Label style={{ marginTop: "10px" }}>
+                      {t("emailInputTitle")}
+                    </Form.Label>
+                    <Form.Control
+                      style={{ marginTop: "0px" }}
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      type="email"
+                      placeholder={t("emailInputTitle")}
+                    />
                   </Form.Group>
-                }
+                )}
               </Tab>
-              <Tab disabled eventKey="whatsapp" title={<div className="Tab-inner"><span style={{ marginLeft: "10px" }}>{t("tabTitleWhatsapp")}</span><span><img src="../images/whatsappicon.svg" alt="logo" /> </span></div>}>
+              <Tab
+                disabled
+                eventKey="whatsapp"
+                title={
+                  <div className="Tab-inner">
+                    <span style={{ marginLeft: "10px" }}>
+                      {t("tabTitleWhatsapp")}
+                    </span>
+                    <span>
+                      <img src="../images/whatsappicon.svg" alt="logo" />{" "}
+                    </span>
+                  </div>
+                }
+              >
                 {isBusy ? (
                   <img src="./images/loading.gif" alt="loading" />
-                ) :
+                ) : (
                   <Form.Group controlId="formBasicPhone">
-                    <Form.Label style={{ marginTop: '10px' }}>{t("phoneInputTitle")}</Form.Label>
-                    <Form.Control style={{ marginTop: '0px' }} value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} type="number" placeholder={t("phoneInputTitle")} />
+                    <Form.Label style={{ marginTop: "10px" }}>
+                      {t("phoneInputTitle")}
+                    </Form.Label>
+                    <Form.Control
+                      style={{ marginTop: "0px" }}
+                      value={whatsapp}
+                      onChange={(e) => setWhatsapp(e.target.value)}
+                      type="number"
+                      placeholder={t("phoneInputTitle")}
+                    />
                   </Form.Group>
-                }
+                )}
               </Tab>
             </Tabs>
           </div>
@@ -143,6 +180,6 @@ const SubscribeModal = () => {
       </Modal>
     </>
   );
-}
+};
 
-export default SubscribeModal
+export default SubscribeModal;

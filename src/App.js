@@ -1,98 +1,42 @@
-import React, { useEffect, useState, } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
-import ReactGA from 'react-ga';
-import {
-  Switch,
-  Route,
-  useHistory,
-  Router,
-  useLocation,
-  Link,
-} from "react-router-dom";
-import Resault from "./pages/resaults";
-import Search from "./pages/search";
-import Feedback from "./components/feedback";
+import ReactGA from "react-ga";
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
+import { Search, Resault, Blog, BlogDetails } from "./pages";
 import Cookies from "js-cookie";
 import uniqid from "uniqid";
 import "./i18n";
 import { useTranslation } from "react-i18next";
-import moment from "moment";
-import { updateMomentLocaleToArabic, updateMomentLocaleToEng } from "./helpers/helpers";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import Form from "react-bootstrap/Form";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import FacebookLogin from "./components/FacebookLogin";
-import TwitterLogins from "./components/TwitterLogin";
-import {
-  faEnvelope,
-  faUser,
-  faEye,
-  faStar,
-  faCommentAlt,
-  faEyeSlash,
-  faPhoneAlt,
-} from "@fortawesome/free-solid-svg-icons";
-import { FaBars } from "react-icons/fa";
-import DatePicker from "react-datepicker";
+import { updateMomentLocaleToArabic, notifySucess } from "./helpers";
 import "react-datepicker/dist/react-datepicker.css";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import Loader from "./components/loader";
+import { ToastContainer } from "react-toastify";
 import { apiUrl } from "./features/constants";
-import { Col, Row } from "react-bootstrap";
-import Dropdown from "react-bootstrap/Dropdown";
-import GoogleLog from "./components/GoogleLogin";
-import RegisterModel from "./components/RegisterModel";
-import { setLanguage } from "./features/search/searchSlice";
-import { useDispatch, useSelector } from "react-redux";
-import FeedbackModel from "./components/FeedbackModel";
-import Blog from "./pages/Blog";
-import BlogDetails from "./pages/BlogDetails";
-import { NavActiveProvider, useNavBarContext } from "./context/NavActive";
-
-const lngs = {
-  ar: { nativeName: "Arabic" },
-  en: { nativeName: "English" },
-};
+import { useSelector } from "react-redux";
+import { Feedback, RegisterModel, FeedbackModel, NavBar } from "./components";
 
 const App = () => {
   const { t, i18n } = useTranslation();
-
-  const [state, setState] = useState({
-    isOpen: false,
-  });
-  const menuClass = `dropdown-menu${state.isOpen ? " show" : ""}`;
-  const toggleOpen = () => setState({ isOpen: !state.isOpen });
-
-  const [login, showLogin] = useState(false);
-  const [registerModal, setRegisterModal] = useState(false)
+  const [registerModal, setRegisterModal] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
-  const [continueWithEmail, showContinueWithEmailModal] = useState(false);
-  const [validationError, setValidationError] = useState();
   const [validationErrorLogIn, setValidationErrorLogIn] = useState();
   const [isInValidCredentials, setIsInvalidCredentials] = useState(false);
   const [userDetails, setUserDetails] = useState();
-  const [date, setDate] = useState(new Date());
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const selectedLng = useSelector((state) => state.search.language);
-  const dispatch = useDispatch()
-
-  let history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => {
-    i18n.changeLanguage('ar')
-    localStorage.setItem("lang", 'ar');
-    updateMomentLocaleToArabic()
+    i18n.changeLanguage("ar");
+    localStorage.setItem("lang", "ar");
+    updateMomentLocaleToArabic();
     const getID = Cookies.get("id");
     if (!getID) {
       let userId = uniqid("userId-");
       Cookies.set("id", userId);
     }
-    ReactGA.initialize('UA-248573380-1');
+    ReactGA.initialize("UA-248573380-1");
     ReactGA.pageview(window.location.pathname + window.location.search);
   }, []);
 
@@ -117,9 +61,6 @@ const App = () => {
     }
   }, [location.search]);
 
-  const handleCalendarClose = () => console.log("Calendar closed");
-  const handleCalendarOpen = () => console.log("Calendar opened");
-
   const loginHelper = (token, userData) => {
     localStorage.setItem("token", JSON.stringify(token));
     localStorage.setItem("userDetails", JSON.stringify(userData));
@@ -128,7 +69,7 @@ const App = () => {
     setIsInvalidCredentials(false);
     // resetFormLogin();
     setValidationErrorLogIn(undefined);
-    history.push("/results");
+    navigate("/results");
     // setSubmitting(false);
     showRegister(false);
   };
@@ -136,15 +77,12 @@ const App = () => {
   // FOR GOOGLE LOGIN
   const googleFn = async (val) => {
     localStorage.removeItem("loginFrom");
-    const res = await axios(
-      `${apiUrl}/api/auth/callback/google${val}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      }
-    );
+    const res = await axios(`${apiUrl}/api/auth/callback/google${val}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
     if (res.data.data.token) {
       loginHelper(res.data.data.token, res.data.data.user);
     }
@@ -162,15 +100,12 @@ const App = () => {
   const twitterLogin = async (val) => {
     localStorage.removeItem("loginFrom");
     try {
-      const res = await axios(
-        `${apiUrl}/api/auth/callback/twitter${val}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      );
+      const res = await axios(`${apiUrl}/api/auth/callback/twitter${val}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
       if (res) {
         loginHelper(res.data.data.token, res.data.data.user);
         // window.close();
@@ -179,7 +114,6 @@ const App = () => {
       console.log(err);
       // window.close();
     }
-
   };
 
   // TO LOGOUT
@@ -188,16 +122,8 @@ const App = () => {
     localStorage.removeItem("userDetails");
     setIsLoggedIn(false);
     setUserDetails(null);
-    toast.success(t("logoutSuccessfullyMessage"), {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-    history.push("/");
+    notifySucess(t("logoutSuccessfullyMessage"));
+    navigate("/");
   };
 
   // const formik = useFormik({
@@ -211,15 +137,8 @@ const App = () => {
   //     axios
   //       .post(`${apiUrl}/api/registerModal`, values)
   //       .then((res) => {
-  //         toast.success(res.data.message, {
-  //           position: "top-right",
-  //           autoClose: 5000,
-  //           hideProgressBar: false,
-  //           closeOnClick: true,
-  //           pauseOnHover: true,
-  //           draggable: true,
-  //           progress: undefined,
-  //         });
+  //notifySucess(res.data.message)
+  //
   //         setSubmitting(false);
   //         setShowRegister(false);
   //         if (res) {
@@ -252,15 +171,8 @@ const App = () => {
   //       .post(`${apiUrl}/api/login`, values)
   //       .then((res) => {
   //         showContinueWithEmailModal(false);
-  //         toast.success(res.data.message, {
-  //           position: "top-right",
-  //           autoClose: 5000,
-  //           hideProgressBar: false,
-  //           closeOnClick: true,
-  //           pauseOnHover: true,
-  //           draggable: true,
-  //           progress: undefined,
-  //         });
+  //notifySucess(res.data.message)
+  //
   //         if (res.data.data.token) {
   //           loginHelper(res.data.data.token, res.data.data.user);
   //           setSubmitting(false);
@@ -306,141 +218,21 @@ const App = () => {
   //   handleSubmit,
   //   errors,
   // } = formik;
-  const { open, handleClick } = useNavBarContext();
+  // const { open, handleClick } = useNavBarContext();
   return (
     <>
       <FeedbackModel />
-      <div className="bars" onClick={handleClick}>
-        <FaBars />
-      </div>
-      <div className="h-left d-flex">
-        <div className="language-button" onClick={toggleOpen}>
-          <button
-            style={{ background: '#3e0292' }}
-            className="btn btn-secondary"
-            type="button"
-            id="dropdownMenuButton"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            <span style={{ color: "white" }}>{t("language")}</span>
-          </button>
-
-          <div
-            className={menuClass}
-            aria-labelledby="dropdownMenuButton"
-            x-placement="bottom-start"
-            style={{
-              position: "absolute",
-              transform: "translate3d(-1px, 36px, 0px)",
-              top: "0px",
-              left: "0px",
-              willChange: "transform",
-              zIndex: "1000 !important",
-            }}
-          >
-            {Object.keys(lngs).map((lng) => (
-              <div
-                key={lng}
-                className="dropdown-item"
-                onClick={() => {
-                  i18n.changeLanguage(lng);
-                  localStorage.setItem("lang", lng);
-                  dispatch(setLanguage(lng))
-                  if (lng === "ar") {
-                    updateMomentLocaleToArabic();
-                  } else {
-                    updateMomentLocaleToEng()
-                    moment.locale(lng);
-                  }
-                }}
-              >
-                {lng === 'ar' ? <img style={{ width: '30px', height: '30px' }} src="./images/saudi-icon.svg" alt="saudi" /> : <img style={{ width: '30px', height: '30px' }} src="./images/uk-flag-icon.svg" alt="eng" />}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div
-          className={`blog__link ${selectedLng === "ar" ? "blog__link-ar" : "blog__link-en"
-            } ${open && "active"}`}
-        >
-          <Link to="/blogs">{t("blogLink")}</Link>
-        </div>
-        {!isLoggedIn ? (
-          <div
-            // className="login-link"
-            className={`login-link ${selectedLng === "ar" ? "login-link-ar" : "login-link-en"
-              }`}
-            onClick={() => {
-              setRegisterModal(true);
-              // resetFormLogin();
-              setIsInvalidCredentials(null);
-              setValidationErrorLogIn(null);
-            }}
-          >
-            {t("Login")}
-          </div>
-        ) : (
-          <Dropdown className="login-drop">
-            <Dropdown.Toggle variant="success" id="dropdown-basic">
-              <FontAwesomeIcon icon={faUser} />
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1" className="user-name">
-                <FontAwesomeIcon icon={faUser} color="white" />
-                {t("hiText")}, {userDetails && userDetails.name}
-              </Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item href="#/action-2">
-                <FontAwesomeIcon icon={faUser} />
-                {selectedLng === "en" ?
-                  <>{t("profileMenu.MyProfile")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
-                  <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.MyProfile")}   </>
-                }
-              </Dropdown.Item>
-              <Dropdown.Item href="#/action-3">
-                <FontAwesomeIcon icon={faEye} />
-                {selectedLng === "en" ?
-                  <>{t("profileMenu.MyRequest")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
-                  <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.MyRequest")}   </>
-                }
-              </Dropdown.Item>
-              <Dropdown.Item href="#/action-3">
-                <FontAwesomeIcon icon={faStar} />{" "}
-                {selectedLng === "en" ?
-                  <>{t("profileMenu.RelatedPosts")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
-                  <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.RelatedPosts")}   </>
-                }
-              </Dropdown.Item>
-              <Dropdown.Item href="#/action-3">
-                <FontAwesomeIcon icon={faCommentAlt} />{" "}
-                {selectedLng === "en" ?
-                  <>{t("profileMenu.CommentedPosts")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
-                  <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.CommentedPosts")}   </>
-                }
-              </Dropdown.Item>
-              <Dropdown.Item href="#/action-3">
-                <FontAwesomeIcon icon={faEyeSlash} />{" "}
-                {selectedLng === "en" ?
-                  <>{t("profileMenu.HiddenPosts")}  <span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span> </> :
-                  <><span style={{ color: '#00CEBD' }}>{t("profileMenu.commingSoon")}</span>  {t("profileMenu.HiddenPosts")}   </>
-                }
-              </Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item onClick={logoutHandler}>
-                {t("profileMenu.LogOut")}
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-
-          // <div className="login-link" onClick={logoutHandler}>
-          //   logout
-          // </div>
-        )}
-      </div>
+      {/* Navbar */}
+      <NavBar
+        t={t}
+        i18n={i18n}
+        isLoggedIn={isLoggedIn}
+        setRegisterModal={setRegisterModal}
+        setIsInvalidCredentials={setIsInvalidCredentials}
+        setValidationErrorLogIn={setValidationErrorLogIn}
+        userDetails={userDetails}
+        logoutHandler={logoutHandler}
+      />
 
       {/* social MODAL  */}
       {/* <Modal
@@ -451,9 +243,7 @@ const App = () => {
       >
         <Modal.Header closeButton></Modal.Header>
         <Modal.Body>
-          <div className="modal-logo">
-            <img src="./images/logo_color.png" alt="logo" />
-          </div>
+           <ModalLogo />
           <Modal.Title>{t("welcomeMessage")}</Modal.Title>
           <GoogleLog />
           <FacebookLogin fbLogin={fbLogin} />
@@ -493,9 +283,7 @@ const App = () => {
       >
         <Modal.Header closeButton></Modal.Header>
         <Modal.Body>
-          <div className="modal-logo">
-            <img src="./images/logo_color.png" alt="logo" />
-          </div>
+           <ModalLogo />
           <Modal.Title>{t("welcomeMessage")}</Modal.Title>
           <Form onSubmit={handleSubmitLogin}>
             <Form.Group className="mb-3">
@@ -571,9 +359,7 @@ const App = () => {
       >
         <Modal.Header closeButton></Modal.Header>
         <Modal.Body>
-          <div className="modal-logo">
-            <img src="./images/logo_color.png" alt="logo" />
-          </div>
+           <ModalLogo />
           <Modal.Title>{t("formFields.createYourAccoutonMsh")}</Modal.Title>
           <Form onSubmit={handleSubmit}>
             <Row>
@@ -704,28 +490,35 @@ const App = () => {
           </Form>
         </Modal.Body>
       </Modal> */}
-      < RegisterModel registerModal={registerModal} setRegisterModal={setRegisterModal} loginHelper={loginHelper} />
+      <RegisterModel
+        registerModal={registerModal}
+        setRegisterModal={setRegisterModal}
+        loginHelper={loginHelper}
+      />
 
       <div
         className={selectedLng === "en" ? "App-en" : "App-ar"}
         style={{ direction: selectedLng === "en" ? "ltr" : "rtl" }}
       >
         {/* <div className="App"> */}
-        <Switch>
-          <Route exact path="/">
-            <Search />
-          </Route>
-          <Route path="/results">
-            <Resault />
-            <Feedback selectedLng={selectedLng} />
-          </Route>
-          <Route exact path="/blogs">
-            <Blog selectedLng={selectedLng} />
-          </Route>
-          <Route path="/blogs/:id">
-            <BlogDetails selectedLng={selectedLng} />
-          </Route>
-        </Switch>
+
+        <Routes>
+          <Route path="/" element={<Search />} />
+          <Route
+            path="/results"
+            element={
+              <>
+                <Resault />
+                <Feedback selectedLng={selectedLng} />
+              </>
+            }
+          />
+          <Route path="/blogs" element={<Blog selectedLng={selectedLng} />} />
+          <Route
+            path="/blogs/:id"
+            element={<BlogDetails selectedLng={selectedLng} />}
+          />
+        </Routes>
       </div>
 
       {/* {isSubmitting && <Loader />} */}

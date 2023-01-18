@@ -1,12 +1,10 @@
-import LogoHeader from "../components/LogoHeader";
-
 import { Col, Container, Row } from "react-bootstrap";
-import BlogCard from "../components/BlogCard";
+
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getBlogById } from "../features/blog/blogSlice";
-import LoadingComponent from "../components/LoadingComponent";
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { useParams } from "react-router-dom";
+import { LogoHeader, LoadingComponent, BlogCard } from "../components";
 
 const BlogDetails = ({ selectedLng }) => {
   const dispatch = useDispatch();

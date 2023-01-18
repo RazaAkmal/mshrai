@@ -1,17 +1,19 @@
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import logo from "../images/logo.png";
-const LogoHeader = ({ background }) => {
-  const history = useHistory()
+const LogoHeader = ({ background, children }) => {
+  const navigate = useNavigate();
   const handleNav = () => {
-    history.push('/')
-  }
+    navigate("/");
+  };
   return (
-    <header style={{ "background": background && "#3e0292" }}>
-      <div className="container">
-        <div className="row logo-row" onClick={handleNav}>
-          <div className="col-6">
+    <header style={{ background: background && "#3e0292" }}>
+      <div className="container-fluid">
+        <div className="row logo-row " onClick={handleNav}>
+          {/* <div className="col-8 d-flex align-items-center">{children}</div> */}
+          <Link to="/" className="col-6">
             <img src={logo} alt="logo" />
-          </div>
+          </Link>
         </div>
       </div>
     </header>

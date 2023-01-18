@@ -9,8 +9,10 @@ import "react-phone-input-2/lib/bootstrap.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { Formik } from "formik";
 import axios from "axios";
-import { toast } from "react-toastify";
 import { apiUrl } from "../features/constants";
+import { notifySucess } from "../helpers";
+import FromGroupContainer from "./FormGroup/FromGroupContainer";
+import ModalLogo from "./Modal/ModalLogo";
 
 const PhoneLogin = (props) => {
   const { t } = useTranslation();
@@ -30,9 +32,7 @@ const PhoneLogin = (props) => {
       >
         <Modal.Header closeButton></Modal.Header>
         <Modal.Body>
-          <div className="modal-logo">
-            <img src="./images/logo_color.png" alt="logo" />
-          </div>
+          <ModalLogo />
           <Modal.Title>{t("welcomeMessage")}</Modal.Title>
           <Formik
             initialValues={{ phone: "", password: "" }}
@@ -49,19 +49,11 @@ const PhoneLogin = (props) => {
                 .post(`${apiUrl}/api/login`, values)
                 .then((res) => {
                   props.setPhoneLogin(false);
-                  toast.success(res.data.message, {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                  });
-                  console.log('res befoer loop', res.data)
+                  notifySucess(res.data.message);
+                  console.log("res befoer loop", res.data);
 
                   if (res.data.data.token) {
-                    console.log('res', res.data)
+                    console.log("res", res.data);
                     props.loginHelper(res.data.data.token, res.data.data.user);
                     setSubmitting(false);
                     setValidationErrorLogIn(undefined);
@@ -101,16 +93,10 @@ const PhoneLogin = (props) => {
               isSubmitting,
             }) => (
               <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3">
-                  <Form.Label>{t("formFields.phonenumber")}</Form.Label>
-                  {/* <Form.Control
-                    type="number"
-                    name="phone"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.phone}
-                  /> */}
-
+                <FromGroupContainer
+                  label={t("formFields.phonenumber")}
+                  Error={validationErrorLogIn?.phone}
+                >
                   <PhoneInput
                     country="sa"
                     preferredCountries={["sa", "ae", "qa", "kw", "om", "bh"]}
@@ -124,15 +110,11 @@ const PhoneLogin = (props) => {
                       onChange: handleChange,
                     }}
                   ></PhoneInput>
-                  {validationErrorLogIn?.phone && (
-                    <span style={{ color: "red" }}>
-                      {validationErrorLogIn.phone}
-                    </span>
-                  )}
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>{t("formFields.password")}</Form.Label>
+                </FromGroupContainer>
+                <FromGroupContainer
+                  label={t("formFields.password")}
+                  Error={validationErrorLogIn?.user}
+                >
                   <Form.Control
                     type="password"
                     name="password"
@@ -141,18 +123,8 @@ const PhoneLogin = (props) => {
                     onBlur={handleBlur}
                     value={values.password}
                   />
+                </FromGroupContainer>
 
-                  {validationErrorLogIn?.password && (
-                    <span style={{ color: "red" }}>
-                      {validationErrorLogIn.password}
-                    </span>
-                  )}
-                  {validationErrorLogIn?.user && (
-                    <span style={{ color: "red" }}>
-                      {validationErrorLogIn.user}
-                    </span>
-                  )}
-                </Form.Group>
                 <Button
                   className="w-100 mt-2"
                   size="lg"
@@ -160,7 +132,7 @@ const PhoneLogin = (props) => {
                   disabled={false}
                   type="submit"
                 >
-                  {t("login")}
+                  {t("Login")}
                 </Button>
                 <div className="text-center mt-2">
                   <span

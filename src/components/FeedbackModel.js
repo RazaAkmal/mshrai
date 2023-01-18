@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { toast } from "react-toastify";
 import { saveFeedback } from "../features/search/searchApi";
 import { useTranslation } from "react-i18next";
 import Modal from "react-bootstrap/Modal";
+import { notifySucess } from "../helpers";
 
 const feedback = [
   {
@@ -34,16 +34,14 @@ const feedback = [
   },
 ];
 const FeedbackModel = ({ selectedLng }) => {
-
-    useEffect(() => {
-        setTimeout(() => {
-            SetFeedbackHide(true)
-            
-        }, 180000);
-    }, [])
+  useEffect(() => {
+    setTimeout(() => {
+      SetFeedbackHide(true);
+    }, 180000);
+  }, []);
 
   const { t } = useTranslation();
-  
+
   const [rate, setRate] = useState("");
   const [note, setNote] = useState("");
   const [submited, setSubmited] = useState(false);
@@ -60,15 +58,7 @@ const FeedbackModel = ({ selectedLng }) => {
       setRate("");
       setNote("");
       setSubmited(true);
-      toast.success(res.message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      notifySucess(res.message);
     });
   };
 
@@ -97,8 +87,9 @@ const FeedbackModel = ({ selectedLng }) => {
               {t("feedbackTitle")}
             </div>
             <div style={{ paddingTop: "20px", display: "flex" }}>
-              {feedback.map((data) => (
+              {feedback.map((data, index) => (
                 <img
+                  key={index}
                   onClick={() => setRate(data.rate)}
                   style={{ width: "40px", height: "40px" }}
                   src={rate === data.rate ? data.iconActive : data.icon}
