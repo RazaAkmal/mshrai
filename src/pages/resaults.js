@@ -87,9 +87,9 @@ export default function Resault(props) {
     if (city_id.length > 0) {
       query["city_id"] = city_id;
     }
-    let data = {
-      query: query,
-    };
+    // let data = {
+    //   query: query,
+    // };
     if (brand_id.length > 0) {
       setFilterSelected(true);
       dispatch(

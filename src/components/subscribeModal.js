@@ -19,7 +19,7 @@ const SubscribeModal = () => {
   const [whatsapp, setWhatsapp] = useState("");
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const query = useSelector((state) => state.search.query);
+  // const query = useSelector((state) => state.search.query);
   const searchForm = useSelector((state) => state.search.searchForm);
   const isEnglish = localStorage.getItem("lang") === "en";
 

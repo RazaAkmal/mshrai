@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import Slider from "rc-slider";
+// import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { Tabs, Tab } from "react-bootstrap";
 import { fetchSearchInputs, searchCars } from "../features/search/searchApi";
@@ -28,8 +28,8 @@ import {
   handleAnyYearChangeUtility,
   handleSelectedBrandsUtils,
 } from "../utils";
-const { createSliderWithTooltip } = Slider;
-const Range = createSliderWithTooltip(Slider.Range);
+// const { createSliderWithTooltip } = Slider;
+// const Range = createSliderWithTooltip(Slider.Range);
 
 export default function Search() {
   const isEnglish = localStorage.getItem("lang") === "en";
@@ -102,19 +102,19 @@ export default function Search() {
     );
   }, [state]);
 
-  const addShape = (i) => {
-    let shapes = [...state.shape_id];
-    console.log(shapes);
-    if (shapes.includes(i)) {
-      shapes.splice(shapes.indexOf(i), 1);
-    } else {
-      shapes.push(i);
-    }
-    setState({
-      ...state,
-      shape_id: [...shapes],
-    });
-  };
+  // const addShape = (i) => {
+  //   let shapes = [...state.shape_id];
+  //   console.log(shapes);
+  //   if (shapes.includes(i)) {
+  //     shapes.splice(shapes.indexOf(i), 1);
+  //   } else {
+  //     shapes.push(i);
+  //   }
+  //   setState({
+  //     ...state,
+  //     shape_id: [...shapes],
+  //   });
+  // };
   const addCity = (values) => {
     setFilterSelected(true);
     let cities = values.map((value) => value.value);
@@ -202,7 +202,7 @@ export default function Search() {
 
   const { t } = useTranslation();
   const textareaRef = useRef();
-  const cursorPosition = 0;
+  // const cursorPosition = 0;
 
   const formatOptionLabel = formatOptionLabelUtility(isEnglish);
   const handleBrandChange = (value) => {
