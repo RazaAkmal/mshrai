@@ -16,7 +16,8 @@ export async function fetchSearchInputs(selectedLng) {
     cityOptions: [],
     shapes: [],
     sources: [],
-    yearOptions: []
+    yearOptions: [],
+    provincesOption: result.provinces
   };
   if (result.code === "0") {
     if (result.marks && result.marks.length > 0) {

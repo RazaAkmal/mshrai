@@ -11,6 +11,7 @@ const initialState = {
     kilometer: [],
     price: [],
     yearOptions: [],
+    provincesOption: {}
   },
   cars: [],
   numFound: 0,

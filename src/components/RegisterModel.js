@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,  } from "react";
 import "../i18n";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
@@ -32,11 +32,13 @@ const RegisterModel = (props) => {
   const handleCalendarOpen = () => console.log("Calendar opened");
   const [shoeaccor, setShowAccor] = useState(false);
   const [phonelogin, setPhoneLogin] = useState(false);
+  const [switchtologin, setSwitchToLogin] = useState(false);
 
   const formik = useFormik({
     initialValues: {
       name: "",
       email: "",
+      phone: props.phoneNumber,
     },
     onSubmit: (values, { setSubmitting }) => {
       let formatedDate = moment(date).format("YYYY-MM-DD");
@@ -45,9 +47,9 @@ const RegisterModel = (props) => {
         .post(`${apiUrl}/api/register`, values)
         .then((res) => {
           notifySucess(res.data.message);
-
+          setSwitchToLogin(true)
           setSubmitting(false);
-          props.setRegisterModal(false);
+          props.setOpenRegisterModel(false);
           if (res) {
             props.loginHelper(res.data.data.token, res.data.data.user);
           }
@@ -81,10 +83,11 @@ const RegisterModel = (props) => {
         className="custom-modal modal-register"
         centered
         scrollable
-        show={props.registerModal}
+        show={props.openregistermodel}
         onHide={() => {
-          props.setRegisterModal(false);
-          setValidationError(null);
+        props.setOpenRegisterModel(false);
+        setValidationError(null)
+
         }}
       >
         <Modal.Header closeButton></Modal.Header>
@@ -94,6 +97,9 @@ const RegisterModel = (props) => {
             t={t}
             setPhoneLogin={setPhoneLogin}
             setRegisterModal={props.setRegisterModal}
+            // new
+            // setSwitchToLogin(true);
+            //       props.setOpenRegisterModel(false);
           />
           <Form onSubmit={handleSubmit}>
             <Row>
@@ -247,12 +253,7 @@ const RegisterModel = (props) => {
           </Form>
         </Modal.Body>
       </Modal>
-      <PhoneLogin
-        phonelogin={phonelogin}
-        setRegisterModal={props.setRegisterModal}
-        setPhoneLogin={setPhoneLogin}
-        loginHelper={props.loginHelper}
-      />
+      {switchtologin && <PhoneLogin  switchtologin={switchtologin} setSwitchToLogin={setSwitchToLogin}/>}
     </>
   );
 };

@@ -5,7 +5,11 @@ import { fetchSearchInputs } from "../features/search/searchApi";
 import { getSearchInputs } from "../features/search/searchSlice";
 import { Accordion } from "react-bootstrap";
 import { Trans, useTranslation } from "react-i18next";
-
+import CityListPopper from "./CityListPopper";
+import Divider from '@mui/material/Divider';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import MobileCityDrawer from './MobileCityDrawer'
 const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range);
 
@@ -17,6 +21,22 @@ export default function Filters(props) {
   const [filterCity, setFilterCity] = useState("");
   const [filterSource, setFilterSource] = useState("");
   const isEnglish = localStorage.getItem("lang") === "en";
+
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [placement, setPlacement] = useState();
+  const [selectedProvience, setSelectedProvience] = useState('')
+  const [showWrapperDiv, setShowWrapperDiv] = useState(false)
+  
+  const handleClick = (newPlacement, provience) => (event) => {
+    setAnchorEl(event.currentTarget);
+    setOpen((prev) => placement !== newPlacement || !prev);
+    setPlacement(newPlacement);
+    setSelectedProvience(provience)
+    setShowWrapperDiv(true)
+    document.body.style.overflow = 'hidden';
+  };
 
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -190,6 +210,14 @@ export default function Filters(props) {
       );
     }
   };
+  const provinceFilterValue = (val, filter) => {
+    if (isEnglish) {
+      return val[0].city_en && val[0].city_en.toLowerCase().includes(filter.toLowerCase()); 
+    } else {
+      return val[0].city && val[0].city.toLowerCase().includes(filter.toLowerCase());
+    }
+  };
+  const famousCity = searchInputs.cityOptions.slice(0,4)
 
   return (
     <div>
@@ -209,7 +237,7 @@ export default function Filters(props) {
           <i className="fa fa-times"></i>
         </button>
         <Accordion>
-          <div className="filter-accordion">
+          <div className="filter-accordion" style={{direction: isEnglish ? 'ltr' : 'rtl'}}>
             <Accordion.Item eventKey="0">
               <Accordion.Header>{t("search.brand")}</Accordion.Header>
               <Accordion.Body>
@@ -217,7 +245,7 @@ export default function Filters(props) {
                   <input
                     type="text"
                     placeholder={t("search.searchBrand")}
-                    style={{ marginTop: "0" }}
+                    style={{ marginTop: "0", textAlign:'-webkit-match-parent' }}
                     className="form-control"
                     onChange={(e) => setFilterbrand(e.target.value)}
                   />
@@ -257,7 +285,7 @@ export default function Filters(props) {
                   <input
                     type="text"
                     placeholder={t("search.searchModal")}
-                    style={{ marginTop: "0" }}
+                    style={{ marginTop: "0", textAlign:'-webkit-match-parent' }}
                     className="form-control"
                     onChange={(e) => setFilterModal(e.target.value)}
                   />
@@ -456,15 +484,139 @@ export default function Filters(props) {
             <Accordion.Item eventKey="4">
               <Accordion.Header>{t("search.city")}</Accordion.Header>
               <Accordion.Body>
-                <div className="panel-content">
+                <div className="panel-content-province">
                   <input
                     placeholder={t("search.searchForCity")}
                     type="text"
-                    style={{ marginTop: "0" }}
+                    style={{  }}
                     className="form-control"
                     onChange={(e) => setFilterCity(e.target.value)}
                   />
-                  {searchInputs.cityOptions
+                  <Divider style={{ paddingBottom: "10px" }}>
+                    {t("search.popularCities")}
+                  </Divider>
+                  {famousCity
+                    .filter((v) => filterValue(v, filterCity))
+                    .map((city, index) => {
+                      return (
+                        <div className="form-group" key={"city" + index} style={{paddingLeft: '10px'}}>
+                          <input
+                            id={"city" + index}
+                            type="checkbox"
+                            name="city"
+                            checked={props.searchState.city_id.includes(
+                              city.value
+                            )}
+                            onChange={(v) => addValue("city_id", city.value)}
+                          />
+                            <label
+                              className="d-block"
+                              style={{ fontSize: "1rem" }}
+                              htmlFor={"city" + index}
+                            >
+                              {localStorage.getItem("lang") === "en"
+                                ? city.label_en
+                                : city.label}{" "}
+                            </label>
+                        </div>
+                      );
+                    })}
+                  <Divider style={{ marginBottom: "15px" }} />
+                  {Object.values(searchInputs.provincesOption)
+                  .filter((v) => provinceFilterValue(v, filterCity))
+                  .map((province, index) => {
+                      if(province.length > 1){
+                      return  <div
+                        onClick={handleClick(
+                          "right-start",
+                          province[0].province === null
+                            ? "UAE"
+                            : province[0].province
+                        )}
+                        className={
+                          isEnglish
+                            ? "form-group-province-en"
+                            : "form-group-province-ar"
+                        }
+                        key={"city" + index}
+                      >
+                        {province[0].province === null ? (
+                          <label className="label-province ">
+                            {localStorage.getItem("lang") === "en"
+                              ? "Gulf Countries"
+                              : t("search.gulfCountries")}
+                          </label>
+                        ) : (
+                          <label className="label-province ">
+                            {localStorage.getItem("lang") === "en"
+                              ? province[0].province_en
+                              : province[0].province}{" "}
+                          </label>
+                        )}
+                        {isEnglish ? (
+                          <FontAwesomeIcon icon={faChevronRight} />
+                        ) : (
+                          <FontAwesomeIcon icon={faChevronLeft} />
+                        )}
+                      </div>
+                  }})}
+                  {Object.values(searchInputs.provincesOption)
+                  .filter((v) => provinceFilterValue(v, filterCity))
+                  .map( (province, index) => {
+                      if(province.length === 1 ){
+                        return (
+                          <div className="form-group" key={"city" + index} style={{paddingLeft: '10px'}}>
+                            <input
+                              id={"city" + index}
+                              type="checkbox"
+                              name="city"
+                              checked={props.searchState.city_id.includes(
+                                province[0].id
+                              )}
+                              onChange={(v) => addValue("city_id", province[0].id)}
+                            />
+                              <label
+                                className="d-block"
+                                style={{ fontSize: "1rem" }}
+                                htmlFor={"city" + index}
+                              >
+                                {localStorage.getItem("lang") === "en"
+                                ? province[0].province_en
+                                : province[0].province}{" "}
+                              </label>
+                          </div>
+                        )}
+                    })}                  
+                  {props.windowwidth > 990 ? (
+                    <CityListPopper
+                      showWrapperDiv={showWrapperDiv}
+                      setShowWrapperDiv={setShowWrapperDiv}
+                      open={open}
+                      setOpen={setOpen}
+                      anchorEl={anchorEl}
+                      addValue={addValue}
+                      searchState={props.searchState}
+                      searchInputs={searchInputs}
+                      placement={placement}
+                      selectedProvience={selectedProvience}
+                      filterValue={filterValue}
+                    />
+                  ) : (
+                    <MobileCityDrawer
+                      showWrapperDiv={showWrapperDiv}
+                      setShowWrapperDiv={setShowWrapperDiv}
+                      open={open}
+                      setOpen={setOpen}
+                      anchorEl={anchorEl}
+                      addValue={addValue}
+                      searchState={props.searchState}
+                      searchInputs={searchInputs}
+                      placement={placement}
+                      selectedProvience={selectedProvience}
+                      filterValue={filterValue}
+                    />
+                  )}
+                  {/* {searchInputs.cityOptions
                     .filter((v) => filterValue(v, filterCity))
                     .map((city, index) => {
                       return (
@@ -486,7 +638,7 @@ export default function Filters(props) {
                           </label>
                         </div>
                       );
-                    })}
+                    })} */}
                 </div>
               </Accordion.Body>
             </Accordion.Item>
@@ -643,7 +795,7 @@ export default function Filters(props) {
                   <input
                     type="text"
                     placeholder={t("search.searchSource")}
-                    style={{ marginTop: "0" }}
+                    style={{ marginTop: "0", textAlign:'-webkit-match-parent' }}
                     className="form-control"
                     onChange={(e) => setFilterSource(e.target.value)}
                   />

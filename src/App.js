@@ -13,7 +13,7 @@ import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import { apiUrl } from "./features/constants";
 import { useSelector } from "react-redux";
-import { Feedback, RegisterModel, FeedbackModel, NavBar } from "./components";
+import { Feedback, PhoneOtpModel, FeedbackModel, NavBar } from "./components";
 
 const App = () => {
   const { t, i18n } = useTranslation();
@@ -490,11 +490,8 @@ const App = () => {
           </Form>
         </Modal.Body>
       </Modal> */}
-      <RegisterModel
-        registerModal={registerModal}
-        setRegisterModal={setRegisterModal}
-        loginHelper={loginHelper}
-      />
+      {/* < RegisterModel registerModal={registerModal} setRegisterModal={setRegisterModal} loginHelper={loginHelper} /> */}
+      < PhoneOtpModel registerModal={registerModal} setRegisterModal={setRegisterModal} loginHelper={loginHelper} />
 
       <div
         className={selectedLng === "en" ? "App-en" : "App-ar"}

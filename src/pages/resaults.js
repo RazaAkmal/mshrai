@@ -31,6 +31,8 @@ import {
   SelectedSearchTags,
   Cars,
 } from "../components";
+import FilterDrawer from "../components/FilterDrawer";
+
 export default function Resault(props) {
   useEffect(() => {
     document
@@ -151,6 +153,7 @@ export default function Resault(props) {
   );
   const [filterSelected, setFilterSelected] = useState(false);
   const [page, setPage] = useState(1);
+  const [openfilter, setOpenFilter] = useState(false);
   useEffect(() => {
     setState((prevState) => ({
       ...prevState,
@@ -162,6 +165,29 @@ export default function Resault(props) {
   const limit = 8;
 
   const dispatch = useDispatch();
+  const getWindowWidth = () => {
+    const { innerWidth: width } = window;
+    return width;
+  }
+  const [windowwidth, setWindowWidth] = useState(getWindowWidth());
+
+  
+    useEffect(() => {
+      const handleResize = () => {
+        setWindowWidth(getWindowWidth());
+      }
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    useEffect(() => {
+      if(windowwidth > 991){
+        setOpenFilter(false)
+
+      }
+ 
+    }, [windowwidth])
+    
 
   const _handleStartSearch = handleStartSearchUtility(
     setNextPage,
@@ -217,8 +243,9 @@ export default function Resault(props) {
   };
 
   const fillterBtnClickHandle = (e) => {
-    setShowWrapperDiv(true);
-    document.querySelector(".toggle-container").classList.add("move");
+    setOpenFilter(!openfilter)
+    // setShowWrapperDiv(true)
+    // document.querySelector(".toggle-container").classList.add("move");
     e.stopPropagation();
   };
   const [showWrapperDiv, setShowWrapperDiv] = useState(false);
@@ -259,7 +286,7 @@ export default function Resault(props) {
     return returnVal;
   };
 
-  let totalpages = Math.floor(resultsNumber / 25);
+  let totalpages = Math.ceil(resultsNumber / 25);
   const changePage = (e, value) => {
     // setPage(page+1)
     setPage(value);
@@ -357,16 +384,28 @@ export default function Resault(props) {
             />
             <div className="row">
               <div className="col-lg-2">
-                <Filters
+                  {windowwidth > 991 ? <Filters windowwidth={windowwidth}
+                  closeFilterMenuHandle={closeFilterMenuHandle}
+                  handleStartSearch={(type, value, value_obj) =>
+                    _handleStartSearch(type, value, value_obj)
+                  }
+                  searchState={searchForm}
+                /> 
+                : <FilterDrawer
+                windowwidth={windowwidth}
+                  openfilter={openfilter}
+                  setOpenFilter={setOpenFilter}
                   closeFilterMenuHandle={closeFilterMenuHandle}
                   handleStartSearch={(type, value, value_obj) =>
                     _handleStartSearch(type, value, value_obj)
                   }
                   searchState={searchForm}
                 />
+                }
               </div>
               <div className="col-lg-10">
                 <div className="search_hint search_hint_mobile">
+              
                   <button
                     className="filter_btn link"
                     onClick={fillterBtnClickHandle}

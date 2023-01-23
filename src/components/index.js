@@ -17,6 +17,7 @@ import Menu from "./SelectMenu";
 import OptionCity from "./OptionCity";
 import SourcesImagesMain from "./SearchComponents/SourcesImagesMain";
 import SelectBoxContainer from "./SearchComponents/SelectBoxContainer";
+import PhoneOtpModel from "./PhoneOtpModel";
 export {
   Feedback,
   RegisterModel,
@@ -37,4 +38,5 @@ export {
   OptionCity,
   SourcesImagesMain,
   SelectBoxContainer,
+  PhoneOtpModel,
 };
