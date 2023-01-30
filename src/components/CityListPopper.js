@@ -60,9 +60,7 @@ export const ProvienceCity = (props) => {
                 />
               </div> */}
 
-              {props.searchInputs.provincesOption[
-                props.selectedProvience === "UAE" ? "" : props.selectedProvience
-              ]
+              {Object.values(props.selectedProvience)
                 .filter((v) => filterValue(v, filterCity))
                 .map((item, index) => {
                   return (

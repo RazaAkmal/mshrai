@@ -28,7 +28,7 @@ export default function Filters(props) {
   const [placement, setPlacement] = useState();
   const [selectedProvience, setSelectedProvience] = useState('')
   const [showWrapperDiv, setShowWrapperDiv] = useState(false)
-  
+
   const handleClick = (newPlacement, provience) => (event) => {
     setAnchorEl(event.currentTarget);
     setOpen((prev) => placement !== newPlacement || !prev);
@@ -212,9 +212,9 @@ export default function Filters(props) {
   };
   const provinceFilterValue = (val, filter) => {
     if (isEnglish) {
-      return val[0].city_en && val[0].city_en.toLowerCase().includes(filter.toLowerCase()); 
+      return val.province && val.province.toLowerCase().includes(filter.toLowerCase()); 
     } else {
-      return val[0].city && val[0].city.toLowerCase().includes(filter.toLowerCase());
+      return val.province && val.province.toLowerCase().includes(filter.toLowerCase());
     }
   };
   const famousCity = searchInputs.cityOptions.slice(0,4)
@@ -522,17 +522,35 @@ export default function Filters(props) {
                       );
                     })}
                   <Divider style={{ marginBottom: "15px" }} />
-                  {Object.values(searchInputs.provincesOption)
+                  <div
+                      onClick={handleClick(
+                        "right-start", 
+                        searchInputs.countriesOption
+                      )}
+                        className={
+                          isEnglish
+                            ? "form-group-province-en"
+                            : "form-group-province-ar"
+                        }
+                      >
+                      <label className="label-province ">
+                      {t("search.gulfCountries")}
+                      </label>
+                        {isEnglish ? (
+                          <FontAwesomeIcon icon={faChevronRight} />
+                        ) : (
+                          <FontAwesomeIcon icon={faChevronLeft} />
+                        )}
+                      </div>
+                  {searchInputs.provincesOption
                   .filter((v) => provinceFilterValue(v, filterCity))
                   .map((province, index) => {
-                      if(province.length > 1){
+                    if(province.cities.length > 1){
                       return  <div
-                        onClick={handleClick(
-                          "right-start",
-                          province[0].province === null
-                            ? "UAE"
-                            : province[0].province
-                        )}
+                      onClick={handleClick(
+                                "right-start", 
+                                province.cities
+                              )}
                         className={
                           isEnglish
                             ? "form-group-province-en"
@@ -540,19 +558,11 @@ export default function Filters(props) {
                         }
                         key={"city" + index}
                       >
-                        {province[0].province === null ? (
-                          <label className="label-province ">
-                            {localStorage.getItem("lang") === "en"
-                              ? "Gulf Countries"
-                              : t("search.gulfCountries")}
-                          </label>
-                        ) : (
-                          <label className="label-province ">
-                            {localStorage.getItem("lang") === "en"
-                              ? province[0].province_en
-                              : province[0].province}{" "}
-                          </label>
-                        )}
+                      <label className="label-province ">
+                        {localStorage.getItem("lang") === "en"
+                        ? province.province_en
+                        : province.province}{" "}
+                      </label>
                         {isEnglish ? (
                           <FontAwesomeIcon icon={faChevronRight} />
                         ) : (
@@ -560,10 +570,10 @@ export default function Filters(props) {
                         )}
                       </div>
                   }})}
-                  {Object.values(searchInputs.provincesOption)
+                  {searchInputs.provincesOption
                   .filter((v) => provinceFilterValue(v, filterCity))
                   .map( (province, index) => {
-                      if(province.length === 1 ){
+                      if(province.cities.length === 1 ){
                         return (
                           <div className="form-group" key={"city" + index} style={{paddingLeft: '10px'}}>
                             <input
@@ -571,9 +581,9 @@ export default function Filters(props) {
                               type="checkbox"
                               name="city"
                               checked={props.searchState.city_id.includes(
-                                province[0].id
+                                province.cities[0].id
                               )}
-                              onChange={(v) => addValue("city_id", province[0].id)}
+                              onChange={(v) => addValue("city_id", province.cities[0].id)}
                             />
                               <label
                                 className="d-block"
@@ -581,12 +591,12 @@ export default function Filters(props) {
                                 htmlFor={"city" + index}
                               >
                                 {localStorage.getItem("lang") === "en"
-                                ? province[0].province_en
-                                : province[0].province}{" "}
+                                ? province.province_en
+                                : province.province}{" "}
                               </label>
                           </div>
                         )}
-                    })}                  
+                    })} 
                   {props.windowwidth > 990 ? (
                     <CityListPopper
                       showWrapperDiv={showWrapperDiv}
