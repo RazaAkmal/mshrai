@@ -50,12 +50,13 @@ const SelectedSearchTags = ({
             })
           : ""}
       </ul> */}
+      <div style={{display:'flex'}}>
       {searchForm.brand_id && searchForm.brand_id.length > 0
             ? searchInputs.marksOptions.map((mark, index) => {
                 return searchForm.brand_id.includes(mark.value) &&
                   modalOfbrandNotSelected(mark.value, index) ? (
                     <Stack
-                      style={{ padding: "5px 2px", display: "inline-flex" }}
+                      style={{ padding:'5px 2px', display: "inline-flex" }}
                       direction="row"
                       spacing={1}
                     >
@@ -84,7 +85,7 @@ const SelectedSearchTags = ({
                   ? getBrandValueAswell(model, index)
                   : false;
               })
-            : ""}
+            : ""} </div>
     </>
   );
 };

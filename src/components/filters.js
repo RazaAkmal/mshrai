@@ -10,6 +10,9 @@ import Divider from '@mui/material/Divider';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import MobileCityDrawer from './MobileCityDrawer'
+import FilterTags from "./ResaultsPageComponents/Tags/FilterTags";
+import './ResaultsPageComponents/Tags/FilterTag.css';
+import { SearchTagsRemove } from "./ResaultsPageComponents/Tags";
 const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range);
 
@@ -223,6 +226,10 @@ export default function Filters(props) {
     <div>
       <div className="filter-title">
         <Trans i18nKey="description.Filter" />
+        <SearchTagsRemove isEnglish={isEnglish} searchForm={props.searchState} _handleStartSearch={props.handleStartSearch} />
+      </div>
+      <div className="filter_tags">
+      <FilterTags searchInputs={searchInputs} searchForm={props.searchState} _handleStartSearch={props.handleStartSearch}/>
       </div>
       <form
         className="toggle-container"
