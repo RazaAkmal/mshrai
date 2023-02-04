@@ -8,10 +8,12 @@ import { useTranslation } from "react-i18next";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
+import FilterTags from "./ResaultsPageComponents/Tags/FilterTags";
 
 
 
 export const ProvienceCity = (props) => {
+  console.log(props)
   const { t } = useTranslation();
 
   const isEnglish = localStorage.getItem("lang") === "en";
@@ -50,6 +52,9 @@ export const ProvienceCity = (props) => {
                   />{" "}
                 </Button>
               </div>
+              <div className="filter_tags">
+      <FilterTags searchInputs={props.searchInputs} searchForm={props.searchState} _handleStartSearch={props._handleStartSearch}/>
+      </div>
               {/* <div style={{ marginLeft: "20px", marginRight: "20px" }}>
                 <input
                   placeholder={t("search.searchForCity")}

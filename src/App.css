@@ -429,6 +429,8 @@ header form .link i {
 }
 
 .filter-title {
+  display: flex;
+  justify-content: space-between;
   background: white;
   margin-bottom: 1px;
   padding: 15px;

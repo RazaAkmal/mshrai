@@ -221,7 +221,7 @@ export default function Filters(props) {
     }
   };
   const famousCity = searchInputs.cityOptions.slice(0,4)
-
+console.log(props)
   return (
     <div>
       <div className="filter-title">
@@ -236,13 +236,13 @@ export default function Filters(props) {
         onClick={(event) => event.stopPropagation()}
         id="accordion1"
       >
-        <button
+        {/* <button
           className="icon_link close_btn"
           type="button"
           onClick={props.closeFilterMenuHandle}
         >
           <i className="fa fa-times"></i>
-        </button>
+        </button> */}
         <Accordion>
           <div className="filter-accordion" style={{direction: isEnglish ? 'ltr' : 'rtl'}}>
             <Accordion.Item eventKey="0">
@@ -617,6 +617,7 @@ export default function Filters(props) {
                       placement={placement}
                       selectedProvience={selectedProvience}
                       filterValue={filterValue}
+                      _handleStartSearch={props.handleStartSearch}
                     />
                   ) : (
                     <MobileCityDrawer
@@ -631,6 +632,7 @@ export default function Filters(props) {
                       placement={placement}
                       selectedProvience={selectedProvience}
                       filterValue={filterValue}
+                      _handleStartSearch={props.handleStartSearch}
                     />
                   )}
                   {/* {searchInputs.cityOptions
